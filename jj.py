@@ -35,9 +35,13 @@ MEMORY = os.path.join(HOME, '.claude', 'projects',
 BACKUP = os.path.join(WORKSPACE, '_backup')
 JOB = os.path.join(ROOT, 'jobs', 'PR-000 - L J Show Residence')
 
-# (label, source, skip-these-dirs) -- unsynced assets that must survive a disk loss
+# (label, source, skip-these-dirs) -- unsynced assets that must survive a disk loss.
+# `jj-takeoff` was `skill` until 2026-08-04. It is no longer just the skill: the whole
+# program consolidated into ROOT, which sits OUTSIDE OneDrive with no other local copy.
+# `.git` is mirrored on purpose -- the GitHub remote covers history, but this mirror has
+# to stand alone if the remote is ever unreachable. node_modules/.vercel are reinstallable.
 ASSETS = [
-    ('skill', SKILL, {'__pycache__', '.pytest_cache'}),
+    ('jj-takeoff', SKILL, {'__pycache__', '.pytest_cache', 'node_modules', '.vercel'}),
     ('memory', MEMORY, set()),
 ]
 
