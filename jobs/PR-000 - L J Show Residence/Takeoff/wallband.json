@@ -1,0 +1,46 @@
+{
+ "E1_FRONT": {
+  "band_sf": 1202.9,
+  "coverage_pct": 100.0,
+  "unclassified_before_fill_sf": 262.4,
+  "LAP": 394.0,
+  "B&B": 590.6,
+  "STONE": 218.3,
+  "LAP_pct": 32.8,
+  "B&B_pct": 49.1,
+  "STONE_pct": 18.2
+ },
+ "E3_REAR": {
+  "band_sf": 1203.0,
+  "coverage_pct": 100.0,
+  "unclassified_before_fill_sf": 428.2,
+  "LAP": 255.1,
+  "B&B": 824.2,
+  "STONE": 123.7,
+  "LAP_pct": 21.2,
+  "B&B_pct": 68.5,
+  "STONE_pct": 10.3
+ },
+ "E2_LEFT": {
+  "band_sf": 692.2,
+  "coverage_pct": 100.0,
+  "unclassified_before_fill_sf": 207.4,
+  "LAP": 220.8,
+  "B&B": 382.7,
+  "STONE": 88.8,
+  "LAP_pct": 31.9,
+  "B&B_pct": 55.3,
+  "STONE_pct": 12.8
+ },
+ "E4_RIGHT": {
+  "band_sf": 692.1,
+  "coverage_pct": 100.0,
+  "unclassified_before_fill_sf": 180.4,
+  "LAP": 128.9,
+  "B&B": 487.9,
+  "STONE": 75.3,
+  "LAP_pct": 18.6,
+  "B&B_pct": 70.5,
+  "STONE_pct": 10.9
+ }
+}

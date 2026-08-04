@@ -1,0 +1,35 @@
+{
+  "room_types": {
+    "safe room": {
+      "answer": "Hardened small room; count room SF + FLAG reinforced walls (concrete/steel/CMU) for a structural allowance -- ask the spec",
+      "learned": "2026-07-06",
+      "seen": 1,
+      "source": "room-type registry (banked 7/6/26)",
+      "term": "safe room"
+    },
+    "scullery": {
+      "answer": "Back/prep kitchen: 2nd sink + dishwasher + counter&cabinets, sometimes a 2nd range; MEASURE like a small kitchen (counter SF, cabinet LF, fixtures)",
+      "learned": "2026-07-06",
+      "seen": 1,
+      "source": "room-type registry (banked 7/6/26)",
+      "term": "scullery"
+    }
+  },
+  "symbols": {
+    "hb": {
+      "answer": "Hose Bib -- exterior wall spigot (seen on J&J slab plans)",
+      "learned": "2026-07-06",
+      "seen": 1,
+      "source": "construction convention (banked 7/6/26)",
+      "term": "HB"
+    },
+    "p.": {
+      "answer": "Pitch suffix on a roof callout, rise/12 (e.g. '16/12 P.')",
+      "learned": "2026-07-06",
+      "seen": 1,
+      "source": "construction convention (banked 7/6/26)",
+      "term": "P."
+    }
+  },
+  "terms": {}
+}

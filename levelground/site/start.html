@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Start my report — Level Ground</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0E2233;--steel:#5C90AC;--steel-lt:#AFCBDD;--paper:#F4EFE4;--offwhite:#FBF9F4;--red:#D63A2B;--ink:#15242F;--muted:#6E7E88}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);font-family:"Inter",system-ui,sans-serif;color:var(--ink);line-height:1.6}
+  .top{background:var(--navy);color:#fff;padding:26px 24px}
+  .top .in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px}
+  .mark{width:44px;height:15px;border:1.5px solid var(--steel);border-radius:3px;position:relative;flex:none}
+  .mark::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:8px;height:8px;border-radius:50%;background:var(--steel)}
+  .mark::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:17px;height:10px;border-left:1.5px solid var(--steel);border-right:1.5px solid var(--steel)}
+  .top b{font-family:"Oswald",sans-serif;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:2.1rem;line-height:1.1;margin:0 0 .3em}
+  .sub{color:var(--muted);max-width:60ch}
+  .founding{background:var(--offwhite);border:1.5px solid var(--navy);border-radius:5px;padding:16px 20px;margin:26px 0;font-size:.95rem}
+  .founding b{font-family:"Oswald",sans-serif;letter-spacing:.06em}
+  form{background:var(--offwhite);border:1px solid #E2D8C4;border-radius:6px;padding:34px;display:grid;gap:22px}
+  .row{display:grid;gap:22px;grid-template-columns:1fr 1fr}
+  label{display:block}
+  label .t{display:block;font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:.68rem;color:#3c6379;margin-bottom:7px}
+  input,select,textarea{width:100%;padding:13px 14px;border:1px solid #C9BFA9;border-radius:3px;font-family:inherit;font-size:1rem;background:#fff;color:var(--ink)}
+  textarea{min-height:110px;resize:vertical}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--steel);outline-offset:1px}
+  .hint{font-size:.8rem;color:var(--muted);margin-top:5px}
+  .btn{font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:1rem;padding:16px 28px;border-radius:2px;border:0;cursor:pointer;background:var(--red);color:#fff}
+  .btn:hover{background:#bf2f21}
+  .micro{font-size:.83rem;color:var(--muted)}
+  fieldset{border:1px solid #E2D8C4;border-radius:4px;padding:14px 16px;margin:0}
+  legend{font-family:"Oswald",sans-serif;text-transform:uppercase;letter-spacing:.12em;font-size:.68rem;color:#3c6379;padding:0 6px}
+  .opt{display:flex;gap:10px;align-items:flex-start;padding:8px 0}
+  .opt input{width:auto;margin-top:4px}
+  .opt b{font-weight:600;display:block}
+  .opt span{font-size:.86rem;color:var(--muted)}
+  @media(max-width:600px){.row{grid-template-columns:1fr}form{padding:22px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="in"><span class="mark" aria-hidden="true"></span><b>Level&nbsp;Ground</b></div></div>
+<div class="wrap">
+  <h1>Let's get you on level ground.</h1>
+  <p class="sub">Tell us about your build. No payment today — we'll confirm your spot by email, send a secure link for your plans (and bid), and a payment link once you're ready to proceed.</p>
+
+  <div class="founding"><b>Founding price: $99</b> — first 10 reports only, then $299. Full refund if you're not satisfied, no questions asked.</div>
+
+  <form method="POST" action="https://formspree.io/f/mrewjjyl">
+    <input type="hidden" name="_subject" value="Level Ground — new report reservation">
+    <input type="hidden" name="_next" value="/thanks.html">
+    <input type="text" name="_gotcha" style="display:none">
+
+    <div class="row">
+      <label><span class="t">Your name</span><input name="name" required autocomplete="name"></label>
+      <label><span class="t">Email</span><input type="email" name="email" required autocomplete="email"></label>
+    </div>
+
+    <fieldset>
+      <legend>Where are you in the process?</legend>
+      <label class="opt"><input type="radio" name="report_type" value="pre_bid" required><span><b>I have plans, no bid yet</b><span>Pre-Bid Report — what it should cost + what a complete bid must include</span></span></label>
+      <label class="opt"><input type="radio" name="report_type" value="bid_gap"><span><b>I have plans and a builder's bid</b><span>Bid Risk &amp; Gap Report — where the bid falls short, before you sign</span></span></label>
+    </fieldset>
+
+    <div class="row">
+      <label><span class="t">City &amp; state of the build</span><input name="location" required placeholder="e.g. Monticello, GA"></label>
+      <label><span class="t">ZIP code of the lot</span><input name="zip" inputmode="numeric" required></label>
+    </div>
+
+    <div class="row">
+      <label><span class="t">Heated square feet (best guess)</span><input name="heated_sf" placeholder="e.g. 2,800"><span class="hint">Not sure? Leave blank — we'll measure it off your plans.</span></label>
+      <label><span class="t">Foundation</span>
+        <select name="foundation"><option value="">Not sure</option><option>Slab</option><option>Crawl space</option><option>Basement</option></select>
+      </label>
+    </div>
+
+    <div class="row">
+      <label><span class="t">Finish level you're aiming for</span>
+        <select name="finish_level"><option value="">Not sure</option><option>Builder-grade</option><option>Semi-custom</option><option>Custom</option><option>High-end / luxury</option></select>
+      </label>
+      <label><span class="t">Bid total, if you have one</span><input name="bid_total" placeholder="e.g. $540,000"></label>
+    </div>
+
+    <div class="row">
+      <label><span class="t">Do you own the land?</span>
+        <select name="land"><option value="">Not yet</option><option>Yes — mostly flat</option><option>Yes — sloped</option><option>Yes — not sure of conditions</option></select>
+      </label>
+      <label><span class="t">When do you hope to break ground?</span>
+        <select name="timeline"><option>Within 3 months</option><option>3–6 months</option><option>6–12 months</option><option>Just planning ahead</option></select>
+      </label>
+    </div>
+
+    <label><span class="t">What's keeping you up at night about this build?</span><textarea name="worry" placeholder="Anything that feels off, confusing, or too good to be true — tell us straight."></textarea></label>
+
+    <button class="btn" type="submit">Reserve my founding spot</button>
+    <p class="micro">After you submit, we'll email you within one business day with a secure upload link for your plans and bid. Your documents are used only to build your report — never sold, never shared with builders.</p>
+  </form>
+</div>
+<script src="live-price.js"></script>
+</body>
+</html>

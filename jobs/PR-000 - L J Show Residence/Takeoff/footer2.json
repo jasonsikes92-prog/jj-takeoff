@@ -1,0 +1,9 @@
+{
+ "outer": 394.32,
+ "seams": {
+  "HEATED <-> GARAGE": 75.42,
+  "HEATED <-> REAR PORCH": 100.33,
+  "HEATED <-> FRONT PORCH": 25.81
+ },
+ "own": 790.96
+}

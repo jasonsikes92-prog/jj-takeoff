@@ -1,0 +1,20 @@
+floor_left.png: sheet-06.png (120, 130, 1420, 2210) -> (1300, 2080)
+floor_center.png: sheet-06.png (1080, 130, 2460, 2210) -> (1380, 2080)
+floor_right.png: sheet-06.png (2150, 130, 3440, 2210) -> (1290, 2080)
+dims_left.png: sheet-07.png (80, 80, 1500, 2280) -> (1420, 2200)
+dims_center.png: sheet-07.png (1040, 80, 2500, 2280) -> (1460, 2200)
+dims_right.png: sheet-07.png (2060, 80, 3520, 2280) -> (1460, 2200)
+ceiling_left.png: sheet-09.png (120, 130, 1500, 2210) -> (1380, 2080)
+ceiling_center.png: sheet-09.png (1050, 130, 2500, 2210) -> (1450, 2080)
+ceiling_right.png: sheet-09.png (2100, 130, 3450, 2210) -> (1350, 2080)
+foundation_main.png: sheet-04.png (150, 100, 3400, 2220) -> (3250, 2120)
+roof_main.png: sheet-11.png (150, 100, 3400, 2220) -> (3250, 2120)
+site_main.png: sheet-02.png (300, 120, 2150, 2240) -> (1850, 2120)
+grading_main.png: sheet-03.png (300, 120, 2150, 2240) -> (1850, 2120)
+workshop_main.png: sheet-14.png (50, 100, 3450, 2250) -> (3400, 2150)
+sheet-02-grid.png: 100-pixel coordinate grid
+sheet-03-grid.png: 100-pixel coordinate grid
+sheet-04-grid.png: 100-pixel coordinate grid
+sheet-07-grid.png: 100-pixel coordinate grid
+sheet-11-grid.png: 100-pixel coordinate grid
+sheet-14-grid.png: 100-pixel coordinate grid

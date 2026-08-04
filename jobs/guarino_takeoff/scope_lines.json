@@ -1,0 +1,1694 @@
+{
+ "01B": [
+  {
+   "name": "Temporary Erosion Control",
+   "ct": "Excavation",
+   "qty": 750,
+   "unit": "LF",
+   "desc": "Install silt fence on all downhill slopes of areas cleared, in accordance with local building codes. — 750 ft",
+   "allowance": false
+  }
+ ],
+ "01": [
+  {
+   "name": "Grubbing and mulching",
+   "ct": "Excavation",
+   "qty": 1,
+   "unit": "Days",
+   "desc": "JJCH cannot be sure on exact amount of mulching, so this is an allowance.  Anything above and beyond estimated will be billed at cost plus 20% via a change order.  Invoice/receipt will be provided at your request — 1 Days",
+   "allowance": true
+  },
+  {
+   "name": "Lot Clearing & Excavation",
+   "ct": "Excavation",
+   "qty": 2,
+   "unit": "Days",
+   "desc": "JJCH cannot be sure on exact amount for tree removal, so this is an allowance.  Anything above and beyond estimated will be billed at cost plus 20% via a change order.  Invoice/receipt will be provided at your request — 2 Days",
+   "allowance": true
+  },
+  {
+   "name": "Concrete wash out pit",
+   "ct": "Excavation",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Provide a safe area for concrete trucks to wash out in accordance with local building code — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Culvert Pipe",
+   "ct": "Excavation",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Culvert Pipe — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Driveway mat",
+   "ct": "Dirt/Gravel",
+   "qty": 110,
+   "unit": "LF",
+   "desc": "Driveway mat — 110 LF",
+   "allowance": false
+  },
+  {
+   "name": "#34 Gravel to house site - 12' wide",
+   "ct": "Dirt/Gravel",
+   "qty": 1320,
+   "unit": "sqft",
+   "desc": "JJCH cannot be sure on exact amount of gravel, so this is an allowance.  Anything above and beyond estimated will be billed at cost plus 20% via a change order.  Invoice/receipt will be provided at your request — 1,320 ft2 (incl. 10% waste)",
+   "allowance": true
+  }
+ ],
+ "09": [
+  {
+   "name": "Water Meter",
+   "ct": "Underground Sewage & Water",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Connection to public water main, meter and tap fee. Allowance - billed at cost. — 1 each",
+   "allowance": true
+  },
+  {
+   "name": "Count Each Fixture Opening",
+   "ct": "Plumbing Labor",
+   "qty": 20,
+   "unit": "each",
+   "desc": "Count Each Fixture Opening — 20 each",
+   "allowance": false
+  },
+  {
+   "name": "Count Each Water Opening",
+   "ct": "Plumbing Labor",
+   "qty": 12,
+   "unit": "each",
+   "desc": "Fridge, Ice Maker, Washer, Hose Bibbs, etc. — 12 each",
+   "allowance": false
+  },
+  {
+   "name": "Water Heater",
+   "ct": "Plumbing Fixtures",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Two high-efficiency water heaters. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Potfiller  - Kitchen",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Potfiller  - Kitchen Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Kitchen Sink - Undermount",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Kitchen Sink - Undermount Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Kitchen Sink - Faucet",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Kitchen Sink - Faucet Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Toilet - Bath 1",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Toilet - Bath 1 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Sink - Bath 1",
+   "ct": "Plumbing Fixtures",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Vanity Sink - Bath 1 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Sink - Faucet - Bath 1",
+   "ct": "Plumbing Fixtures",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Vanity Sink - Faucet - Bath 1 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Sink drain kit - Bath 1",
+   "ct": "Plumbing Materials",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Vanity Sink drain kit - Bath 1 — 2 each",
+   "allowance": false
+  },
+  {
+   "name": "Shower valve and head - Allowance - Bath 1",
+   "ct": "Plumbing Fixtures",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Shower valve and head - Allowance - Bath 1",
+   "allowance": true
+  },
+  {
+   "name": "Freestanding tub - Bath 1",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Freestanding soaking tub, master. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Tub Valve- Allowance - Bath 1",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Tub Valve- Allowance - Bath 1",
+   "allowance": true
+  },
+  {
+   "name": "Toilet - Bath 2",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Toilet - Bath 2 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Sink - Bath 2",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Comes with vanity Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Sink - Faucet - Bath 2",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Vanity Sink - Faucet - Bath 2 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Sink drain kit - Bath 2",
+   "ct": "Plumbing Materials",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Vanity Sink drain kit - Bath 2 — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Shower valve and head - Allowance - Bath 2",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Shower valve and head - Allowance - Bath 2",
+   "allowance": true
+  },
+  {
+   "name": "Toilet - Bath 3",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Toilet - Bath 3 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Sink - Bath 3",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Vanity Sink - Bath 3 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Sink - Faucet - Bath 3",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Vanity Sink - Faucet - Bath 3 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Sink drain kit - Bath 3",
+   "ct": "Plumbing Materials",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Vanity Sink drain kit - Bath 3 — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Shower valve and head - Allowance - Bath 3",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Shower valve and head - Allowance - Bath 3",
+   "allowance": true
+  },
+  {
+   "name": "Toilet - Bath 4",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Toilet - Bath 4 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Sink - Bath 4",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Vanity Sink - Bath 4 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Sink - Faucet - Bath 4",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Vanity Sink - Faucet - Bath 4 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Sink drain kit - Bath 4",
+   "ct": "Plumbing Materials",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Vanity Sink drain kit - Bath 4 — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Shower valve and head - Allowance - Bath 4",
+   "ct": "Plumbing Fixtures",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Shower valve and head - Allowance - Bath 4",
+   "allowance": true
+  }
+ ],
+ "02": [
+  {
+   "name": "Sewer: Septic System, Plan, & Permit",
+   "ct": "Underground Sewage & Water",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Septic system installed by a GA licensed septic contractor, per Newton County specs. Allowance. — 1 each",
+   "allowance": true
+  }
+ ],
+ "04": [
+  {
+   "name": "Gas: Propane Tank (1,000 Gallon)",
+   "ct": "Gas Lines",
+   "qty": 1,
+   "unit": "each",
+   "desc": "1,000-gallon buried propane tank - allowance. — 1 each",
+   "allowance": true
+  },
+  {
+   "name": "Bury Propane tank",
+   "ct": "Gas Lines",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Bury Propane tank — 1 each",
+   "allowance": false
+  }
+ ],
+ "05": [
+  {
+   "name": "Form Boards - Footer",
+   "ct": "Footing",
+   "qty": 490,
+   "unit": "LF",
+   "desc": "Form Boards - Footer — 490 LF (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Concrete - Footer",
+   "ct": "Footing",
+   "qty": 23,
+   "unit": "CY",
+   "desc": "Concrete - Footer — 23 yd (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "#4 Rebar 20\" Sticks - Footer",
+   "ct": "Footing",
+   "qty": 74,
+   "unit": "LF",
+   "desc": "#4 Rebar 20\" Sticks - Footer — 74 LF (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Mesh Chairs 100 pack - Slab",
+   "ct": "Slab Grade & Gravel",
+   "qty": 8,
+   "unit": "sqft",
+   "desc": "Mesh chairs that keep the WWM in the center of the slab — 8 each",
+   "allowance": false
+  },
+  {
+   "name": "Concrete- 4 inches - Slab",
+   "ct": "Slab Grade & Gravel",
+   "qty": 58,
+   "unit": "CY",
+   "desc": "3000 PSI fiber reinforced concrete — 58 YD3 (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Labor - Monolithic slab",
+   "ct": "Slab Grade & Gravel",
+   "qty": 3841,
+   "unit": "sqft",
+   "desc": "Labor - Monolithic slab — 3,841 ft2 (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Pump Truck - Slab pour",
+   "ct": "Slab Grade & Gravel",
+   "qty": 2,
+   "unit": "sqft",
+   "desc": "Pump truck required to pour the slab — 2 each",
+   "allowance": false
+  },
+  {
+   "name": "Vapor Barrier - Slab",
+   "ct": "Slab Grade & Gravel",
+   "qty": 6,
+   "unit": "Rolls",
+   "desc": "6 Mill plastic vapor barrier — 6 Rolls (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "1/2\" Gravel - Slab",
+   "ct": "Slab Grade & Gravel",
+   "qty": 6,
+   "unit": "Truck load",
+   "desc": "#57 Stone under slab — 6 Truck load (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Termite Protection",
+   "ct": "Termite Treatment",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Termite Protection — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Slab reinforcing - #4 rebar grid 24in OC",
+   "ct": "Slab Grade & Gravel",
+   "qty": 192,
+   "unit": "sqft",
+   "desc": "Slab reinforcing steel. — 192 each",
+   "allowance": false
+  }
+ ],
+ "07A": [
+  {
+   "name": "Framing Lumber",
+   "ct": "Frame Lumber",
+   "qty": 4188,
+   "unit": "sqft",
+   "desc": "Standard 2x4 walls, 2x8 Ceiling Joist, 2x6 Roof rafter.  Southern pine or spruce/fir — 4,188 ft2",
+   "allowance": false
+  }
+ ],
+ "07C": [
+  {
+   "name": "Engineered Floor",
+   "ct": "Frame Lumber",
+   "qty": 4850,
+   "unit": "sqft",
+   "desc": "Wood I-Joist or Trusses — 4,850 ft2",
+   "allowance": false
+  }
+ ],
+ "07B": [
+  {
+   "name": "Framing Labor - SF Price",
+   "ct": "Frame Labor",
+   "qty": 4188,
+   "unit": "sqft",
+   "desc": "Framing Labor - SF Price — 4,188 ft2",
+   "allowance": false
+  }
+ ],
+ "08": [
+  {
+   "name": "Metal Roofing",
+   "ct": "Roofing",
+   "qty": 5578,
+   "unit": "sqft",
+   "desc": "Standing-seam metal roof, low-slope, mechanically-seamed, turnkey installed. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Gutters (6\" Standard K-Style)",
+   "ct": "Gutters & Downspouts",
+   "qty": 200,
+   "unit": "LF",
+   "desc": "Gutters (6\" Standard K-Style) — 200 feet",
+   "allowance": false
+  },
+  {
+   "name": "Downspouts (3\" Standard)",
+   "ct": "Gutters & Downspouts",
+   "qty": 100,
+   "unit": "LF",
+   "desc": "Downspouts (3\" Standard) — 100 feet",
+   "allowance": false
+  }
+ ],
+ "15": [
+  {
+   "name": "Windows",
+   "ct": "Windows Materials",
+   "qty": 24,
+   "unit": "each",
+   "desc": "Vinyl single-hung & fixed windows, black exterior, Low-E double-pane, no grid (modern). Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Window Tape",
+   "ct": "Windows Materials",
+   "qty": 8,
+   "unit": "roll",
+   "desc": "Window Tape — 8 roll",
+   "allowance": false
+  },
+  {
+   "name": "Windows - Labor to Install",
+   "ct": "Windows Installation Labor",
+   "qty": 24,
+   "unit": "each",
+   "desc": "Windows - Labor to Install — 24 each",
+   "allowance": false
+  },
+  {
+   "name": "Front Door - Double (Wood Door)",
+   "ct": "Exterior Doors",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Double entry door, modern. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Front Door - Lockset",
+   "ct": "Door Hardware",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Front Door - Lockset Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Front Door - Labor to install Door",
+   "ct": "Exterior Doors",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Front Door - Labor to install Door — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Front Door - Lockset installation",
+   "ct": "Door Hardware Installation",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Front Door - Lockset installation — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Exterior Doors - Single Door",
+   "ct": "Exterior Doors",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Exterior single hinged doors. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Exterior Doors - Double Door",
+   "ct": "Exterior Doors",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Exterior double glass doors, black. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Exterior Doors - 10' Sliding Door",
+   "ct": "Exterior Doors",
+   "qty": 1,
+   "unit": "each",
+   "desc": "8' sliding glass door, black. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Exterior Doors - 12' Sliding Door",
+   "ct": "Exterior Doors",
+   "qty": 1,
+   "unit": "each",
+   "desc": "12' sliding/multi-slide glass door to rear porch, black. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Exterior Door Lockset",
+   "ct": "Door Hardware",
+   "qty": 5,
+   "unit": "each",
+   "desc": "Handle and lockset for all hinged entry doors (Excluding Front Door)\n Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Exterior Doors - Labor to install sliding doors",
+   "ct": "Exterior Doors",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Exterior Doors - Labor to install sliding doors — 2 each",
+   "allowance": false
+  }
+ ],
+ "16": [
+  {
+   "name": "Exterior Doors - Labor to Install Hinged doors",
+   "ct": "Exterior Doors",
+   "qty": 3,
+   "unit": "each",
+   "desc": "N/A if framing crew installs — 3 each",
+   "allowance": false
+  },
+  {
+   "name": "6'8\" Hinged",
+   "ct": "Interior Doors",
+   "qty": 5,
+   "unit": "each",
+   "desc": "6'8\" Hinged — 5 each",
+   "allowance": false
+  },
+  {
+   "name": "8'0\" Single",
+   "ct": "Interior Doors",
+   "qty": 13,
+   "unit": "each",
+   "desc": "Hollow-core flat-stock 8' doors. — 13 each",
+   "allowance": false
+  },
+  {
+   "name": "8'0\" Single",
+   "ct": "Interior Doors",
+   "qty": 9,
+   "unit": "each",
+   "desc": "Solid-core flat-stock 8' doors at bedrooms. — 9 each",
+   "allowance": false
+  },
+  {
+   "name": "8' Garage Entry Door",
+   "ct": "Interior Doors",
+   "qty": 1,
+   "unit": "each",
+   "desc": "8' Garage Entry Door — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Door knobs",
+   "ct": "Door Hardware",
+   "qty": 28,
+   "unit": "sqft",
+   "desc": "Door knobs Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Door Stops",
+   "ct": "Door Hardware",
+   "qty": 28,
+   "unit": "sqft",
+   "desc": "Door Stops — 28 ft2",
+   "allowance": false
+  },
+  {
+   "name": "Interior Door Hardware Installation",
+   "ct": "Door Hardware Installation",
+   "qty": 28,
+   "unit": "sqft",
+   "desc": "Interior Door Hardware Installation — 28 ft2",
+   "allowance": false
+  },
+  {
+   "name": "Base molding - Choose size",
+   "ct": "Trim Carpentry Materials",
+   "qty": 750,
+   "unit": "LF",
+   "desc": "Modern flat-stock base trim. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Trim - 1x4 Window casing and Jambs",
+   "ct": "Trim Carpentry Materials",
+   "qty": 400,
+   "unit": "LF",
+   "desc": "Trim - 1x4 Window casing and Jambs — 400 LF (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Trim Labor",
+   "ct": "Trim Carpentry Labor",
+   "qty": 1200,
+   "unit": "LF",
+   "desc": "Trim Labor — 1,200 feet (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Trim - Labor (Install Quarter Round & Bath, Door, Cabinet Hardware)",
+   "ct": "Trim Carpentry Materials",
+   "qty": 3841,
+   "unit": "sqft",
+   "desc": "Trim - Labor (Install Quarter Round & Bath, Door, Cabinet Hardware) — 3,841 sq ft (incl. 10% waste)",
+   "allowance": false
+  }
+ ],
+ "10": [
+  {
+   "name": "Gas Lines",
+   "ct": "HVAC",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Fireplace, Furnace, Tankless WH, etc — 2 each",
+   "allowance": false
+  },
+  {
+   "name": "HVAC - Air Handler and Condensing Units",
+   "ct": "HVAC",
+   "qty": 1,
+   "unit": "each",
+   "desc": "HVAC system for residence; high-efficiency. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Flex Duct work",
+   "ct": "HVAC",
+   "qty": 1,
+   "unit": "sqft",
+   "desc": "Hard spiral ductwork (exposed-structure design). — 1 ft2",
+   "allowance": false
+  },
+  {
+   "name": "HVAC - Garage",
+   "ct": "HVAC",
+   "qty": 1,
+   "unit": "sqft",
+   "desc": "HVAC for conditioned garage. — 1 sq ft",
+   "allowance": false
+  },
+  {
+   "name": "Garage - Flex Duct work",
+   "ct": "HVAC",
+   "qty": 1204,
+   "unit": "sqft",
+   "desc": "Garage - Flex Duct work — 1,204 ft2",
+   "allowance": false
+  },
+  {
+   "name": "HVAC zone damper - master suite",
+   "ct": "HVAC",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Zoned damper to separate master-suite cooling. — 1 each",
+   "allowance": false
+  }
+ ],
+ "11": [
+  {
+   "name": "Electrical - SF Price",
+   "ct": "Electrical",
+   "qty": 3841,
+   "unit": "sqft",
+   "desc": "Code minimum electrical wiring.  200 Amp service and panel included.  Additional electrical will be billed at cost  plus 20%\n — 3,841 sq ft",
+   "allowance": false
+  },
+  {
+   "name": "Upgrade to 400 AMP service",
+   "ct": "Electrical",
+   "qty": 1,
+   "unit": "sqft",
+   "desc": "Upgrade to 400 AMP service — 1 ft2",
+   "allowance": false
+  },
+  {
+   "name": "Low Voltage, Alarm, Cameras - Allowance",
+   "ct": "Electrical",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Low-voltage, data, security rough-in - allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Under cabinet LED lighting  - Kitchen",
+   "ct": "Lighting",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Under cabinet LED lighting  - Kitchen — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Vanity - Light Fixture - Bath 1",
+   "ct": "Lighting",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Vanity - Light Fixture - Bath 1 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity - Light Fixture - Bath 2",
+   "ct": "Lighting",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Vanity - Light Fixture - Bath 2 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity - Light Fixture - Bath 3",
+   "ct": "Lighting",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Vanity - Light Fixture - Bath 3 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity - Light Fixture - Bath 4",
+   "ct": "Lighting",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Vanity - Light Fixture - Bath 4 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Fans/Lights",
+   "ct": "Lighting",
+   "qty": 8,
+   "unit": "sqft",
+   "desc": "Fans/Lights Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Can Lights",
+   "ct": "Lighting",
+   "qty": 45,
+   "unit": "sqft",
+   "desc": "Can Lights Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Can Light- add wiring",
+   "ct": "Electrical",
+   "qty": 45,
+   "unit": "sqft",
+   "desc": "Can Light- add wiring — 45 ft2",
+   "allowance": false
+  },
+  {
+   "name": "Permanent power connection from transformer",
+   "ct": "Electrical",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Permanent power service connection. — 1 each",
+   "allowance": false
+  }
+ ],
+ "12": [
+  {
+   "name": "Insulation (SqFt) - Walls",
+   "ct": "Insulation",
+   "qty": 7986,
+   "unit": "sqft",
+   "desc": "Open-cell spray foam insulation, walls. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Insulation Ceiling/Roof",
+   "ct": "Insulation",
+   "qty": 5585,
+   "unit": "sqft",
+   "desc": "Open-cell spray foam insulation, roof deck. Allowance.",
+   "allowance": true
+  }
+ ],
+ "13": [
+  {
+   "name": "Drywall - Level 4",
+   "ct": "Drywall",
+   "qty": 17939,
+   "unit": "sqft",
+   "desc": "Drywall hung, taped, finished (Level 4) on interior walls; ceilings left exposed per design. — 17,939 sq ft",
+   "allowance": false
+  }
+ ],
+ "14": [
+  {
+   "name": "Siding (Vertical)",
+   "ct": "Siding Materials and labor",
+   "qty": 4682,
+   "unit": "sqft",
+   "desc": "Standing-seam metal wall cladding, factory-finished (no field paint). — 4,682 ft2 (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Fascia (Metal and Vinyl)",
+   "ct": "Siding Materials and labor",
+   "qty": 340,
+   "unit": "LF",
+   "desc": "Fascia (Metal and Vinyl) — 340 feet (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Porch Ceilings",
+   "ct": "Siding Materials and labor",
+   "qty": 381.7,
+   "unit": "sqft",
+   "desc": "Tongue-and-groove ceiling at covered porches. — 381.7 ft2 (incl. 10% waste)",
+   "allowance": false
+  }
+ ],
+ "22": [
+  {
+   "name": "Stone Material",
+   "ct": "Masonry Materials",
+   "qty": 282,
+   "unit": "sqft",
+   "desc": "Stone veneer accent wall. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Stone Labor",
+   "ct": "Masonry Materials",
+   "qty": 282,
+   "unit": "sqft",
+   "desc": "Stone Labor — 282 sq ft",
+   "allowance": false
+  }
+ ],
+ "19": [
+  {
+   "name": "LF of Lowers - Kitchen",
+   "ct": "Cabinet Material",
+   "qty": 20,
+   "unit": "LF",
+   "desc": "High-end cabinetry, kitchen. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "LF of Uppers  - Kitchen",
+   "ct": "Cabinet Material",
+   "qty": 12,
+   "unit": "LF",
+   "desc": "LF of Uppers  - Kitchen Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "LF of Island  - Kitchen",
+   "ct": "Cabinet Material",
+   "qty": 10,
+   "unit": "LF",
+   "desc": "LF of Island  - Kitchen Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "LF of Tall Cabinet (Fridge, Oven, Linen)  - Kitchen",
+   "ct": "Cabinet Material",
+   "qty": 6,
+   "unit": "LF",
+   "desc": "LF of Tall Cabinet (Fridge, Oven, Linen)  - Kitchen Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Each Vent Hood Cabinet  - Kitchen",
+   "ct": "Cabinet Material",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Each Vent Hood Cabinet  - Kitchen Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Labor to assemble and install cabinets  - Kitchen",
+   "ct": "Cabinets Install Labor",
+   "qty": 40,
+   "unit": "each",
+   "desc": "Labor to assemble and install cabinets  - Kitchen — 40 each",
+   "allowance": false
+  },
+  {
+   "name": "LF of Lowers",
+   "ct": "Cabinet Material",
+   "qty": 12,
+   "unit": "LF",
+   "desc": "LF of Lowers Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "LF of Uppers",
+   "ct": "Cabinet Material",
+   "qty": 10,
+   "unit": "LF",
+   "desc": "LF of Uppers Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Countertops",
+   "ct": "Cabinet Material",
+   "qty": 15,
+   "unit": "sqft",
+   "desc": "Countertops  — 15 ft2 (incl. 1.24% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Vanity Cabinets - Bath 1",
+   "ct": "Cabinet Material",
+   "qty": 18,
+   "unit": "sqft",
+   "desc": "Vanity Cabinets - Bath 1 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Cabinets - Hardware - Bath 1",
+   "ct": "Cabinets Hardware",
+   "qty": 18,
+   "unit": "sqft",
+   "desc": "Vanity Cabinets - Hardware - Bath 1 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Cabinets - Installation - Bath 1",
+   "ct": "Cabinets Install Labor",
+   "qty": 18,
+   "unit": "sqft",
+   "desc": "Vanity Cabinets - Installation - Bath 1 — 18 ft2",
+   "allowance": false
+  },
+  {
+   "name": "Install towel bars - Bath 1",
+   "ct": "Cabinets Install Labor",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Install towel bars - Bath 1 — 2 each",
+   "allowance": false
+  },
+  {
+   "name": "Vanity Cabinets - Bath 2",
+   "ct": "Cabinet Material",
+   "qty": 9,
+   "unit": "sqft",
+   "desc": "Vanity Cabinets - Bath 2 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Cabinets - Hardware - Bath 2",
+   "ct": "Cabinets Hardware",
+   "qty": 9,
+   "unit": "sqft",
+   "desc": "Vanity Cabinets - Hardware - Bath 2 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Cabinets - Installation - Bath 2",
+   "ct": "Cabinets Install Labor",
+   "qty": 9,
+   "unit": "sqft",
+   "desc": "Vanity Cabinets - Installation - Bath 2 — 9 ft2",
+   "allowance": false
+  },
+  {
+   "name": "Install towel bars - Bath 2",
+   "ct": "Cabinets Install Labor",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Install towel bars - Bath 2 — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Vanity Cabinets - Bath 3",
+   "ct": "Cabinet Material",
+   "qty": 9,
+   "unit": "sqft",
+   "desc": "Vanity Cabinets - Bath 3 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Cabinets - Hardware - Bath 3",
+   "ct": "Cabinets Hardware",
+   "qty": 9,
+   "unit": "sqft",
+   "desc": "Vanity Cabinets - Hardware - Bath 3 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Cabinets - Installation - Bath 3",
+   "ct": "Cabinets Install Labor",
+   "qty": 9,
+   "unit": "sqft",
+   "desc": "Vanity Cabinets - Installation - Bath 3 — 9 ft2",
+   "allowance": false
+  },
+  {
+   "name": "Install towel bars - Bath 3",
+   "ct": "Cabinets Install Labor",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Install towel bars - Bath 3 — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Vanity Cabinets - Bath 4",
+   "ct": "Cabinet Material",
+   "qty": 9,
+   "unit": "sqft",
+   "desc": "Vanity Cabinets - Bath 4 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Cabinets - Hardware - Bath 4",
+   "ct": "Cabinets Hardware",
+   "qty": 9,
+   "unit": "sqft",
+   "desc": "Vanity Cabinets - Hardware - Bath 4 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Vanity Cabinets - Installation - Bath 4",
+   "ct": "Cabinets Install Labor",
+   "qty": 9,
+   "unit": "sqft",
+   "desc": "Vanity Cabinets - Installation - Bath 4 — 9 ft2",
+   "allowance": false
+  },
+  {
+   "name": "Install towel bars - Bath 4",
+   "ct": "Cabinets Install Labor",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Install towel bars - Bath 4 — 1 each",
+   "allowance": false
+  }
+ ],
+ "20": [
+  {
+   "name": "Granite or Quartz  - Kitchen",
+   "ct": "Countertops Material",
+   "qty": 80,
+   "unit": "sqft",
+   "desc": "Level-6 granite/quartz (or concrete) countertops, fabricated & installed. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Charge per cutout/hole",
+   "ct": "Countertops Material",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Charge per cutout/hole — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Charge per cutout/hole - Bath 1",
+   "ct": "Countertops Material",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Charge per cutout/hole - Bath 1 — 2 each",
+   "allowance": false
+  },
+  {
+   "name": "Granite or Quartz - Bath 1",
+   "ct": "Countertops Material",
+   "qty": 32,
+   "unit": "sqft",
+   "desc": "Level-6 quartz vanity tops. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Charge per cutout/hole - Bath 2",
+   "ct": "Countertops Material",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Comes with vanity — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Granite or Quartz - Bath 2",
+   "ct": "Countertops Material",
+   "qty": 14,
+   "unit": "sqft",
+   "desc": "Comes with vanity Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Charge per cutout/hole - Bath 3",
+   "ct": "Countertops Material",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Charge per cutout/hole - Bath 3 — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Granite or Quartz - Bath 3",
+   "ct": "Countertops Material",
+   "qty": 14,
+   "unit": "sqft",
+   "desc": "Granite or Quartz - Bath 3 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Charge per cutout/hole - Bath 4",
+   "ct": "Countertops Material",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Charge per cutout/hole - Bath 4 — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Granite or Quartz - Bath 4",
+   "ct": "Countertops Material",
+   "qty": 14,
+   "unit": "sqft",
+   "desc": "Granite or Quartz - Bath 4 Allowance.",
+   "allowance": true
+  }
+ ],
+ "18": [
+  {
+   "name": "Backsplash - Material allowance",
+   "ct": "Tile Materials",
+   "qty": 49.5,
+   "unit": "sqft",
+   "desc": "Backsplash - Material allowance",
+   "allowance": true
+  },
+  {
+   "name": "Tile sundries - Glue Grout, Spacers, etc",
+   "ct": "Tile Materials",
+   "qty": 49.5,
+   "unit": "sqft",
+   "desc": "Tile sundries - Glue Grout, Spacers, etc — 49.5 each",
+   "allowance": false
+  },
+  {
+   "name": "Backsplash - Tile labor",
+   "ct": "Tile Labor",
+   "qty": 45,
+   "unit": "sqft",
+   "desc": "Backsplash - Tile labor — 45 each",
+   "allowance": false
+  },
+  {
+   "name": "Tile Walls  - Material allowance - Bath 1",
+   "ct": "Tile Materials",
+   "qty": 143,
+   "unit": "sqft",
+   "desc": "Tile Walls  - Material allowance - Bath 1",
+   "allowance": true
+  },
+  {
+   "name": "Tile sundries - Glue Grout, Spacers, etc - Bath 1",
+   "ct": "Tile Materials",
+   "qty": 143,
+   "unit": "sqft",
+   "desc": "Tile sundries - Glue Grout, Spacers, etc - Bath 1 — 143 ft2 (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Schluter - Bath 1",
+   "ct": "Tile Materials",
+   "qty": 143,
+   "unit": "sqft",
+   "desc": "Schluter - Bath 1 — 143 sq ft (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Tile wall labor - Bath 1",
+   "ct": "Tile Labor",
+   "qty": 130,
+   "unit": "sqft",
+   "desc": "Tile wall labor - Bath 1 — 130 ft2 (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Niche Labor - Bath 1",
+   "ct": "Tile Labor",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Niche Labor - Bath 1 — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Niche tile allowance - Bath 1",
+   "ct": "Tile Materials",
+   "qty": 3,
+   "unit": "LF",
+   "desc": "Niche tile allowance - Bath 1",
+   "allowance": true
+  },
+  {
+   "name": "Shower bench - Bath 1",
+   "ct": "Tile Labor",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Shower bench - Bath 1 — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Shower Bench Labor - Bath 1",
+   "ct": "Tile Labor",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Shower Bench Labor - Bath 1 — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Shower mud bed - Bath 1",
+   "ct": "Tile Labor",
+   "qty": 40,
+   "unit": "sqft",
+   "desc": "Shower mud bed - Bath 1 — 40 sq ft (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Shower floor tile allowance - Bath 1",
+   "ct": "Tile Materials",
+   "qty": 40,
+   "unit": "sqft",
+   "desc": "Shower floor tile allowance - Bath 1",
+   "allowance": true
+  },
+  {
+   "name": "Flooring Tile - Bath 1",
+   "ct": "Tile Materials",
+   "qty": 77,
+   "unit": "sqft",
+   "desc": "Flooring Tile - Bath 1 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Flooring tile sundries - Bath 1",
+   "ct": "Tile Materials",
+   "qty": 77,
+   "unit": "sqft",
+   "desc": "Flooring tile sundries - Bath 1 — 77 each",
+   "allowance": false
+  },
+  {
+   "name": "Flooring tile Labor - Bath 1",
+   "ct": "Tile Labor",
+   "qty": 70,
+   "unit": "sqft",
+   "desc": "Flooring tile Labor - Bath 1 — 70 each",
+   "allowance": false
+  },
+  {
+   "name": "Tile Walls  - Material allowance - Bath 2",
+   "ct": "Tile Materials",
+   "qty": 90,
+   "unit": "sqft",
+   "desc": "Tile Walls  - Material allowance - Bath 2",
+   "allowance": true
+  },
+  {
+   "name": "Tile wall labor - Bath 2",
+   "ct": "Tile Labor",
+   "qty": 90,
+   "unit": "sqft",
+   "desc": "Tile wall labor - Bath 2 — 90 ft2 (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Shower mud bed - Bath 2",
+   "ct": "Tile Labor",
+   "qty": 36,
+   "unit": "sqft",
+   "desc": "Shower mud bed - Bath 2 — 36 sq ft (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Shower floor tile allowance - Bath 2",
+   "ct": "Tile Materials",
+   "qty": 36,
+   "unit": "sqft",
+   "desc": "Shower floor tile allowance - Bath 2",
+   "allowance": true
+  },
+  {
+   "name": "Flooring Tile - Bath 2",
+   "ct": "Tile Materials",
+   "qty": 45,
+   "unit": "sqft",
+   "desc": "Flooring Tile - Bath 2 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Tile Walls  - Material allowance - Bath 3",
+   "ct": "Tile Materials",
+   "qty": 90,
+   "unit": "sqft",
+   "desc": "Tile Walls  - Material allowance - Bath 3",
+   "allowance": true
+  },
+  {
+   "name": "Tile wall labor - Bath 3",
+   "ct": "Tile Labor",
+   "qty": 90,
+   "unit": "sqft",
+   "desc": "Tile wall labor - Bath 3 — 90 ft2 (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Shower mud bed - Bath 3",
+   "ct": "Tile Labor",
+   "qty": 36,
+   "unit": "sqft",
+   "desc": "Shower mud bed - Bath 3 — 36 sq ft (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Shower floor tile allowance - Bath 3",
+   "ct": "Tile Materials",
+   "qty": 36,
+   "unit": "sqft",
+   "desc": "Shower floor tile allowance - Bath 3",
+   "allowance": true
+  },
+  {
+   "name": "Flooring Tile - Bath 3",
+   "ct": "Tile Materials",
+   "qty": 45,
+   "unit": "sqft",
+   "desc": "Flooring Tile - Bath 3 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Flooring tile sundries - Bath 3",
+   "ct": "Tile Materials",
+   "qty": 45,
+   "unit": "sqft",
+   "desc": "Flooring tile sundries - Bath 3 — 45 each",
+   "allowance": false
+  },
+  {
+   "name": "Flooring tile Labor - Bath 3",
+   "ct": "Tile Labor",
+   "qty": 45,
+   "unit": "sqft",
+   "desc": "Flooring tile Labor - Bath 3 — 45 each",
+   "allowance": false
+  },
+  {
+   "name": "Tile Walls  - Material allowance - Bath 4",
+   "ct": "Tile Materials",
+   "qty": 90,
+   "unit": "sqft",
+   "desc": "Tile Walls  - Material allowance - Bath 4",
+   "allowance": true
+  },
+  {
+   "name": "Tile wall labor - Bath 4",
+   "ct": "Tile Labor",
+   "qty": 90,
+   "unit": "sqft",
+   "desc": "Tile wall labor - Bath 4 — 90 ft2 (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Shower mud bed - Bath 4",
+   "ct": "Tile Labor",
+   "qty": 36,
+   "unit": "sqft",
+   "desc": "Shower mud bed - Bath 4 — 36 sq ft (incl. 10% waste)",
+   "allowance": false
+  },
+  {
+   "name": "Shower floor tile allowance - Bath 4",
+   "ct": "Tile Materials",
+   "qty": 36,
+   "unit": "sqft",
+   "desc": "Shower floor tile allowance - Bath 4",
+   "allowance": true
+  },
+  {
+   "name": "Flooring Tile - Bath 4",
+   "ct": "Tile Materials",
+   "qty": 45,
+   "unit": "sqft",
+   "desc": "Flooring Tile - Bath 4 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Flooring tile sundries - Bath 4",
+   "ct": "Tile Materials",
+   "qty": 45,
+   "unit": "sqft",
+   "desc": "Flooring tile sundries - Bath 4 — 45 each",
+   "allowance": false
+  },
+  {
+   "name": "Flooring tile Labor - Bath 4",
+   "ct": "Tile Labor",
+   "qty": 45,
+   "unit": "sqft",
+   "desc": "Flooring tile Labor - Bath 4 — 45 each",
+   "allowance": false
+  }
+ ],
+ "23": [
+  {
+   "name": "Vanity Sink - Mirror - Bath 1",
+   "ct": "Mirrors",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Vanity Sink - Mirror - Bath 1 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Install Mirror - Bath 1",
+   "ct": "Mirrors",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Install Mirror - Bath 1 — 2 each",
+   "allowance": false
+  },
+  {
+   "name": "Vanity Sink - Mirror - Bath 2",
+   "ct": "Mirrors",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Vanity Sink - Mirror - Bath 2 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Install Mirror - Bath 2",
+   "ct": "Mirrors",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Install Mirror - Bath 2 — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Vanity Sink - Mirror - Bath 3",
+   "ct": "Mirrors",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Vanity Sink - Mirror - Bath 3 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Install Mirror - Bath 3",
+   "ct": "Mirrors",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Install Mirror - Bath 3 — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Vanity Sink - Mirror - Bath 4",
+   "ct": "Mirrors",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Vanity Sink - Mirror - Bath 4 Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Install Mirror - Bath 4",
+   "ct": "Mirrors",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Install Mirror - Bath 4 — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Glass Shower Enclosure - Frameless (Master)",
+   "ct": "Shower Doors",
+   "qty": 2,
+   "unit": "each",
+   "desc": "Frameless glass shower enclosure(s). Allowance.",
+   "allowance": true
+  }
+ ],
+ "17": [
+  {
+   "name": "Paint/Stain - Interior SF",
+   "ct": "Paint",
+   "qty": 17939,
+   "unit": "sqft",
+   "desc": "Interior walls painted. — 17,939 sq ft",
+   "allowance": false
+  },
+  {
+   "name": "Spray-coat exposed structure / ducts / foam - BLACK",
+   "ct": "Paint",
+   "qty": 3841,
+   "unit": "sqft",
+   "desc": "Exposed ceiling structure, ductwork and insulation spray-coated black (industrial finish); includes code ignition-barrier coating. — 3,841 ft2 (incl. 10% waste)",
+   "allowance": false
+  }
+ ],
+ "24": [
+  {
+   "name": "Double Garage Door",
+   "ct": "Garage Doors",
+   "qty": 1,
+   "unit": "sqft",
+   "desc": "Modern flush 16'x8' garage door. Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Double Garage Door Opener",
+   "ct": "Garage Doors",
+   "qty": 1,
+   "unit": "sqft",
+   "desc": "Double Garage Door Opener Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Double Garage Door Installation",
+   "ct": "Garage Doors",
+   "qty": 1,
+   "unit": "sqft",
+   "desc": "Double Garage Door Installation — 1 ft2",
+   "allowance": false
+  }
+ ],
+ "27": [
+  {
+   "name": "Final Grading",
+   "ct": "Final grading",
+   "qty": 1,
+   "unit": "sqft",
+   "desc": "Final Grading — 1 ft2",
+   "allowance": false
+  },
+  {
+   "name": "Backfill Dirt (14Yd Net)",
+   "ct": "Final grading",
+   "qty": 3,
+   "unit": "loads",
+   "desc": "Backfill Dirt (14Yd Net) Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Sod",
+   "ct": "Sod",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Sod / lawn establishment - allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Irrigation",
+   "ct": "Sod",
+   "qty": 1,
+   "unit": "each",
+   "desc": "Irrigation system - allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Plant package",
+   "ct": "Sod",
+   "qty": 1,
+   "unit": "sqft",
+   "desc": "Landscape plant package - allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Seed and straw",
+   "ct": "Sod",
+   "qty": 1,
+   "unit": "sqft",
+   "desc": "Seed and straw Allowance.",
+   "allowance": true
+  }
+ ],
+ "26B": [
+  {
+   "name": "Labor & Equipment",
+   "ct": null,
+   "qty": 1,
+   "unit": "each",
+   "desc": "Labor & Equipment — 1 each",
+   "allowance": false
+  },
+  {
+   "name": "Labor",
+   "ct": "Driveway",
+   "qty": 2400,
+   "unit": "sqft",
+   "desc": "Labor Allowance.",
+   "allowance": true
+  },
+  {
+   "name": "Concrete",
+   "ct": "Driveway",
+   "qty": 46.2,
+   "unit": "CY",
+   "desc": "4\" Slab Allowance.",
+   "allowance": true
+  }
+ ],
+ "28A": [
+  {
+   "name": "Cleaning - Final Clean Interior",
+   "ct": "General Site Cleanup",
+   "qty": 3841,
+   "unit": "sqft",
+   "desc": "Cleaning - Final Clean Interior — 3,841 sq ft",
+   "allowance": false
+  }
+ ],
+ "28C": [
+  {
+   "name": "Cleaning - Exterior Pressure washing",
+   "ct": "General Site Cleanup",
+   "qty": 3841,
+   "unit": "each",
+   "desc": "Cleaning - Exterior Pressure washing — 3,841 each",
+   "allowance": false
+  }
+ ],
+ "28B": [
+  {
+   "name": "Cleaning - Final window cleaning",
+   "ct": "General Site Cleanup",
+   "qty": 24,
+   "unit": "each",
+   "desc": "Cleaning - Final window cleaning — 24 each",
+   "allowance": false
+  }
+ ],
+ "21": [
+  {
+   "name": "Stained & sealed concrete floors",
+   "ct": "LVP Materials",
+   "qty": 3631,
+   "unit": "sqft",
+   "desc": "Stained and sealed concrete finished floors throughout (polished/sealed slab). — 3,631 ft2",
+   "allowance": false
+  }
+ ]
+}

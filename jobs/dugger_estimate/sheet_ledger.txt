@@ -1,0 +1,21 @@
+  p0  cover         [sheet_0.png]  A-000 Cover Sheet
+  p1  site          [sheet_1.png]  A-001 Site Plan
+  p2  site          [sheet_2.png]  A-002 Grading Plan
+  p3  foundation    [sheet_3.png]  A-100a Proposed Foundation Plan
+  p4  detail        [sheet_4.png]  A-100b Foundation Details
+  p5  floor_plan    [sheet_5.png]  A-101 Proposed Floor Plan
+  p6  floor_plan    [sheet_6.png]  A-102 Proposed Dimensioned Floor Plan
+  p7  electrical    [sheet_7.png]  A-103 Proposed Electrical Plan
+  p8  other         [sheet_8.png]  A-104 Reflected Ceiling Plan - Heights
+  p9  electrical    [sheet_9.png]  A-104 Reflected Ceiling Plan - Lighting
+  p10 roof_plan     [sheet_10.png]  A-105 Proposed Roof Plan
+  p11 elevation     [sheet_11.png]  A-200 West & South Exterior Elevations
+  p12 elevation     [sheet_12.png]  A-201 East & North Exterior Elevations
+  p13 floor_plan    [sheet_13.png]  A-250 Workshop Floor Plan & Elevations
+  p14 notes         [sheet_14.png]  A-300 General Construction Recommendations
+  p15 notes         [sheet_15.png]  A-301 General Specifications
+  p16 detail        [sheet_16.png]  A-302 General Construction Details & Notations
+  core 'foundation': p[3]
+  core 'floor_plan': p[5, 6, 13]
+  core 'roof_plan': p[10]
+  core 'elevation': p[11, 12]

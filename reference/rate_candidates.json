@@ -1,0 +1,24 @@
+[
+  {
+    "trade": "shiplap_sf",
+    "unit_cost": 5.5,
+    "unit": "SF",
+    "evidence": "Jason 7/5/26: shiplap sub $5.50/SF (confirmed rate)",
+    "proposed": "2026-07-06",
+    "status": "pending",
+    "note": "ADVISORY ONLY -- not priced until confirmed against actuals + hand-added to RATE_BOOK (estimator mandate)"
+  },
+  {
+    "trade": "Drywall - Level 4",
+    "cost_code": "10.05",
+    "unit_cost": 1.44,
+    "unit": "sq ft of waste-adjusted surface",
+    "quantity_waste_pct": 10,
+    "evidence": "Completed Burns invoice 502225 ($11,002.50) and Jason manual takeoff (6,971 net SF; 7,668 SF after 10% waste).",
+    "proposed": "2026-07-15",
+    "status": "confirmed",
+    "confirmed_by": "Jason",
+    "confirmed": "2026-07-15",
+    "note": "Promoted to active V3. Frozen V2 remains archived and unchanged."
+  }
+]

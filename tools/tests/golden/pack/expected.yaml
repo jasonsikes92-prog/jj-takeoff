@@ -1,0 +1,21 @@
+# PACK RESIDENCE (Ralph & Lynn Pack) — PR-Pack, 16-sheet J&J set
+# Ground truth = Jason's hand takeoff (calibration.md data point #39, job not yet built)
+# + #34/#35. Single-story mono-slab, all-masonry, 8:12 roof throughout.
+house: pack
+plan: plan.pdf
+plan_sha256: ED5DAE730C47556596267BC44151489182B26C11F45FDD38E9144BC09891CF90
+plan_missing: false
+scale_note: "3/16in=1ft on plan sheets (p5-p8), 1/4in on electrical; per-page verified"
+
+asserts:
+  # Framing = total under-roof framed area (heated + both garages + covered patios,
+  # uncovered patio excluded). #39: 'Framing SF 7,372=7,372 EXACT' vs Jason takeoff.
+  # Given data (designer's own SQFT schedule) -> tight +/-1% tolerance.
+  - {trade: framing_sf, quantity: 7372, unit: SF, tolerance_pct: 1.5, source: schedule, assertion_type: comparison, page_ref: "sheet 4 SQFT"}
+
+  # Heated area = 4,326 SF (designer SQFT schedule; #34). Given data +/-1%.
+  - {trade: heated_sf, quantity: 4326, unit: SF, tolerance_pct: 1.5, source: schedule, assertion_type: comparison, page_ref: "sheet 4 SQFT"}
+
+  # Kitchen BASE cabinet run. #34: kitchen lower 16.2 + island 24.41 + tall 8.90
+  # = 49.5 LF base run (spec rounds to ~51). Deliverable-B target; +/-10%, island captured.
+  - {trade: cabinet_kitchen_base_lf, quantity: 49.5, unit: LF, tolerance_pct: 10, source: takeoff, page_ref: "sheet 7 MAIN FLOOR"}

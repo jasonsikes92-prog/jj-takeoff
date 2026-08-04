@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Level Ground — Risk &amp; Gap Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Oswald:wght@500;600;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0E2233; --navy-deep:#091723; --steel:#5C90AC; --steel-lt:#AFCBDD;
+    --paper:#F4EFE4; --offwhite:#FBF9F4; --red:#D63A2B; --ink:#15242F; --muted:#6E7E88;
+    --f-display:"Fraunces",Georgia,serif; --f-body:"Inter",system-ui,sans-serif;
+    --f-label:"Oswald",sans-serif; --f-hand:"Caveat",cursive;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#E9E4D8;font-family:var(--f-body);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .page{max-width:860px;margin:28px auto;background:var(--offwhite);box-shadow:0 18px 44px rgba(20,40,55,.18)}
+  h1,h2,h3{font-family:var(--f-display);font-weight:500;margin:0;line-height:1.1}
+  p{margin:0 0 .9em}
+
+  .lbl{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.18em;font-size:.68rem;color:var(--steel)}
+
+  /* cover band */
+  .cover{background:var(--navy);color:var(--offwhite);padding:44px 52px 38px;position:relative;overflow:hidden}
+  .cover::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(175,203,221,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(175,203,221,.06) 1px,transparent 1px);background-size:34px 34px}
+  .cover>*{position:relative}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:30px}
+  .mark{width:44px;height:15px;border:1.5px solid var(--steel);border-radius:3px;position:relative;flex:none}
+  .mark::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:8px;height:8px;border-radius:50%;background:var(--steel)}
+  .mark::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:17px;height:10px;border-left:1.5px solid var(--steel);border-right:1.5px solid var(--steel)}
+  .brand b{font-family:var(--f-label);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:1.05rem}
+  .cover h1{font-size:2.5rem;margin:.2em 0 .25em}
+  .cover .sub{color:#C6D4DE;max-width:52ch}
+  .meta{display:grid;grid-template-columns:repeat(4,auto);gap:8px 38px;margin-top:28px;border-top:1px solid rgba(175,203,221,.25);padding-top:18px}
+  .meta div span{display:block;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.14em;font-size:.62rem;color:var(--steel-lt)}
+  .meta div b{font-weight:600;font-size:.95rem}
+  .sample-flag{position:absolute;top:18px;right:-42px;transform:rotate(35deg);background:var(--red);color:#fff;font-family:var(--f-label);letter-spacing:.2em;font-size:.7rem;padding:6px 54px;text-transform:uppercase}
+
+  .body{padding:44px 52px}
+  section{margin-bottom:42px}
+  section>h2{font-size:1.55rem;margin-bottom:4px}
+  .rule{display:flex;align-items:center;gap:12px;color:var(--steel);margin:6px 0 20px}
+  .rule .ln{flex:1;height:1px;background:currentColor;opacity:.45;position:relative}
+  .rule .ln::before,.rule .ln::after{content:"";position:absolute;top:-4px;width:1px;height:9px;background:currentColor}
+  .rule .ln::before{left:0}.rule .ln::after{right:0}
+
+  /* verdict strip */
+  .verdict{display:grid;grid-template-columns:1fr 1fr 1fr;border:1.5px solid var(--navy);border-radius:5px;overflow:hidden;text-align:center}
+  .verdict>div{padding:20px 14px}
+  .verdict .k{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.14em;font-size:.66rem;color:var(--muted)}
+  .verdict .v{font-family:var(--f-display);font-size:1.7rem;margin-top:4px}
+  .verdict>div+div{border-left:1px solid #E2D8C4}
+  .verdict .bad .v{color:var(--red)}
+  .verdict-note{margin-top:12px;color:var(--muted);font-size:.92rem;font-style:italic}
+
+  /* confidence chips */
+  .conf{display:inline-block;font-family:var(--f-label);text-transform:uppercase;letter-spacing:.1em;font-size:.62rem;padding:2.5px 9px;border-radius:2px;vertical-align:middle}
+  .conf--m{background:rgba(92,144,172,.16);color:#3c6379}
+  .conf--f{background:rgba(46,125,80,.14);color:#2e6e4f}
+  .conf--e{background:rgba(214,58,43,.12);color:#b2362a}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;background:var(--paper);border:1px solid #E2D8C4;border-radius:5px;padding:14px 18px;font-size:.88rem;color:var(--muted)}
+  .legend span b{color:var(--ink);font-weight:600}
+
+  /* findings */
+  .find{border:1px solid #E2D8C4;border-radius:5px;margin-bottom:14px;overflow:hidden;break-inside:avoid}
+  .find-head{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:13px 18px;background:var(--paper)}
+  .find-head .t{font-weight:600;font-size:1rem}
+  .find-head .cat{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.12em;font-size:.62rem;color:var(--muted)}
+  .find-body{padding:14px 18px;display:grid;grid-template-columns:1fr auto;gap:6px 22px;align-items:start}
+  .find-body p{margin:0;font-size:.94rem;color:#3d4c56}
+  .basis{display:block;margin-top:8px;font-size:.8rem;color:var(--muted);font-style:italic}
+  .nums{text-align:right;white-space:nowrap;font-family:var(--f-label)}
+  .nums .bid{color:var(--muted);font-size:.82rem;display:block}
+  .nums .real{font-weight:600;font-size:1.02rem;display:block}
+  .nums .exp{display:block;margin-top:4px;font-family:var(--f-hand);font-weight:700;color:var(--red);font-size:1.3rem;line-height:1}
+
+  /* quantities table */
+  table{width:100%;border-collapse:collapse;font-size:.92rem}
+  th{font-family:var(--f-label);text-transform:uppercase;letter-spacing:.12em;font-size:.64rem;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:2px solid var(--navy)}
+  td{padding:9px 10px;border-bottom:1px solid #ECE3D2}
+  td.num{font-family:var(--f-label);font-weight:600;white-space:nowrap}
+  td.src{color:var(--muted);font-size:.84rem}
+
+  /* questions */
+  .qs{counter-reset:q;list-style:none;padding:0;margin:0}
+  .qs li{counter-increment:q;position:relative;padding:12px 0 12px 46px;border-top:1px dashed #E2D8C4;font-size:.97rem}
+  .qs li:first-child{border-top:0}
+  .qs li::before{content:counter(q,decimal-leading-zero);position:absolute;left:0;top:12px;font-family:var(--f-display);color:var(--steel);font-size:1.15rem}
+  .qs li{cursor:pointer}
+  .qs .chk{display:inline-block;width:15px;height:15px;border:1.5px solid var(--steel);border-radius:2px;margin-right:10px;vertical-align:-2px;position:relative;flex:none}
+  .qs li.done .chk{background:var(--steel)}
+  .qs li.done .chk::after{content:"✓";position:absolute;left:2.5px;top:-2.5px;color:#fff;font-size:11px;font-weight:700}
+
+  /* unknowns */
+  .unk{background:var(--paper);border:1px solid #E2D8C4;border-radius:5px;padding:20px 22px}
+  .unk ul{margin:8px 0 0;padding-left:18px;color:#3d4c56;font-size:.94rem}
+  .unk li{margin-bottom:6px}
+
+  .foot{background:var(--navy-deep);color:#9FB2BE;padding:26px 52px;font-size:.78rem;line-height:1.6}
+  .foot b{color:#fff;font-family:var(--f-label);letter-spacing:.12em;text-transform:uppercase;font-size:.72rem}
+
+  @media print{
+    body{background:#fff}
+    .page{box-shadow:none;margin:0;max-width:none}
+    .cover{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    section{break-inside:avoid-page}
+  }
+  @media (max-width:640px){
+    .cover,.body,.foot{padding-left:22px;padding-right:22px}
+    .meta{grid-template-columns:1fr 1fr}
+    .verdict{grid-template-columns:1fr}
+    .verdict>div+div{border-left:0;border-top:1px solid #E2D8C4}
+    .find-body{grid-template-columns:1fr}
+    .nums{text-align:left}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="cover">
+    <div class="sample-flag" id="sampleFlag">Sample report</div>
+    <div class="brand"><span class="mark" aria-hidden="true"></span><b>Level Ground</b></div>
+    <div class="lbl" id="rType">Bid Risk &amp; Gap Report</div>
+    <h1 id="rTitle">Property name</h1>
+    <p class="sub">An independent review of your plans and your builder's estimate — what's solid, what's missing, and what to ask before you sign. Every line is labeled by how sure we are.</p>
+    <div class="meta" id="rMeta"></div>
+  </div>
+
+  <div class="body">
+
+    <section id="verdictSection">
+      <h2>The bottom line</h2>
+      <div class="rule"><span class="ln"></span><span class="lbl">read this first</span><span class="ln"></span></div>
+      <div class="verdict">
+        <div><div class="k" id="kBid">Builder's bid</div><div class="v" id="vBid">—</div></div>
+        <div><div class="k" id="kRange">Our independent range</div><div class="v" id="vRange">—</div></div>
+        <div class="bad" id="expCell"><div class="k" id="kExp">Exposure we flagged</div><div class="v" id="vExp">—</div></div>
+      </div>
+      <p class="verdict-note" id="vNote"></p>
+    </section>
+
+    <section>
+      <h2>How to read this report</h2>
+      <div class="rule"><span class="ln"></span><span class="lbl">our honesty labels</span><span class="ln"></span></div>
+      <div class="legend">
+        <span><span class="conf conf--m">Measured</span> &nbsp;<b>Taken off your drawings.</b> High confidence.</span>
+        <span><span class="conf conf--f">Fact</span> &nbsp;<b>Observable in your bid.</b> Not a prediction.</span>
+        <span><span class="conf conf--e">Estimated · regional</span> &nbsp;<b>Honest range</b> from regional data. Confirm locally.</span>
+      </div>
+    </section>
+
+    <section>
+      <h2 id="foundH2">What we found</h2>
+      <div class="rule"><span class="ln"></span><span class="lbl" id="foundLbl">gaps · allowances · vague lines</span><span class="ln"></span></div>
+      <div id="findings"></div>
+    </section>
+
+    <section>
+      <h2>Your home, measured</h2>
+      <div class="rule"><span class="ln"></span><span class="lbl">straight off your drawings</span><span class="ln"></span></div>
+      <table>
+        <thead><tr><th>Item</th><th>Quantity</th><th>Source</th><th>Confidence</th></tr></thead>
+        <tbody id="qty"></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Ask your builder these — before you sign</h2>
+      <div class="rule"><span class="ln"></span><span class="lbl">your script for the meeting</span><span class="ln"></span></div>
+      <ol class="qs" id="questions"></ol>
+    </section>
+
+    <section>
+      <h2>What we can't know</h2>
+      <div class="rule"><span class="ln"></span><span class="lbl">the honest limits</span><span class="ln"></span></div>
+      <div class="unk">
+        <p style="margin:0;color:var(--muted);font-size:.94rem">No honest review can see everything. These items are outside what plans and a bid can tell us — keep them on your radar:</p>
+        <ul id="unknowns"></ul>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="foot">
+    <b>Level Ground · getlevelground.com</b><br>
+    This report is an independent, educational review prepared to help you ask better questions. It is not legal, engineering, or financial advice, and Level Ground is not a party to your construction contract. Cost figures marked "Estimated" are ranges, not guarantees — always confirm specifics with your builder and licensed professionals. We never take referral fees from builders; the homeowner is the only party we work for. <span id="rId"></span>
+  </div>
+</div>
+
+<script id="report-data" type="application/json">
+{
+  "meta": {
+    "report_id": "LG-BIDGAP-0001",
+    "report_type": "bid_gap",
+    "is_sample": true,
+    "prepared_for": "Sample Homeowner",
+    "property_label": "Sample Residence — Lake County, GA",
+    "region": {
+      "state": "GA",
+      "zip3": "310",
+      "market": "Middle Georgia"
+    },
+    "date": "2026-07-06",
+    "home": {
+      "heated_sf": 3214,
+      "stories": 1.5,
+      "foundation": "slab",
+      "garage": "3-car",
+      "finish_level": "custom"
+    },
+    "bid_total": 587400.0,
+    "our_range": {
+      "low": 704000.0,
+      "high": 880000.0
+    },
+    "cost_basis": "custom finish · Middle Georgia · $160-200/sf under-roof",
+    "pricing_confirmed": true,
+    "market_calibrated": true,
+    "pricing_tier": "calibrated",
+    "verdict_note": "An independent review of your plans against your builder's bid — what's solid, what's thin, and what to ask before you sign. The range below is your bid corrected for every gap we found; each dollar of it traces to a finding."
+  },
+  "findings": [
+    {
+      "category": "missing_scope",
+      "title": "Site work, driveway & final grading",
+      "detail": "Grading, the driveway, and the final grade are the single most common thing a bid under-carries or buries in a vague \"site allowance.\" It lands late, and it is rarely small. The bid carries less than a realistic number for it.",
+      "bid_amount": 4500.0,
+      "realistic_low": 18000,
+      "realistic_high": 28000,
+      "confidence": "estimate_regional",
+      "basis": "Bid carries $4,500; regional range for a build like yours (provisional)."
+    },
+    {
+      "category": "missing_scope",
+      "title": "Gutters & downspouts",
+      "detail": "A small line that goes missing from bids more than almost any other. It never gets cheaper after the paint is on. It isn't in the bid at all.",
+      "bid_amount": 0,
+      "realistic_low": 3000,
+      "realistic_high": 5000,
+      "confidence": "estimate_regional",
+      "basis": "Not found in the bid; regional range for a build like yours (provisional)."
+    },
+    {
+      "category": "missing_scope",
+      "title": "Home technology, security & low-voltage",
+      "detail": "Structured wiring, cameras, alarm, and automation are frequently left out and come back as a five-figure change order mid-build, when your leverage is gone. It isn't in the bid at all.",
+      "bid_amount": 0,
+      "realistic_low": 40000,
+      "realistic_high": 60000,
+      "confidence": "estimate_regional",
+      "basis": "Not found in the bid; regional range for a build like yours (provisional)."
+    },
+    {
+      "category": "missing_scope",
+      "title": "Landscaping, sod & irrigation",
+      "detail": "Almost always excluded or zeroed. Fine if you know it going in — a surprise if you don't. It isn't in the bid at all.",
+      "bid_amount": 0,
+      "realistic_low": 5000,
+      "realistic_high": 15000,
+      "confidence": "estimate_regional",
+      "basis": "Not found in the bid; regional range for a build like yours (provisional)."
+    },
+    {
+      "category": "mispriced",
+      "title": "Insulation matches the plan spec",
+      "detail": "If your plans call for spray foam and the bid is priced for a batt package, the real number is different. Confirm the grade the bid actually carries. The bid carries less than a realistic number for it.",
+      "bid_amount": 8200.0,
+      "realistic_low": 16000,
+      "realistic_high": 21000,
+      "confidence": "estimate_regional",
+      "basis": "Bid carries $8,200; regional range for a build like yours (provisional)."
+    },
+    {
+      "category": "vague_lump",
+      "title": "\"Electrical — $35,000\"",
+      "detail": "A big one-line number with no breakdown — no scope split, no allowances. We can't call it wrong; we can tell you it's unverifiable as written, and unverifiable favors the builder.",
+      "bid_amount": 35000.0,
+      "realistic_low": null,
+      "realistic_high": null,
+      "confidence": "fact",
+      "basis": "Flagged, not priced — no quantities to check. Not added to the exposure total."
+    }
+  ],
+  "quantities": [
+    {
+      "item": "Heated living area",
+      "qty": "3,214",
+      "unit": "sq ft",
+      "source": "page 2 · text-schedule",
+      "confidence": "measured"
+    },
+    {
+      "item": "Total area under roof",
+      "qty": "4,400",
+      "unit": "sq ft",
+      "source": "page 2 · text-schedule",
+      "confidence": "measured"
+    },
+    {
+      "item": "Roof area",
+      "qty": "48",
+      "unit": "squares",
+      "source": "page 4 · face-decomposition",
+      "confidence": "measured"
+    },
+    {
+      "item": "Foundation / slab edge",
+      "qty": "312",
+      "unit": "lin ft",
+      "source": "page 3 · enclosed-region",
+      "confidence": "measured"
+    },
+    {
+      "item": "Slab footprint",
+      "qty": "3,120",
+      "unit": "sq ft",
+      "source": "page 3 · two-tracer-agree",
+      "confidence": "measured"
+    }
+  ],
+  "questions": [
+    "What exactly does the site/allowance line cover — clearing, driveway, and final grade — and what happens if it runs over?",
+    "Are gutters and downspouts in the bid, and who is carrying them?",
+    "Is low-voltage / structured wiring / security in the contract as a defined line, or is it excluded?",
+    "Can you list every allowance, its dollar figure, and the exact material and square footage it buys — in writing?",
+    "Is any landscaping, sod, or irrigation included, or is that on me?",
+    "Does the insulation line match the spec on my plans (foam vs. batt), and can I see the quote behind it?",
+    "Can the big trade lines (electrical, plumbing, HVAC) be broken into scope and allowances so I can see what's actually included?",
+    "How are change orders priced — cost plus a fixed markup, or re-quoted each time — and is that language in the contract?"
+  ],
+  "unknowns": [
+    "What's under the dirt — rock, unsuitable soil, or drainage surprises no plan can show.",
+    "Your final selections — a $12 tile and a $40 tile read identically on a floor plan.",
+    "Market swings between signing and dry-in — lumber and labor move.",
+    "Permit and utility-connection fees, which vary by county and can't be verified from plans alone."
+  ]
+}
+</script>
+
+<script>
+  const R = JSON.parse(document.getElementById('report-data').textContent);
+  const $ = id => document.getElementById(id);
+  const usd = n => n==null ? "—" : "$" + Math.round(n).toLocaleString();
+  const usdK = n => n==null ? "—" : (n>=1000 ? "$" + Math.round(n/1000) + "k" : usd(n));
+
+  if(!R.meta.is_sample) $('sampleFlag').style.display='none';
+  $('rType').innerHTML = R.meta.report_type==='pre_bid' ? 'Pre-Bid Report' : 'Bid Risk &amp; Gap Report';
+  $('rTitle').textContent = R.meta.property_label;
+  $('rId').textContent = "Report " + R.meta.report_id + " · " + R.meta.date;
+
+  const h = R.meta.home;
+  $('rMeta').innerHTML = [
+    ["Prepared for", R.meta.prepared_for],
+    ["Home", h.heated_sf.toLocaleString()+" sf · "+h.stories+"-story · "+h.foundation],
+    ["Market", R.meta.region.market+", "+R.meta.region.state],
+    ["Date", R.meta.date]
+  ].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('');
+
+  // ── VERDICT STRIP — three modes ─────────────────────────────────────────────
+  const M = R.meta;
+  const isBidGap = M.bid_total != null;
+  // exposure = per-finding corrections (dollars only exist on bid_gap findings)
+  let expLo=0, expHi=0;
+  R.findings.forEach(f=>{ if(f.realistic_low!=null){
+    expLo += Math.max(0, f.realistic_low-(f.bid_amount||0));
+    expHi += Math.max(0, f.realistic_high-(f.bid_amount||0)); } });
+
+  if(isBidGap){
+    // BID GAP: Builder's bid | our range (= bid + documented gaps) | exposure. The range is
+    // DERIVED from the findings so the three numbers ALWAYS reconcile (range − bid === exposure).
+    const rangeLo = M.bid_total + expLo, rangeHi = M.bid_total + expHi;
+    $('vBid').textContent = usd(M.bid_total);
+    $('vRange').textContent = usdK(rangeLo)+"–"+usdK(rangeHi);
+    $('vExp').textContent = usdK(expLo)+"–"+usdK(expHi);
+    let vnote = M.verdict_note || "";
+    if(M.our_range){   // cross-check: findings-derived range should OVERLAP the independent market range
+      const disjoint = Math.max(0, rangeLo - M.our_range.high, M.our_range.low - rangeHi);
+      if(disjoint > 0.12 * M.our_range.high){
+        console.warn(`Level Ground reconcile: findings-derived $${Math.round(rangeLo)}–$${Math.round(rangeHi)} `+
+          `and the independent market range $${M.our_range.low}–$${M.our_range.high} don't overlap `+
+          `(off $${Math.round(disjoint)}) — likely missed gaps or over-flagged; review before sending.`);
+        vnote += "  ⚠ Draft: the findings and the independent market range don't reconcile yet.";
+      }
+    }
+    $('vNote').textContent = vnote;
+  } else if(M.our_range){
+    // PRE-BID + MARKET PRICING (Phase 2): expected-cost hero, no bid to compare against.
+    $('kBid').textContent = "Your home";
+    $('vBid').textContent = (M.home && M.home.heated_sf) ? Number(M.home.heated_sf).toLocaleString()+" sf heated" : "measured";
+    $('kRange').textContent = "Estimated build cost";
+    $('vRange').textContent = usdK(M.our_range.low)+"–"+usdK(M.our_range.high);
+    $('kExp').textContent = "Market basis";
+    $('vExp').textContent = M.cost_basis || (M.region && M.region.market) || "regional";
+    const ec = $('expCell'); if(ec) ec.classList.remove('bad');    // a basis, not "exposure" (no red)
+    $('vNote').textContent = M.verdict_note || "";
+  } else {
+    // PRE-BID, no pricing: hide the strip entirely (Phase 1).
+    const vs = $('verdictSection'); if(vs) vs.style.display = 'none';
+    $('vNote').textContent = M.verdict_note || "";
+  }
+  // PRE-BID reframes the findings section into the forward-looking scope checklist.
+  if(!isBidGap){
+    const fh = $('foundH2'); if(fh) fh.textContent = 'Scope to confirm your bid covers';
+    const fl = $('foundLbl'); if(fl) fl.textContent = 'before you sign anything';
+  }
+
+  const catLabel = {missing_scope:"Missing scope", low_allowance:"Low allowance", vague_lump:"Vague lump sum", mispriced:"Mispriced scope"};
+  const confChip = c => c==="measured" ? '<span class="conf conf--m">Measured</span>'
+    : c==="fact" ? '<span class="conf conf--f">Fact</span>'
+    : c==="fact_plus_estimate" ? '<span class="conf conf--f">Fact</span> <span class="conf conf--e">Estimated · regional</span>'
+    : '<span class="conf conf--e">Estimated · regional</span>';
+
+  $('findings').innerHTML = R.findings.map(f=>{
+    const gapLo = f.realistic_low!=null ? Math.max(0,f.realistic_low-(f.bid_amount||0)) : null;
+    const gapHi = f.realistic_high!=null ? Math.max(0,f.realistic_high-(f.bid_amount||0)) : null;
+    return `<div class="find">
+      <div class="find-head"><span class="t">${f.title}</span><span class="cat">${catLabel[f.category]||f.category}</span></div>
+      <div class="find-body">
+        <p>${f.detail}<br>${confChip(f.confidence)}${f.basis?`<span class="basis">Basis: ${f.basis}</span>`:""}</p>
+        <div class="nums">
+          ${f.bid_amount!=null ? `<span class="bid">in the bid: ${usd(f.bid_amount)}</span>`:""}
+          ${f.realistic_low!=null ? `<span class="real">realistic: ${usdK(f.realistic_low)}–${usdK(f.realistic_high)}</span>`:""}
+          ${gapLo!=null ? `<span class="exp">→ ${usdK(gapLo)}–${usdK(gapHi)} exposure</span>`:""}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  $('qty').innerHTML = R.quantities.map(q=>`<tr>
+    <td>${q.item}</td><td class="num">${q.qty} ${q.unit}</td><td class="src">${q.source}</td><td>${confChip(q.confidence)}</td>
+  </tr>`).join('');
+
+  $('questions').innerHTML = R.questions.map(q=>`<li><span class="chk" aria-hidden="true"></span>${q}</li>`).join('');
+  document.querySelectorAll('#questions li').forEach(li=>li.addEventListener('click',()=>li.classList.toggle('done')));
+  $('unknowns').innerHTML = R.unknowns.map(u=>`<li>${u}</li>`).join('');
+</script>
+</body>
+</html>

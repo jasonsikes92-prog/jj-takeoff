@@ -1,0 +1,68 @@
+# ROBERTS RESIDENCE (= Jeffries, 788 Jeffries Rd; PR-051) — 1-story crawlspace farmhouse
+# Ground truth = Jason's REFERENCE ESTIMATE (examples/) + calibration.md data point #1.
+# PLAN DELIVERED 7/5/26: "Precon notes Jefferies (1).pdf" — title block reads "Roberts
+# Residence" on every sheet. 12-sheet VECTOR set: p2 SQFT sheet, p3 foundation/slab,
+# p4 floor plan, p5 framing, p6 roof plan (12:12 + 8:12), p7 electrical, p8-9 elevations,
+# p10 sections/bath elevations.
+house: roberts
+plan: plan.pdf
+plan_sha256: 0B5720FC85EC723DB2A64AFF913A2DF6DF39A578EB4B055BC1A80843ECAB4124
+reference_estimate: reference-estimate.xlsx
+reference_estimate_sha256: E45EA33C24CB6790F626DC4168DB7E2FD0CA090EB2A6EE151343EAE103D9CCAE
+plan_missing: false
+# Audited against Jason's 2026-07-29 colored overlay. White strokes remove a line; colored
+# strokes assign the same role as the overlay legend. Endpoint coordinates are PDF points,
+# so registration and render zoom cannot change the review.
+roof_line_review_json: '[{"action":"remove","segment":[1624.209,498.65,1624.209,612.128],"reason":"white markup"},{"action":"remove","segment":[1626.543,764.063,1626.543,695.486],"reason":"white markup"},{"action":"remove","segment":[1626.543,695.486,1626.543,609.905],"reason":"white markup"},{"action":"remove","segment":[1626.543,764.063,1152.957,764.063],"reason":"white markup"},{"action":"remove","segment":[1338.568,1311.449,1286.886,1311.449],"reason":"white markup"},{"action":"remove","segment":[1360.797,1318.229,1342.792,1318.229],"reason":"white markup"},{"action":"reclassify","segment":[935.336,1334.901,880.431,1334.901],"role":"ridge"},{"action":"reclassify","segment":[880.431,1334.901,825.637,1334.901],"role":"ridge"},{"action":"reclassify","segment":[1613.762,960.677,1566.97,960.677],"role":"ridge"},{"action":"reclassify","segment":[1212.975,1311.449,1013.693,1311.449],"role":"eave","scope":"porch"},{"action":"reclassify","segment":[919.22,1048.037,909.217,1063.041],"role":"ridge"},{"action":"reclassify","segment":[956.787,1048.037,919.22,1048.037],"role":"ridge"},{"action":"reclassify","segment":[1427.595,1333.678,1286.886,1333.678],"role":"rake"},{"action":"add","segment":[1626.543,764.063,1642.104,764.063],"role":"ridge"}]'
+scale_note: "p4 detect_scale ppf=16.714 (187 votes) — NONSTANDARD (print-rescaled set); per-page dim-voting required, never assume 18.0"
+
+asserts:
+  # The base classifier must resolve every reviewed segment without calling the review layer.
+  # Colors are labels in this fixture only; production uses plan geometry and topology.
+  - {trade: roof_line_autonomous_match_pct, quantity: 100, unit: PCT, tolerance_pct: 0, source: jason-markup, page_ref: "p7 roof plan colored overlay 2026-07-29"}
+  # Direct role totals from the autonomous classifier. Rake and hip/valley are
+  # slope-corrected; eave, ridge, and transition are level plan lengths.
+  - {trade: autonomous_eave_lf, quantity: 194.9, unit: LF, tolerance_pct: 0, source: jason-markup, page_ref: "p7 roof plan colored overlay 2026-07-29"}
+  - {trade: autonomous_rake_lf, quantity: 114.8, unit: LF, tolerance_pct: 0, source: jason-markup, page_ref: "p7 roof plan colored overlay 2026-07-29"}
+  - {trade: autonomous_ridge_lf, quantity: 110.2, unit: LF, tolerance_pct: 0, source: jason-markup, page_ref: "p7 roof plan colored overlay 2026-07-29"}
+  - {trade: autonomous_hip_valley_lf, quantity: 325.0, unit: LF, tolerance_pct: 0, source: jason-markup, page_ref: "p7 roof plan colored overlay 2026-07-29"}
+  - {trade: autonomous_transition_lf, quantity: 1.7, unit: LF, tolerance_pct: 0, source: jason-markup, page_ref: "p7 roof plan colored overlay 2026-07-29"}
+  # 1x4 WINDOW TRIM — sum of window OPENING perimeters from the plan's own size tags.
+  # Jason ruled 2026-07-27: trim runs around the whole ASSEMBLY (the mullion strip is built into
+  # the window, so a double mull gets ONE perimeter) and DOORS GET NO TRIM.
+  # The manual takeoff measures per SASH and runs over: 439.75 vs 283.33 here.
+  # ⚠ WHAT THIS PROVES: that the engine reads every window tag, parses the WWHH feet-inches
+  # encoding, and applies Jason's assembly rule. It is METHOD-CONFORMANCE plus regression
+  # protection — it is NOT independent accuracy evidence, because the expected value is derived
+  # from the same tags the probe reads. Raw LF; the takeoff's 10% waste is a separate column.
+  - {trade: window_trim_lf, quantity: 283.33, unit: LF, tolerance_pct: 0.5, source: jason-ruling, page_ref: "floor plan window tags"}
+  # Schedule-READ asserts grade against the PLAN'S OWN printed SQFT sheet (test = can the
+  # engine read the schedule). RESOLVED by Jason 7/5/26: 2,161 is RIGHT — the plan was
+  # revised after calibration #1 recorded 2,127. Plan-printed values are canonical here.
+  - {trade: heated_sf, quantity: 2161, unit: SF, tolerance_pct: 1.5, source: schedule, assertion_type: comparison, page_ref: "p2 SQFT sheet"}
+  - {trade: framing_sf, quantity: 3431, unit: SF, tolerance_pct: 1.5, source: schedule, assertion_type: comparison, page_ref: "p2 SQFT (heated+garage+cov porch+cov deck)"}
+
+  # WINDOW COUNT — measured off the FLOOR PLAN (p5), never the elevations. Ground truth is
+  # Skip's own Buildern takeoff for PR-051 (Measurements - Roberts Residence.xlsx: 23 each).
+  # Jason's rule 2026-07-27: a mulled unit is separate windows — 4x 6062MU labelled DOUBLE
+  # = 8, 2x 9062MU labelled TRIPLE = 6, 1x 6044MU unlabelled mull = 2, plus 7 singles = 23.
+  - {trade: window_count, quantity: 23, unit: EA, tolerance_pct: 0, source: skip-takeoff, page_ref: "p5 floor plan"}
+
+  # FASCIA = reviewed eave + slope-corrected rake. Jason's 2026-07-29 markup is the geometry
+  # authority. Southern's 336 LF quote remains a comparison only; forcing geometry to that
+  # total previously hid offsetting classification errors.
+  - {trade: fascia_lf, quantity: 309.7, unit: LF, tolerance_pct: 0, source: jason-markup, page_ref: "p7 roof plan colored overlay 2026-07-29"}
+  - {trade: fascia_vendor_lf, quantity: 336, unit: LF, tolerance_pct: 10, source: vendor-quote, assertion_type: comparison, page_ref: "Southern Siding and Gutters quote"}
+
+  # Sell estimate total = $591,341 (#1); needs the end-to-end estimate-assembly probe
+  # (run_takeoff contract, Phase 5). Reported as SKIP until then — not silently dropped.
+  # Estimate-ASSEMBLY math reproduced in code (assemble_estimate, cal #49): the file's
+  # 589 priced lines re-priced from qty/unit-cost/markup%% -> amount 516,589 (line math
+  # verified in bulk; 1 rounding exception in the file itself).
+  - {trade: estimate_amount_usd, quantity: 516589, unit: USD, tolerance_pct: 0.5, source: reference-file, page_ref: "fixture reference-estimate.xlsx, Estimate sheet"}
+  # DISCREPANCY (cal #49): 591,341 (cal #1 narrative) is NOT in the file; the file's own
+  # Buildern footer Total = 649,312.39 and doesn't sum from its items. Jason to call it.
+  # RESOLVED (Jason 7/6/26): sell truth = signed CONTRACT $591,341.33; the examples
+  # file is a later re-priced rebuild (items 516,589; stale footer 649,312) and can
+  # never reproduce it -> assert retired, kept here as the contract reference.
+  # RETIRED: - {trade: sell_total_usd, quantity: 591341, unit: USD, tolerance_pct: 10, source: sell, page_ref: "reference estimate xlsx"}

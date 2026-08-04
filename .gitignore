@@ -1,0 +1,37 @@
+# JJ-Takeoff — ALLOW BY DEFAULT.
+#
+# The old workspace .gitignore was deny-by-default. It was right for a repo sitting inside
+# 14 GB of plan sets, but it meant a brand-new source file was invisible to git until someone
+# explicitly un-ignored it — and 117 source files stayed invisible for months before anyone
+# noticed. This tree holds only the program, so the rule inverts: everything is tracked
+# unless it is large, generated, or secret. A new .py file is committed automatically.
+
+# --- generated ---
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+.vercel/
+*.bak
+
+# --- secrets ---
+.env
+.env.*
+!.env.example
+
+# --- large binaries: on disk, backed up, NOT in git history ---
+# Plan sets and workbooks are the evaluation corpus. They live here and in the original
+# OneDrive tree (Step 1 was a copy, not a move). Git is history, not disk-loss backup.
+tools/tests/golden/*/plan.pdf
+tools/tests/golden/*/*.xlsx
+eval/corpus/
+jobs/**/*.pdf
+jobs/**/*.png
+levelground/**/*.png
+levelground/**/*.jpg
+*.mp4
+
+# Tracked on purpose despite the patterns above — these are the crown jewels and they are small:
+#   tools/tests/golden/*/expected.yaml   the ground truth per house
+#   eval/truth/measurement_truth_v3.json 1.9 MB, 690 positive truths + 1,167 explicit zeros
+#   reference/calibration.md             1,619 lines, 63 data points

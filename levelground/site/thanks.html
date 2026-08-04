@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You're in — Level Ground</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0E2233;--steel:#5C90AC;--paper:#F4EFE4;--offwhite:#FBF9F4;--red:#D63A2B;--ink:#15242F;--muted:#6E7E88}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);font-family:"Inter",system-ui,sans-serif;color:var(--ink);line-height:1.65;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px}
+  .card{max-width:620px;background:var(--offwhite);border:1.5px solid var(--navy);border-radius:6px;overflow:hidden;box-shadow:0 18px 44px rgba(20,40,55,.14)}
+  .top{background:var(--navy);color:#fff;padding:30px 36px;display:flex;align-items:center;gap:12px}
+  .mark{width:44px;height:15px;border:1.5px solid var(--steel);border-radius:3px;position:relative;flex:none}
+  .mark::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:8px;height:8px;border-radius:50%;background:var(--steel)}
+  .mark::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:17px;height:10px;border-left:1.5px solid var(--steel);border-right:1.5px solid var(--steel)}
+  .top b{font-family:"Oswald",sans-serif;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+  .body{padding:34px 36px}
+  h1{font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:1.9rem;margin:0 0 .4em;line-height:1.15}
+  p{margin:0 0 1em;color:#3d4c56}
+  .btn{display:inline-block;font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:.92rem;padding:14px 24px;border-radius:2px;background:var(--red);color:#fff;text-decoration:none;margin-right:10px;margin-bottom:10px}
+  .btn.alt{background:var(--navy)}
+  .micro{font-size:.83rem;color:var(--muted);margin-top:14px}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="top"><span class="mark" aria-hidden="true"></span><b>Level&nbsp;Ground</b></div>
+    <div class="body">
+      <h1>Got it. You're on level ground now.</h1>
+      <p>Check your inbox shortly — if you reserved a report, we'll reply within one business day with your secure upload link and next steps.</p>
+      <p>In the meantime, here's the checklist — and the sample report, so you can see exactly what you'll get:</p>
+      <a class="btn" href="checklist.html">Open the checklist</a>
+      <a class="btn alt" href="sample-report.html">See a sample report</a>
+      <p class="micro">Didn't get an email? Check spam, or write us — we answer everything ourselves.</p>
+    </div>
+  </div>
+</body>
+</html>

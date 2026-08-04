@@ -1,0 +1,7 @@
+{
+  "name": "level-ground-site",
+  "private": true,
+  "dependencies": {
+    "stripe": "22.3.0"
+  }
+}

@@ -1,0 +1,43 @@
+# BETHANIE BURNS — PR-091, single-story mono-slab farmhouse, no garage
+# Ground truth = J&J manual takeoff (#12) + Southern vendor PO actuals (#12c) + schedule.
+house: burns
+plan: plan.pdf
+plan_sha256: A04414655C5DBDA29E52DF82AADE8AF62B48C776C138323761746228D5C887CD
+plan_missing: false
+scale_note: "1/4in=1ft floor plan (p4, 286 votes per #17)."
+
+asserts:
+  # 1x4 WINDOW TRIM — sum of window OPENING perimeters from the plan's own size tags.
+  # Jason ruled 2026-07-27: trim runs around the whole ASSEMBLY (the mullion strip is built into
+  # the window, so a double mull gets ONE perimeter) and DOORS GET NO TRIM.
+  # The manual takeoff measures per SASH and runs over: 214.79 vs 206.67 here.
+  # ⚠ WHAT THIS PROVES: that the engine reads every window tag, parses the WWHH feet-inches
+  # encoding, and applies Jason's assembly rule. It is METHOD-CONFORMANCE plus regression
+  # protection — it is NOT independent accuracy evidence, because the expected value is derived
+  # from the same tags the probe reads. Raw LF; the takeoff's 10% waste is a separate column.
+  - {trade: window_trim_lf, quantity: 206.67, unit: LF, tolerance_pct: 0.5, source: jason-ruling, page_ref: "floor plan window tags"}
+  # RECESSED CAN LIGHTS — electrical sheet p8, R4 tags only. Jason ruled 2026-07-27 that the
+  # ENGINE's 37 is correct and the manual takeoff's 32 was wrong: it counted vanity lights and
+  # single room fixtures as cans. Cans are recessed cans; other fixtures are their own lines.
+  - {trade: recessed_can_count, quantity: 37, unit: EA, tolerance_pct: 0, source: jason-ruling, page_ref: "p8 electrical plan"}
+  # WINDOW COUNT — FLOOR PLAN p6 only (p9 elevations read 26 for the same openings).
+  # Skip's Buildern sheet for PR-091 records 13. Jason ruled 2026-07-27 that a mulled unit
+  # is separate windows; the plan's single unlabelled 5450MU is a 5'-4" mull = 2 windows,
+  # so the correct count is 14 and the takeoff sheet was one light. Jason confirmed 14.
+  - {trade: window_count, quantity: 14, unit: EA, tolerance_pct: 0, source: jason-ruling, page_ref: "p6 floor plan"}
+  # Heated area from the designer SQFT schedule = 1,951 SF (#12). Given data +/-1%.
+  - {trade: heated_sf, quantity: 1951, unit: SF, tolerance_pct: 1.5, source: schedule, assertion_type: comparison, page_ref: "SQFT sheet"}
+
+  # classify_lines isolates the roof outline+ridge/valley on p6 by its olive-green color+weight
+  # signature = 40 segs / ~624 LF. Regression on the reliability front-end (7/2/26).
+  - {trade: roof_line_ft, quantity: 624, unit: LF, tolerance_pct: 6, source: classify_lines, page_ref: "p6 ROOF PLAN"}
+
+  # Vision-guided footprint from those isolated roof lines = 2,678 SF (clean 12-corner outline;
+  # blind trace_footprint gave a jumbled 1,915). Geometry regression.
+  - {trade: roof_footprint_sf, quantity: 2678, unit: SF, tolerance_pct: 8, source: roof_footprint, page_ref: "p6 ROOF PLAN"}
+
+  # roofing_estimate reproduces Southern Expert Roofing's ACTUAL bill to the penny (#13).
+  - {trade: roofing_total_usd, quantity: 8052.92, unit: USD, tolerance_pct: 1, source: "Southern Expert Roofing PO", page_ref: "vendor estimate 294487"}
+
+  # siding_estimate reproduces Southern Siding & Gutters' ACTUAL bill to the penny (#12c).
+  - {trade: siding_total_usd, quantity: 18962.50, unit: USD, tolerance_pct: 1, source: "Southern Siding & Gutters PO", page_ref: "vendor estimate 294490"}

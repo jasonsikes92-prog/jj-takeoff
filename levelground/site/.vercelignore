@@ -1,0 +1,4 @@
+# Never upload local secrets to the deployment. Vercel serves unknown root files
+# as static assets, so an .env here would be publicly readable.
+.env
+.env*.local

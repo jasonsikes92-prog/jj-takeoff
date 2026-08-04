@@ -1,0 +1,75 @@
+{
+ "areas_certified": {
+  "heated": 3245.7,
+  "garage": 1038.5,
+  "rear_porch": 1168.8,
+  "front_porch": 76.8
+ },
+ "under_roof_sf": 5529.8,
+ "heated_sf": 3245.7,
+ "exterior_wall_lf": {
+  "total": 387.69,
+  "rotated45_garage_wing": 223.85,
+  "orthogonal": 163.84
+ },
+ "wall_heights_ft": {
+  "garage_wing": 10.975,
+  "main_house": 11.2
+ },
+ "cladding_sf": {
+  "wall_band": 4292.0,
+  "gables_paired_asdrawn": 1200.0,
+  "gables_foreshorten_corrected": 1388.0,
+  "gables_unpaired_extra": 289.0,
+  "GROSS_total": 5680.0,
+  "range_lo": 5492.0,
+  "range_hi": 5969.0
+ },
+ "material_split_pct_from_wall_band": {
+  "LAP": 26.4,
+  "B&B": 60.3,
+  "STONE": 13.4
+ },
+ "cladding_by_material_sf": {
+  "STONE_mason_scope": 811.0,
+  "LAP_hardie": 1481.0,
+  "BNB_hardie": 3388.0
+ },
+ "roof": {
+  "footprint_sf": 6159.0,
+  "overhang_ft": 1.5,
+  "perimeter_lf": 402.0,
+  "shingle_surface_sf": 4859.7,
+  "metal_surface_sf": 1822.5,
+  "total_surface_sf": 6682.2,
+  "shingle_turnkey": {
+   "raw_surface_sf": 4859.7,
+   "order_surface_sf": 5588.7,
+   "rate_per_sf": 2.25,
+   "total": 12574.57
+  },
+  "shingle_decoded_xcheck": {
+   "zones": [
+    {
+     "pitch": "6:12",
+     "footprint_sf": 4346.8,
+     "factor": 1.118,
+     "surface_sf": 4859.7
+    }
+   ],
+   "raw_surface_sf": 4859.7,
+   "waste_pct": 15.0,
+   "order_surface_sf": 5588.7,
+   "order_squares": 55.89,
+   "field_rate_per_sq": 175.0,
+   "field_cost": 9780.75,
+   "hip_ridge_cost": 0.0,
+   "drip_edge_cost": 743.7,
+   "pipe_boot_cost": 50.0,
+   "accessories_total": 793.7,
+   "total": 10574.45,
+   "field_pct": 92.5,
+   "all_in_per_sf": 1.892
+  }
+ }
+}

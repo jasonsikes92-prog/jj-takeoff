@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-19T16:58:51.531Z",
+  "contractVersion": "V3",
+  "certified": true,
+  "privateTruthSha256": "420a29b02a021c7b8909ee66cbf4ecd02e092023493e9f40f9f84ddc965bc406",
+  "privateTruthValuesExported": false,
+  "summary": {
+    "jobs": 10,
+    "sourceRows": 2047,
+    "primaryPlanDerivedRows": 1857,
+    "positivePlanDerivedRows": 690,
+    "zeroTruthRows": 1167,
+    "derivedFormulaRows": 122,
+    "moreInformationRequiredRows": 0,
+    "legacySchemaNoiseRows": 68,
+    "positiveRowsWithShapes": 690,
+    "positiveRowsWithoutShapes": 0,
+    "invalidTruthValues": 0,
+    "invalidShapeValues": 0,
+    "orphanPlanReferences": 0
+  },
+  "gates": {
+    "tenJobs": true,
+    "allRowsClassified": true,
+    "allPrimaryTruthNumeric": true,
+    "everyPositiveTruthHasPlanShapes": true,
+    "allShapeValuesNumeric": true,
+    "allShapePlanReferencesResolve": true,
+    "formulaRowsExcludedFromScore": true,
+    "legacySchemaNoiseExcludedFromScore": true
+  },
+  "jobs": [
+    {
+      "projectCode": "PR-071",
+      "phase1Slot": 1,
+      "planSha256": "92f4dc63fec0ac6faa3f2c726f368d119d8a49e1e9d26adcbba1bf31e6b29291",
+      "sourceBundlePayloadSha256": "b1430459d512e1997628882d49c2e589fc16f17e92ea00d8976a404aa64b316c",
+      "summary": {
+        "sourceRows": 200,
+        "primaryPlanDerivedRows": 181,
+        "positivePlanDerivedRows": 67,
+        "zeroTruthRows": 114,
+        "derivedFormulaRows": 11,
+        "moreInformationRequiredRows": 0,
+        "legacySchemaNoiseRows": 8,
+        "positiveRowsWithShapes": 67,
+        "positiveRowsWithoutShapes": 0,
+        "invalidTruthValues": 0,
+        "invalidShapeValues": 0,
+        "orphanPlanReferences": 0
+      }
+    },
+    {
+      "projectCode": "PR-105",
+      "phase1Slot": 2,
+      "planSha256": "485f3851a0d3e3fe261dd8ef56c68dc70528ecf229b5c7e9b6b265fac2afb108",
+      "sourceBundlePayloadSha256": "35f958fb8b64f9f7275a6ef3fdd1ae4c11c4a7834b55a0b2d4f7bcca95f8f580",
+      "summary": {
+        "sourceRows": 208,
+        "primaryPlanDerivedRows": 188,
+        "positivePlanDerivedRows": 65,
+        "zeroTruthRows": 123,
+        "derivedFormulaRows": 14,
+        "moreInformationRequiredRows": 0,
+        "legacySchemaNoiseRows": 6,
+        "positiveRowsWithShapes": 65,
+        "positiveRowsWithoutShapes": 0,
+        "invalidTruthValues": 0,
+        "invalidShapeValues": 0,
+        "orphanPlanReferences": 0
+      }
+    },
+    {
+      "projectCode": "PR-096",
+      "phase1Slot": 3,
+      "planSha256": "5feb9030bacb51b364cc591feeefda8b09a5d593ed35d12cd70f31f7fbb2fa61",
+      "sourceBundlePayloadSha256": "dc47593a1a749455b47b4c12e521ad104dd67dcca3602b0c871dc022352b08cb",
+      "summary": {
+        "sourceRows": 208,
+        "primaryPlanDerivedRows": 187,
+        "positivePlanDerivedRows": 72,
+        "zeroTruthRows": 115,
+        "derivedFormulaRows": 16,
+        "moreInformationRequiredRows": 0,
+        "legacySchemaNoiseRows": 5,
+        "positiveRowsWithShapes": 72,
+        "positiveRowsWithoutShapes": 0,
+        "invalidTruthValues": 0,
+        "invalidShapeValues": 0,
+        "orphanPlanReferences": 0
+      }
+    },
+    {
+      "projectCode": "PR-074",
+      "phase1Slot": 4,
+      "planSha256": "25dfb13f2a5c73577d846f1cb05339729eaf217dcce2e1cedb2a033536dcffd7",
+      "sourceBundlePayloadSha256": "c69aeecaf500d71978166404c320412e973ffa7c566dc13134d5c148605588aa",
+      "summary": {
+        "sourceRows": 201,
+        "primaryPlanDerivedRows": 182,
+        "positivePlanDerivedRows": 64,
+        "zeroTruthRows": 118,
+        "derivedFormulaRows": 11,
+        "moreInformationRequiredRows": 0,
+        "legacySchemaNoiseRows": 8,
+        "positiveRowsWithShapes": 64,
+        "positiveRowsWithoutShapes": 0,
+        "invalidTruthValues": 0,
+        "invalidShapeValues": 0,
+        "orphanPlanReferences": 0
+      }
+    },
+    {
+      "projectCode": "PR-058",
+      "phase1Slot": 5,
+      "planSha256": "e26e9557d4859d5f5457ee2c1bf3f897fee62da8a48abb242c228a3fd51a5654",
+      "sourceBundlePayloadSha256": "6dd1058591bdb79dfe515e9f0334fd7db42a975f92a1b507021cd54543292b2e",
+      "summary": {
+        "sourceRows": 211,
+        "primaryPlanDerivedRows": 189,
+        "positivePlanDerivedRows": 70,
+        "zeroTruthRows": 119,
+        "derivedFormulaRows": 16,
+        "moreInformationRequiredRows": 0,
+        "legacySchemaNoiseRows": 6,
+        "positiveRowsWithShapes": 70,
+        "positiveRowsWithoutShapes": 0,
+        "invalidTruthValues": 0,
+        "invalidShapeValues": 0,
+        "orphanPlanReferences": 0
+      }
+    },
+    {
+      "projectCode": "PR-072",
+      "phase1Slot": 6,
+      "planSha256": "9ba9a207c16eb2b881d86f0f0d3efdecddcc840651ff78ca6ba606b10488d60d",
+      "sourceBundlePayloadSha256": "e26d929c532c92716ea1f36e8b0e27fac85c53ed69bcdb6152c63e75a3473b25",
+      "summary": {
+        "sourceRows": 200,
+        "primaryPlanDerivedRows": 181,
+        "positivePlanDerivedRows": 92,
+        "zeroTruthRows": 89,
+        "derivedFormulaRows": 11,
+        "moreInformationRequiredRows": 0,
+        "legacySchemaNoiseRows": 8,
+        "positiveRowsWithShapes": 92,
+        "positiveRowsWithoutShapes": 0,
+        "invalidTruthValues": 0,
+        "invalidShapeValues": 0,
+        "orphanPlanReferences": 0
+      }
+    },
+    {
+      "projectCode": "PR-094",
+      "phase1Slot": 7,
+      "planSha256": "4276716fa0fffdc64d16595beee26ab1822d7b192176b867465f54cb264b3bed",
+      "sourceBundlePayloadSha256": "3e95751bd9855e03905d1be11687affc8c0442616fa83ca7fb2bb6187b4d921d",
+      "summary": {
+        "sourceRows": 208,
+        "primaryPlanDerivedRows": 187,
+        "positivePlanDerivedRows": 43,
+        "zeroTruthRows": 144,
+        "derivedFormulaRows": 15,
+        "moreInformationRequiredRows": 0,
+        "legacySchemaNoiseRows": 6,
+        "positiveRowsWithShapes": 43,
+        "positiveRowsWithoutShapes": 0,
+        "invalidTruthValues": 0,
+        "invalidShapeValues": 0,
+        "orphanPlanReferences": 0
+      }
+    },
+    {
+      "projectCode": "PR-093",
+      "phase1Slot": 8,
+      "planSha256": "81b2235be6a5806e9d06864328dbac52b921dd97b0ac5aad5f2d137360dbaca0",
+      "sourceBundlePayloadSha256": "29eb05368827a5a1da45344f8c33e4da7c54c339faf87959d8dd819c25522a92",
+      "summary": {
+        "sourceRows": 207,
+        "primaryPlanDerivedRows": 184,
+        "positivePlanDerivedRows": 79,
+        "zeroTruthRows": 105,
+        "derivedFormulaRows": 17,
+        "moreInformationRequiredRows": 0,
+        "legacySchemaNoiseRows": 6,
+        "positiveRowsWithShapes": 79,
+        "positiveRowsWithoutShapes": 0,
+        "invalidTruthValues": 0,
+        "invalidShapeValues": 0,
+        "orphanPlanReferences": 0
+      }
+    },
+    {
+      "projectCode": "PR-062",
+      "phase1Slot": 9,
+      "planSha256": "f5d00aa6bf63c02a0e1c5791dc6601eb39053224f1cdeab7aa342232534e354c",
+      "sourceBundlePayloadSha256": "02b42688105770bf9d84013cf34cdd1281d6b480943699b1303ae067e05008b0",
+      "summary": {
+        "sourceRows": 197,
+        "primaryPlanDerivedRows": 178,
+        "positivePlanDerivedRows": 53,
+        "zeroTruthRows": 125,
+        "derivedFormulaRows": 11,
+        "moreInformationRequiredRows": 0,
+        "legacySchemaNoiseRows": 8,
+        "positiveRowsWithShapes": 53,
+        "positiveRowsWithoutShapes": 0,
+        "invalidTruthValues": 0,
+        "invalidShapeValues": 0,
+        "orphanPlanReferences": 0
+      }
+    },
+    {
+      "projectCode": "PR-053",
+      "phase1Slot": 10,
+      "planSha256": "9be312966d09c9ebd59b57863a82b96eb676c14eca971312ea820ed7fba2a0c8",
+      "sourceBundlePayloadSha256": "f33b92b1af2fd815d0315e5ac142798b8f111ce27429eaf088b2788fd0c64704",
+      "summary": {
+        "sourceRows": 207,
+        "primaryPlanDerivedRows": 200,
+        "positivePlanDerivedRows": 85,
+        "zeroTruthRows": 115,
+        "derivedFormulaRows": 0,
+        "moreInformationRequiredRows": 0,
+        "legacySchemaNoiseRows": 7,
+        "positiveRowsWithShapes": 85,
+        "positiveRowsWithoutShapes": 0,
+        "invalidTruthValues": 0,
+        "invalidShapeValues": 0,
+        "orphanPlanReferences": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,442 @@
+{
+ "Plan Design||General Requirements": [
+  1.0,
+  ""
+ ],
+ "Engineering Services||General Requirements": [
+  1.0,
+  ""
+ ],
+ "Blueprint Copies||General Requirements": [
+  6.0,
+  ""
+ ],
+ "Boundary Survey||General Requirements": [
+  1.0,
+  ""
+ ],
+ "Erosion Control Plan||General Requirements": [
+  1.0,
+  ""
+ ],
+ "Building Permits||General Requirements": [
+  3765.0,
+  "heated + 1/2 garage"
+ ],
+ "Temporary Toilets||General Requirements": [
+  10.0,
+  "10-month build"
+ ],
+ "Temporary Utilities (Electric, Water, Gas)||General Requirements": [
+  10.0,
+  ""
+ ],
+ "Temporary Erosion Control||Clearing and Grading": [
+  900.0,
+  "ASSUMED - no site plan"
+ ],
+ "Temporary Dumpster Rental or Debris Removal||Clearing and Grading": [
+  6.0,
+  "ASSUMED"
+ ],
+ "Grubbing and mulching||Clearing and Grading": [
+  3.0,
+  "ASSUMED days"
+ ],
+ "Lot Clearing & Excavation||Clearing and Grading": [
+  4.0,
+  "ASSUMED days"
+ ],
+ "Concrete wash out pit||Clearing and Grading": [
+  1.0,
+  ""
+ ],
+ "#34 Gravel to house site - 12' wide||Construction Drive": [
+  3600.0,
+  "ASSUMED 300 LF - no site plan"
+ ],
+ "Culvert Pipe||Construction Drive": [
+  1.0,
+  ""
+ ],
+ "Well - 300 FT depth||Water": [
+  1.0,
+  ""
+ ],
+ "Electrical for well||Water": [
+  150.0,
+  "ASSUMED distance"
+ ],
+ "Water: Water Softener & Filtration System||Water": [
+  1.0,
+  ""
+ ],
+ "Sewer: Septic System, Plan, & Permit||Sewage": [
+  1.0,
+  ""
+ ],
+ "Gas: Propane Tank (500 Gallon)||Gas/Propane": [
+  1.0,
+  ""
+ ],
+ "Bury Propane tank||Gas/Propane": [
+  1.0,
+  ""
+ ],
+ "Concrete- 4 inches - Slab||Concrete Slab 4\"": [
+  75.1,
+  "4in over 5530 SF +10%"
+ ],
+ "Labor - Monolithic slab||Concrete Slab 4\"": [
+  5529.8,
+  ""
+ ],
+ "Wire Mesh - Slab||Concrete Slab 4\"": [
+  8.0,
+  ""
+ ],
+ "Mesh Chairs 100 pack - Slab||Concrete Slab 4\"": [
+  14.0,
+  ""
+ ],
+ "Vapor Barrier - Slab||Concrete Slab 4\"": [
+  6.0,
+  ""
+ ],
+ "1/2\" Gravel - Slab||Concrete Slab 4\"": [
+  4.0,
+  ""
+ ],
+ "Pump Truck - Slab pour||Concrete Slab 4\"": [
+  1.0,
+  ""
+ ],
+ "Concrete - Grade Beams||Grade Beams": [
+  23.69,
+  "thickened edge 387.7 LF"
+ ],
+ "#4 Rebar 20' - Grade Beams||Grade Beams": [
+  39.0,
+  "2 bars continuous, 20-ft sticks"
+ ],
+ "Form Boards - Footer||Footers 16x18": [
+  595.88,
+  "whole-slab outer perimeter 394.32 + garage step 75.42 + rear porch 100.33 + front porch 25.81"
+ ],
+ "Concrete - Footer||Footers 16x18": [
+  48.55,
+  "16x18 footer +10%"
+ ],
+ "#4 Rebar 20\" Sticks - Footer||Footers 16x18": [
+  99.0,
+  "3 bars continuous, 20-ft sticks, +10%"
+ ],
+ "Framing Lumber||Framing": [
+  5529.8,
+  ""
+ ],
+ "Framing Labor - SF Price||Framing": [
+  5529.8,
+  ""
+ ],
+ "Shingle Roof - Turnkey||Roofing": [
+  5588.65,
+  "6:12 surface +15%"
+ ],
+ "Metal Roofing - Standing Seam||Roofing": [
+  2095.88,
+  "low-slope planes +15%"
+ ],
+ "Windows||Windows": [
+  22.0,
+  ""
+ ],
+ "Windows - Labor to Install||Windows": [
+  22.0,
+  ""
+ ],
+ "Window Tape||Windows": [
+  4.0,
+  ""
+ ],
+ "Front Door - Double (Wood Door)||Front Door": [
+  1.0,
+  ""
+ ],
+ "Front Door - Lockset||Front Door": [
+  1.0,
+  ""
+ ],
+ "Front Door - Labor to install Door||Front Door": [
+  1.0,
+  ""
+ ],
+ "Front Door - Lockset installation||Front Door": [
+  1.0,
+  ""
+ ],
+ "Exterior Doors - Single Door||Other Exterior Doors": [
+  4.0,
+  ""
+ ],
+ "Exterior Doors - Double Door||Other Exterior Doors": [
+  4.0,
+  ""
+ ],
+ "Exterior Door Lockset||Other Exterior Doors": [
+  8.0,
+  ""
+ ],
+ "Exterior Doors - Labor to Install Hinged doors||Other Exterior Doors": [
+  8.0,
+  ""
+ ],
+ "Exterior Doors Lockset Installation||Other Exterior Doors": [
+  8.0,
+  ""
+ ],
+ "8'0\" Single||8' Doors - Solid": [
+  27.0,
+  ""
+ ],
+ "Door knobs||Attic doors and Knobs": [
+  27.0,
+  ""
+ ],
+ "Door Stops||Attic doors and Knobs": [
+  27.0,
+  ""
+ ],
+ "Interior Door Hardware Installation||Attic doors and Knobs": [
+  27.0,
+  ""
+ ],
+ "Attic Pulldown Staircase||Attic doors and Knobs": [
+  1.0,
+  ""
+ ],
+ "Insulation - Spray Foam Roof Deck||Insulation": [
+  7350.42,
+  ""
+ ],
+ "Insulation - Spray Foam Walls||Insulation": [
+  4721.2,
+  ""
+ ],
+ "Drywall - Level 4||Drywall": [
+  22181.72,
+  "net 20165 SF +10%"
+ ],
+ "Siding (Vertical)||Siding": [
+  3649.8,
+  "B&B measured per elevation"
+ ],
+ "Siding (Fiber Cement, Horizontal)||Siding": [
+  1823.8,
+  "lap measured per elevation"
+ ],
+ "Corner Boards||Siding": [
+  354.0,
+  ""
+ ],
+ "1x4 Around Windows||Siding": [
+  310.0,
+  ""
+ ],
+ "Freize at roof||Siding": [
+  456.2,
+  ""
+ ],
+ "Flashing / Water Table||Siding": [
+  173.0,
+  "stone-to-siding transition"
+ ],
+ "Garage Wrap||Siding": [
+  3.0,
+  ""
+ ],
+ "Gable Brackets||Siding": [
+  13.0,
+  "one per measured gable"
+ ],
+ "Fascia (Metal and Vinyl)||Siding for Eaves / Cornice": [
+  456.2,
+  ""
+ ],
+ "Porch Ceilings||Siding for Eaves / Cornice": [
+  1370.16,
+  "T&G both covered porches"
+ ],
+ "Wrap Porch Beams||Siding for Eaves / Cornice": [
+  121.0,
+  "porch open edge"
+ ],
+ "Column Wrap 12x12 (cedar)||Siding for Eaves / Cornice": [
+  10.0,
+  "ASSUMED count"
+ ],
+ "Stone Material||Stone": [
+  618.2,
+  ""
+ ],
+ "Stone Labor||Stone": [
+  618.2,
+  ""
+ ],
+ "Plumbing - Base Contract (rough-in + set)||Plumbing": [
+  1.0,
+  ""
+ ],
+ "Count Each Fixture Opening||Plumbing": [
+  20.0,
+  ""
+ ],
+ "Count Each Water Opening||Plumbing": [
+  19.0,
+  ""
+ ],
+ "Water Heater||Plumbing": [
+  2.0,
+  ""
+ ],
+ "HVAC - Air Handler and Condensing Units||Mechanical / HVAC": [
+  1.0,
+  "3,246 htd / 800 = 4.06 t -> ONE unit"
+ ],
+ "Flex Duct work||Mechanical / HVAC": [
+  3245.7,
+  ""
+ ],
+ "Blower Door / HERS Test||Mechanical / HVAC": [
+  1.0,
+  ""
+ ],
+ "Gas Lines||Mechanical / HVAC": [
+  3.0,
+  ""
+ ],
+ "Electrical - SF Price||Electrical": [
+  4284.2,
+  ""
+ ],
+ "Upgrade to 400 AMP service||Electrical": [
+  1.0,
+  ""
+ ],
+ "Electrical - Permanent Power Connection||Electrical": [
+  300.0,
+  "ASSUMED - no site plan"
+ ],
+ "Exterior Light Fixtures - Allowance||Audio & Security": [
+  18.0,
+  ""
+ ],
+ "Trim Labor||Trim Material": [
+  4284.2,
+  "(heated+garage) SF x $2"
+ ],
+ "Base molding - Choose size||Trim Material": [
+  1527.0,
+  "room perimeter measured"
+ ],
+ "Trim - 1x4 Window casing and Jambs||Trim Material": [
+  310.0,
+  ""
+ ],
+ "Mudroom Built-ins / Drop Zone - Allowance||Trim Material": [
+  12.0,
+  ""
+ ],
+ "Fireplace - Allowance||Fireplace": [
+  1.0,
+  ""
+ ],
+ "Mantle||Fireplace": [
+  1.0,
+  ""
+ ],
+ "Hearth Top||Fireplace": [
+  12.0,
+  ""
+ ],
+ "Surround material||Surround": [
+  60.0,
+  ""
+ ],
+ "Surround labor to install||Surround": [
+  60.0,
+  ""
+ ],
+ "LF of Lowers - Kitchen||Cabinets": [
+  24.0,
+  ""
+ ],
+ "LF of Uppers  - Kitchen||Cabinets": [
+  18.0,
+  ""
+ ],
+ "LF of Island  - Kitchen||Cabinets": [
+  12.0,
+  ""
+ ],
+ "LF of Tall Cabinet (Fridge, Oven, Linen)  - Kitchen||Cabinets": [
+  8.0,
+  ""
+ ],
+ "Each Vent Hood Cabinet  - Kitchen||Cabinets": [
+  1.0,
+  ""
+ ],
+ "Labor to assemble and install cabinets  - Kitchen||Cabinets": [
+  62.0,
+  ""
+ ],
+ "Granite or Quartz  - Kitchen||Cabinets": [
+  96.0,
+  ""
+ ],
+ "Backsplash - Material allowance||Backsplash - Material allowance": [
+  72.0,
+  ""
+ ],
+ "Backsplash - Tile labor||Backsplash - Material allowance": [
+  72.0,
+  ""
+ ],
+ "Appliance Package  - Kitchen||Appliances": [
+  1.0,
+  ""
+ ],
+ "Appliance Installation  - Kitchen||Appliances": [
+  1.0,
+  ""
+ ],
+ "Kitchen Sink - Farm Sink||Kitchen Sink - Farm Sink": [
+  1.0,
+  ""
+ ],
+ "Kitchen Sink - Faucet||Kitchen Sink - Farm Sink": [
+  1.0,
+  ""
+ ],
+ "LF of Lowers||Cabinets Pantry": [
+  10.0,
+  ""
+ ],
+ "LF of Uppers||Cabinets Pantry": [
+  10.0,
+  ""
+ ],
+ "Countertops||Cabinets Pantry": [
+  22.0,
+  ""
+ ],
+ "Labor to assemble and install cabinets||Cabinets Pantry": [
+  20.0,
+  ""
+ ],
+ "Shelving - Pantry||Cabinets Pantry": [
+  24.0,
+  ""
+ ]
+}

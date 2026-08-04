@@ -1,0 +1,27 @@
+# WILSON (Ken & Dang Wilson) — PR-077, walkout-basement house
+# Ground truth = GV/GEO/FFCI CONTRACTED ACTUALS (calibration.md #18-23) + SQFT schedule.
+house: wilson
+plan: plan.pdf
+plan_sha256: 669921DF23215A8CD0CEA483AECCE25A66E9DB492DD38EF76AA5523BCB9D8FFB
+plan_missing: false
+scale_note: "3/16in on p3/p15/p16, 1/4in on p4/p6/p7/p8 — per-page (#17). Foundation p4=1/4in."
+
+asserts:
+  # Framing under-roof = main 2406.2 + basement 1507.4 + garage 898.4 + covered deck 667
+  # + covered front porch 313.6 = 5792.6. #33: 'Wilson framing 5,792.59'. Given data +/-1%.
+  - {trade: framing_sf, quantity: 5792.59, unit: SF, tolerance_pct: 1.5, source: schedule, assertion_type: comparison, page_ref: "SQFT AREAS"}
+
+  # Heated = main 2406.2 + basement 1507.4 = 3913.6 (given data).
+  - {trade: heated_sf, quantity: 3913.6, unit: SF, tolerance_pct: 1.5, source: schedule, assertion_type: comparison, page_ref: "SQFT AREAS"}
+
+  # Basement poured foundation-wall perimeter. GV invoice #1196 = 156 LF (#18/#19).
+  # Engine trace_enclosed_region proven 155.9 vs 156 (#19). Geometry +/-8%.
+  - {trade: foundation_wall_lf, quantity: 156, unit: LF, tolerance_pct: 8, source: invoice, page_ref: "p4 FOUNDATION WALL PLAN"}
+
+  # Basement interior free-space area. #19: basement interior ~= 1,372 SF (engine trace),
+  # corroborated by GEO (#22). Geometry +/-8%.
+  - {trade: basement_area_sf, quantity: 1372, unit: SF, tolerance_pct: 8, source: takeoff, page_ref: "p4 FOUNDATION WALL PLAN"}
+
+  # FULL CHAIN (cal #50): plan -> run_takeoff -> rate book -> assemble_estimate.
+  # Actual framing-labor spend $38,210 (cal #33); locked blended $6.50/SF reads ~-1.5%.
+  - {trade: framing_labor_cost_usd, quantity: 38210, unit: USD, tolerance_pct: 3, source: actual, assertion_type: comparison, page_ref: "comparison: SQFT schedule p4 x $6.50"}

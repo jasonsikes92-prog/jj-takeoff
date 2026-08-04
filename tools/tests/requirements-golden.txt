@@ -1,0 +1,8 @@
+# Versions used for the verified 2026-07-20 golden run.
+# OCR comparison probes also require the Tesseract executable on PATH.
+numpy==2.5.1
+PyMuPDF==1.28.0
+opencv-python-headless==5.0.0.93
+scikit-image==0.26.0
+pytesseract==0.3.13
+openpyxl==3.1.5

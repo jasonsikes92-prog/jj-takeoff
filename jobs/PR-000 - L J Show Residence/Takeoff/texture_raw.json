@@ -1,0 +1,22 @@
+{
+ "E1_FRONT": {
+  "lap_or_shingle_sf": 1173.1,
+  "bnb_sf": 299.3,
+  "stone_sf": 498.2
+ },
+ "E3_REAR": {
+  "lap_or_shingle_sf": 586.3,
+  "bnb_sf": 209.8,
+  "stone_sf": 144.0
+ },
+ "E2_LEFT": {
+  "lap_or_shingle_sf": 529.8,
+  "bnb_sf": 218.3,
+  "stone_sf": 191.0
+ },
+ "E4_RIGHT": {
+  "lap_or_shingle_sf": 499.4,
+  "bnb_sf": 91.1,
+  "stone_sf": 81.0
+ }
+}

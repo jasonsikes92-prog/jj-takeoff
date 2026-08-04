@@ -1,0 +1,166 @@
+{
+ "gables": [
+  {
+   "elev": "E1_FRONT",
+   "apex_x": 64.5,
+   "base_ft": 24.1,
+   "rise_ft": 6.0,
+   "as_drawn_sf": 102.5,
+   "rot45": false,
+   "true_sf": 102.5,
+   "material": "LAP",
+   "evh": 0.78,
+   "conf": "ok"
+  },
+  {
+   "elev": "E1_FRONT",
+   "apex_x": 57.4,
+   "base_ft": 19.5,
+   "rise_ft": 6.2,
+   "as_drawn_sf": 85.8,
+   "rot45": false,
+   "true_sf": 85.8,
+   "material": "LAP",
+   "evh": 0.892,
+   "conf": "ok"
+  },
+  {
+   "elev": "E1_FRONT",
+   "apex_x": 81.7,
+   "base_ft": 12.2,
+   "rise_ft": 6.7,
+   "as_drawn_sf": 57.3,
+   "rot45": false,
+   "true_sf": 57.3,
+   "material": "LAP",
+   "evh": 0.769,
+   "conf": "ok"
+  },
+  {
+   "elev": "E1_FRONT",
+   "apex_x": 92.1,
+   "base_ft": 12.3,
+   "rise_ft": 4.7,
+   "as_drawn_sf": 40.7,
+   "rot45": true,
+   "true_sf": 57.5,
+   "material": "LAP",
+   "evh": 0.934,
+   "conf": "ok"
+  },
+  {
+   "elev": "E1_FRONT",
+   "apex_x": 24.4,
+   "base_ft": 14.8,
+   "rise_ft": 3.7,
+   "as_drawn_sf": 39.0,
+   "rot45": false,
+   "true_sf": 39.0,
+   "material": "LAP",
+   "evh": 0.741,
+   "conf": "ok"
+  },
+  {
+   "elev": "E1_FRONT",
+   "apex_x": 77.4,
+   "base_ft": 12.2,
+   "rise_ft": 4.3,
+   "as_drawn_sf": 37.4,
+   "rot45": false,
+   "true_sf": 37.4,
+   "material": "STONE",
+   "evh": 0.693,
+   "conf": "ok"
+  },
+  {
+   "elev": "E1_FRONT",
+   "apex_x": 46.9,
+   "base_ft": 8.7,
+   "rise_ft": 2.6,
+   "as_drawn_sf": 16.2,
+   "rot45": false,
+   "true_sf": 16.2,
+   "material": "LAP",
+   "evh": 0.907,
+   "conf": "ok"
+  },
+  {
+   "elev": "E3_REAR",
+   "apex_x": 21.2,
+   "base_ft": 32.7,
+   "rise_ft": 11.6,
+   "as_drawn_sf": 208.6,
+   "rot45": true,
+   "true_sf": 295.0,
+   "material": "B&B",
+   "evh": 0.304,
+   "conf": "ok"
+  },
+  {
+   "elev": "E3_REAR",
+   "apex_x": 78.9,
+   "base_ft": 21.8,
+   "rise_ft": 8.8,
+   "as_drawn_sf": 105.6,
+   "rot45": false,
+   "true_sf": 105.6,
+   "material": "LAP",
+   "evh": 0.86,
+   "conf": "ok"
+  },
+  {
+   "elev": "E2_LEFT",
+   "apex_x": 45.5,
+   "base_ft": 20.9,
+   "rise_ft": 8.8,
+   "as_drawn_sf": 103.9,
+   "rot45": false,
+   "true_sf": 103.9,
+   "material": "LAP",
+   "evh": 0.837,
+   "conf": "ok"
+  },
+  {
+   "elev": "E2_LEFT",
+   "apex_x": 77.6,
+   "base_ft": 20.4,
+   "rise_ft": 7.1,
+   "as_drawn_sf": 82.1,
+   "rot45": true,
+   "true_sf": 116.1,
+   "material": "B&B",
+   "evh": 0.165,
+   "conf": "ok"
+  },
+  {
+   "elev": "E2_LEFT",
+   "apex_x": 74.7,
+   "base_ft": 4.7,
+   "rise_ft": 1.6,
+   "as_drawn_sf": 4.3,
+   "rot45": true,
+   "true_sf": 6.0,
+   "material": "STONE",
+   "evh": 0.623,
+   "conf": "ok"
+  },
+  {
+   "elev": "E4_RIGHT",
+   "apex_x": 92.7,
+   "base_ft": 32.6,
+   "rise_ft": 11.5,
+   "as_drawn_sf": 224.5,
+   "rot45": false,
+   "true_sf": 224.5,
+   "material": "B&B",
+   "evh": 0.089,
+   "conf": "ok"
+  }
+ ],
+ "total_sf": 1246.9,
+ "by_material": {
+  "LAP": 567.9,
+  "B&B": 635.5,
+  "STONE": 43.5
+ }
+}

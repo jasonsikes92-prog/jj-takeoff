@@ -1,0 +1,25 @@
+# PETERSON / "Fairview Cottage" (1301 Sailview Drive, Buckhead) — steep 16:12 roof benchmark
+# Ground truth = Southern Expert Roofing ACTUAL $11,204 (calibration #13): 48.97 sq measured
+# surface -> 54.0 sq billed. PLAN DELIVERED 7/5/26: "Precon notes Sailview (1).pdf" —
+# 11 vector sheets BUT ZERO TEXT LAYER (every label is curves/outlined fonts): rich linework
+# for geometry, NO extractable dims/pitches/schedule numbers.
+# ==> THE OCR FIXTURE for Phase 2. BOTH PROBES LIVE 7/5/26: heated via
+# read_sqft_schedule_ocr (psm-8/13 voting + TOTAL gate), roof via roof_zone_surface
+# (face decomposition + eye-verified pitch callouts; scale SOLVED from schedule underroof
+# + eave perimeter + printed overhangs — cal #44). Pitch callouts stay eye/VLM-verified,
+# never raw OCR ("16/12 P." OCRs as "12/12" — cal #43 trap).
+house: peterson
+plan: plan.pdf
+plan_sha256: E47A5AA9FBC292E572823F13AC62671B92C9FFC71EA8B352407E40D134F50FE8
+plan_missing: false
+scale_note: "NO text layer -> detect_scale dim-voting impossible; scale must come from OCR'd dims or scale_from_reference()"
+
+asserts:
+  # Roof shingle surface = 48.97 sq measured (Jason) / 54.0 sq waste-loaded Southern actual.
+  - {trade: roof_surface_sq, quantity: 48.97, unit: sq, tolerance_pct: 8, source: takeoff, assertion_type: comparison, page_ref: "roof plan (schedule-seeded scale; 16:12 dominant, curve-text)"}
+  - {trade: heated_sf, quantity: 2375, unit: SF, tolerance_pct: 1.5, source: schedule, assertion_type: comparison, page_ref: "SQFT schedule (curve-text, OCR required)"}
+
+  # FULL CHAIN (cal #51): measured roof surface x $227.70/sq (waste-loaded all-in,
+  # cal #13) vs Southern Expert Roofing ACTUAL $11,204. Measurement bias -5% (cal #44).
+  - {trade: roofing_total_usd, quantity: 11204, unit: USD, tolerance_pct: 8, source: actual, assertion_type: comparison, page_ref: "comparison: schedule-seeded roof plan p4 faces x rate"}
+

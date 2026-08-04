@@ -1,0 +1,38 @@
+{
+ "E1_FRONT": {
+  "upper_silhouette_sf": 1191.4,
+  "ROOF_sf": 664.5,
+  "GABLE_wall_sf": 526.9,
+  "LAP": 410.6,
+  "B&B": 37.8,
+  "STONE": 78.4,
+  "coverage_pct": 100.0
+ },
+ "E3_REAR": {
+  "upper_silhouette_sf": 1176.7,
+  "ROOF_sf": 441.1,
+  "GABLE_wall_sf": 735.6,
+  "LAP": 368.9,
+  "B&B": 285.7,
+  "STONE": 81.0,
+  "coverage_pct": 100.0
+ },
+ "E2_LEFT": {
+  "upper_silhouette_sf": 729.3,
+  "ROOF_sf": 180.7,
+  "GABLE_wall_sf": 548.6,
+  "LAP": 341.8,
+  "B&B": 146.9,
+  "STONE": 59.9,
+  "coverage_pct": 100.0
+ },
+ "E4_RIGHT": {
+  "upper_silhouette_sf": 712.7,
+  "ROOF_sf": 422.0,
+  "GABLE_wall_sf": 290.7,
+  "LAP": 97.8,
+  "B&B": 174.2,
+  "STONE": 18.7,
+  "coverage_pct": 100.0
+ }
+}

@@ -1,0 +1,111 @@
+{
+  "ok": true,
+  "page_count": 17,
+  "index_count": 16,
+  "unexamined": [],
+  "report": "  p0  cover         [sheet_0.png]  A-000 Cover Sheet\n  p1  site          [sheet_1.png]  A-001 Site Plan\n  p2  site          [sheet_2.png]  A-002 Grading Plan\n  p3  foundation    [sheet_3.png]  A-100a Proposed Foundation Plan\n  p4  detail        [sheet_4.png]  A-100b Foundation Details\n  p5  floor_plan    [sheet_5.png]  A-101 Proposed Floor Plan\n  p6  floor_plan    [sheet_6.png]  A-102 Proposed Dimensioned Floor Plan\n  p7  electrical    [sheet_7.png]  A-103 Proposed Electrical Plan\n  p8  other         [sheet_8.png]  A-104 Reflected Ceiling Plan - Heights\n  p9  electrical    [sheet_9.png]  A-104 Reflected Ceiling Plan - Lighting\n  p10 roof_plan     [sheet_10.png]  A-105 Proposed Roof Plan\n  p11 elevation     [sheet_11.png]  A-200 West & South Exterior Elevations\n  p12 elevation     [sheet_12.png]  A-201 East & North Exterior Elevations\n  p13 floor_plan    [sheet_13.png]  A-250 Workshop Floor Plan & Elevations\n  p14 notes         [sheet_14.png]  A-300 General Construction Recommendations\n  p15 notes         [sheet_15.png]  A-301 General Specifications\n  p16 detail        [sheet_16.png]  A-302 General Construction Details & Notations\n  core 'foundation': p[3]\n  core 'floor_plan': p[5, 6, 13]\n  core 'roof_plan': p[10]\n  core 'elevation': p[11, 12]",
+  "pages": {
+    "0": {
+      "role": "cover",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_0.png",
+      "title": "A-000 Cover Sheet",
+      "note": "Cover index inspected."
+    },
+    "1": {
+      "role": "site",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_1.png",
+      "title": "A-001 Site Plan",
+      "note": "House, workshop, septic, water meter, and driveway shown."
+    },
+    "2": {
+      "role": "site",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_2.png",
+      "title": "A-002 Grading Plan",
+      "note": "Erosion-control and grading plan."
+    },
+    "3": {
+      "role": "foundation",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_3.png",
+      "title": "A-100a Proposed Foundation Plan",
+      "note": "Main crawlspace; garage and screened patio slab on grade."
+    },
+    "4": {
+      "role": "detail",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_4.png",
+      "title": "A-100b Foundation Details",
+      "note": "Crawl stem wall and turned-down garage/workshop slab details."
+    },
+    "5": {
+      "role": "floor_plan",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_5.png",
+      "title": "A-101 Proposed Floor Plan",
+      "note": "Room, opening, and fixture layout."
+    },
+    "6": {
+      "role": "floor_plan",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_6.png",
+      "title": "A-102 Proposed Dimensioned Floor Plan",
+      "note": "Primary plan dimensions; printed 5,164 SF."
+    },
+    "7": {
+      "role": "electrical",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_7.png",
+      "title": "A-103 Proposed Electrical Plan",
+      "note": "Receptacle layout."
+    },
+    "8": {
+      "role": "other",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_8.png",
+      "title": "A-104 Reflected Ceiling Plan - Heights",
+      "note": "Ceiling heights and fan locations."
+    },
+    "9": {
+      "role": "electrical",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_9.png",
+      "title": "A-104 Reflected Ceiling Plan - Lighting",
+      "note": "Second A-104 page with lighting layout."
+    },
+    "10": {
+      "role": "roof_plan",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_10.png",
+      "title": "A-105 Proposed Roof Plan",
+      "note": "All house roof planes labeled 10:12 shingle."
+    },
+    "11": {
+      "role": "elevation",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_11.png",
+      "title": "A-200 West & South Exterior Elevations",
+      "note": "Brick elevations and roof/soffit heights."
+    },
+    "12": {
+      "role": "elevation",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_12.png",
+      "title": "A-201 East & North Exterior Elevations",
+      "note": "Brick elevations and roof/soffit heights."
+    },
+    "13": {
+      "role": "floor_plan",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_13.png",
+      "title": "A-250 Workshop Floor Plan & Elevations",
+      "note": "30 x 16 workshop, 10-ft gypsum ceiling, mini-split, 10:12 roof."
+    },
+    "14": {
+      "role": "notes",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_14.png",
+      "title": "A-300 General Construction Recommendations",
+      "note": "General code recommendations."
+    },
+    "15": {
+      "role": "notes",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_15.png",
+      "title": "A-301 General Specifications",
+      "note": "Construction methods, materials, and notes."
+    },
+    "16": {
+      "role": "detail",
+      "view": "C:\\Users\\jason\\OneDrive\\Desktop\\Claude\\dugger_estimate\\sheet_renders\\sheet_16.png",
+      "title": "A-302 General Construction Details & Notations",
+      "note": "Brick, wood, roof, and fireplace details."
+    }
+  }
+}

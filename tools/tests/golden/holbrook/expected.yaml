@@ -1,0 +1,21 @@
+# HOLBROOK (5020 Watson Fain Rd, Loganville) — 2nd foundation, blind generalization
+# Ground truth = GV wall #1200 + GEO flatwork + SRM ready-mix ACTUALS (calibration #24/#26).
+house: holbrook
+plan: plan.pdf
+plan_sha256: 1C7669DACAEB92DB262618FEC8672AAC1242CBD9D304BDE90A89C348414C1923
+plan_missing: false
+scale_note: "1/4in=1ft; slab plan p5 (70 votes), foundation-wall p3 (~0 dims, bbox-confirmed)."
+
+asserts:
+  # Basement slab area. GEO flatwork invoice = 3,122 SF (#24). trace_footprint proved
+  # 2,954 SF (~5% low, inside-face) on this exact sheet (#24). Geometry +/-8%.
+  # STATUS: currently reproduces ~1,288 SF with a generic clip (traces one room, not
+  # the whole subdivided slab) -> logged as a FINDING (auto-region on subdivided slabs).
+  # GAP CLOSED 7/5/26: boundary is SHORT-DASH linework -> all-ink trace_footprint (seals
+  # dashes) + auto region padded 8 ft = 3,175 SF (+1.7%), the #26b clip-invariant plateau.
+  # Tracer choice rule: solid walls -> trace_footprint_clean; dashed boundary -> trace_footprint.
+  - {trade: slab_area_sf, quantity: 3122, unit: SF, tolerance_pct: 8, source: invoice, page_ref: "p5 SLAB PLAN"}
+
+  # Foundation wall LF (GV #1200 = 178 LF). measure_wall_lf proved 159-162 LF (~9-11% low,
+  # skeleton corner-rounding) with a hand-set clip (#25/#26). Needs vision clip -> finding,
+  # not yet probe-wired.

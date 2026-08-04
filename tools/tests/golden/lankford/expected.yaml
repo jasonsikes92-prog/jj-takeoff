@@ -1,0 +1,23 @@
+# LANKFORD (530 Milton Dr, McDonough) — 3rd basement, ZERO-TEXT vector set (Rentfrow)
+# Ground truth = GV wall invoice #1211 + CGS waterproofing actual (calibration #27/#29).
+# CORRECTED 7/5/26: NOT a raster scan — the sheets carry full VECTOR linework, only the
+# labels are curve/outline fonts (Peterson-class). p6 = FOUNDATION PLAN 6of8, printed
+# 3/16"=1'-0" but PRINT-RESCALED to ppf 12.474 (solved by detect_scale_ocr from the big
+# clean Rentfrow dim chains — 0.8% spread). foundation_wall_loops (paired-parallel stroke
+# geometry) traces the full foundation loop STABLE at 259.1 LF inside-face / 2,476 SF.
+house: lankford
+plan: plan.pdf
+plan_sha256: 4235C847FEB8FF9618BDF67A91C30355AE4733CE45F4F32A01699EB66AAF285E
+plan_missing: false
+plan_note: "Zero-text vector set. Scale OCR-solved 12.474 (printed 3/16 rescaled)."
+
+asserts:
+  # Poured basement wall = 198 LF (GV #1211). The full p6 foundation loop is 259.1 LF
+  # because it also contains garage/frost/brick-ledge runs. The p4 LOWER FLOOR PLAN
+  # isolates the basement-wall scope: its own OCR scale solves to ppf 12.500 with 0.3%
+  # spread, and the enclosed perimeter is 197.685 LF, identical at 2/8/15-ft clip pads.
+  - {trade: foundation_wall_lf, quantity: 198, unit: LF, tolerance_pct: 2, source: invoice, page_ref: "p4 LOWER FLOOR PLAN basement envelope; p6 FOUNDATION PLAN inventory cross-check"}
+
+  # Waterproofing/french-drain (CGS) = 98 LF, left+right elevations only (#29).
+  # The plan proxy is twice the measured main-basement side depth; comparison only.
+  - {trade: waterproofing_lf, quantity: 98, unit: LF, tolerance_pct: 10, source: invoice, assertion_type: comparison, page_ref: "p6 FOUNDATION PLAN side-depth proxy"}
