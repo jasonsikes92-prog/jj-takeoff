@@ -18,6 +18,7 @@ import hashlib
 import json
 import os
 import shutil
+import stat
 import subprocess
 import sys
 from datetime import datetime
@@ -149,6 +150,14 @@ def _mirror(src, dst, skip):
             if os.path.exists(d) and os.path.getmtime(d) >= os.path.getmtime(s) \
                     and os.path.getsize(d) == os.path.getsize(s):
                 continue
+            # Git writes its loose objects and packs READ-ONLY. copy2 carries that mode
+            # across, so the SECOND backup run hit PermissionError trying to overwrite its
+            # own output and died mid-mirror -- leaving a partial backup and a non-zero
+            # exit on the one command that is supposed to be unfailable before a shutdown.
+            # Clear the bit on the destination first; a backup must never be the thing that
+            # breaks because the previous backup worked.
+            if os.path.exists(d) and not os.access(d, os.W_OK):
+                os.chmod(d, stat.S_IWRITE | stat.S_IREAD)
             shutil.copy2(s, d)
             copied += 1
     return copied
