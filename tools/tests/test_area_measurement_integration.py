@@ -8,8 +8,10 @@ import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TOOLS = os.path.dirname(HERE)
-DEPS = r"C:\Users\jason\OneDrive\Desktop\Claude\.estimate_deps"
-sys.path.insert(0, DEPS)
+# The vendored .estimate_deps tree was deleted 2026-08-04. It was inserted at sys.path[0],
+# so its stale numpy SHADOWED the working system one and this test died on
+# "No module named numpy._core._multiarray_umath" -- the vendored copy was the bug, not
+# the fix. Use the installed packages; if an import fails, fix the environment.
 sys.path.insert(0, TOOLS)
 
 import fitz  # noqa: E402
