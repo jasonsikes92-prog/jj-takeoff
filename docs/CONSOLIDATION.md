@@ -69,7 +69,39 @@ C:\Users\jason\JJ-Takeoff\                    ← git repo, THE program, ~250 MB
 
 ---
 
-## Step 1 — MOVE (zero deletion, fully reversible)
+## ✅ Step 1 — EXECUTED 2026-08-04
+
+`C:\Users\jason\JJ-Takeoff\` exists, is a git repo (commit `d997d88`, 214 files tracked, 3.5 MB of history), and is **verified green from the new location**:
+
+```
+houses graded : 6   houses green : 6
+asserts graded: 22   PASS 22   FAIL 0
+comparison checks: 13   PASS 13   FAIL 0
+engine self-test: ALL PASS
+```
+
+**One deliberate change to the plan:** the pretty `engine\` + `eval\` layout was dropped. `run_golden.py` and `jnj_takeoff.py._reference_dir()` resolve their paths from `__file__`, so renaming into that shape would have broken the golden harness and the rate-book lookup on day one. The skill's internal structure is preserved verbatim and the new folders sit alongside it. Cosmetics lost to a green suite.
+
+**`~\.claude\skills\jnj-estimate-takeoff` is now a junction** → `C:\Users\jason\JJ-Takeoff`. The golden suite runs identically through the old path, so the `jnj-estimate-takeoff` skill is unchanged from your side. The original 227 MB copy is parked at `C:\Users\jason\.claude\_pre-consolidation-2026-08-04\` — **moved out of `skills\` on purpose**, because sitting there it registered as a second, duplicate skill, which is exactly the confusion this exercise removes.
+
+**Undo, if ever needed:** delete the junction, rename the parked copy back. Two commands, nothing lost.
+
+### ⚠ Two pre-existing red gates, found during verification — NOT caused by this
+
+`python jj.py verify` returns **NOT GREEN**, and it returns the identical result from the original tree. Both failures predate the consolidation and both trace to the same 8/3 change:
+
+| Gate | What broke |
+|---|---|
+| offline system test | `test_v3_production_engine_snapshot.mjs:69` — the production engine's dependency graph gained an edge the snapshot doesn't allow: `run_phase1_measurement_observations.mjs -> anthropic_structured_vision_client.mjs` |
+| readiness 17/12 (was 18/11) | one new blocker: **`all_fields_implementation_paths_wired`** flipped from pass to fail. The other 11 blockers are unchanged from the committed 8/3 baseline |
+
+`anthropic_structured_vision_client.mjs` and `anthropic_paid_api_budget.mjs` are both dated **2026-08-03**, after HANDOFF's last green verify on 7/31. The Phase 1 vision plumbing was wired into the production path and the snapshot was never re-baselined.
+
+**These are the guards working correctly, not broken tests.** Both live in `estimator_accuracy\`, the tree being archived in Step 2, so neither blocks anything — but the decision (is that dependency edge intended?) belongs to whoever landed it. **Not fixed here; out of scope and it needs a ruling, not a patch.**
+
+---
+
+## Step 1 — what moved (reference)
 
 Nothing is destroyed. Everything below is copied into the new tree; the originals stay where they are until Step 3.
 
