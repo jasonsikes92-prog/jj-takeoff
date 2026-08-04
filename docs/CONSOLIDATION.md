@@ -122,7 +122,35 @@ Nothing is destroyed. Everything below is copied into the new tree; the original
 
 ---
 
-## Step 2 — ARCHIVE (moved out of the way, not deleted)
+## ✅ Step 2 — EXECUTED 2026-08-04
+
+Moved to `C:\Users\jason\_ARCHIVE\estimating-exhaust-2026-08-04\` — **10,948 MB / 83,908 files**. Same volume, so it was a rename, not a copy; the files are byte-identical. A `README.md` in the archive states what it is, what was deliberately left behind, and the one-line restore.
+
+```
+estimator_accuracy   11,665.5 MB / 89,040 files   ->   717.9 MB / 5,133 files
+```
+
+**`python jj.py verify` returns exactly what it returned before the move** — golden suite, engine self-test, fixture certification and coverage all OK; the same two pre-existing gates still red. The archive broke nothing. I checked all five gates for reads of the archived directories before moving, and none of them touch it.
+
+**Held back from the archive, against the original plan:**
+
+- **All 321 `.mjs`/`.py` source files stay in `estimator_accuracy\`.** The plan said to archive them. Moving them would break three of the five `verify` gates, which run those scripts from `WORKSPACE`. Retiring the source *and* the gates that test it is one decision, and it belongs in Step 3 once you've confirmed you're not going back to the autonomous track.
+- **`private\` (460 MB)** — it is not run exhaust. It holds pricing evidence, rate approvals, the formula registry and output schemas. Real value, wrong pile.
+- **`phase1_registered_inputs\` (239 MB)** — the 10-job plan corpus. Already copied into `JJ-Takeoff\eval\corpus\`; the original stays until Step 3 so there are two copies during the transition.
+
+### ⚠ Durability gap this opens — needs a decision before Step 3
+
+The archive left the OneDrive tree, so OneDrive will drop its cloud copy. That is the intent for run exhaust. But it exposes a bigger issue: **`C:\Users\jason\JJ-Takeoff\` is also outside OneDrive, has no git remote, and is now the working home of the program.** Nothing is at risk today — every file in it is still duplicated at its origin — but **Step 3 deletes those origins.** Before Step 3, pick one:
+
+1. a private GitHub remote (`git push` covers the code, `calibration.md`, the truth file — not the plan PDFs)
+2. point `jj.py backup` at `JJ-Takeoff\` so it mirrors into the synced `_backup\` tree, as it already does for the engine and memory
+3. both — (1) for history, (2) for the binaries
+
+Option 2 alone preserves the current safety net with the least change.
+
+---
+
+## Step 2 — what moved (reference)
 
 Cold storage on the external/OneDrive archive, out of the working tree. Recoverable, just not in the way.
 
