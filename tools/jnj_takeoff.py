@@ -2472,11 +2472,16 @@ def slab_concrete(area_sf, perim_edge_lf, grade_beam_lf=0.0,
 #   Material = two Builders FirstSource plug-in quotes: lumber package (incl
 #   stick-framed roof) + engineered floor system. Roof is stick-framed -> in pkg.
 # ---------------------------------------------------------------------------
-FRAMING_LABOR_RATE = 6.50  # $/sf, blended under-roof FRAMED area. ACTUAL-VALIDATED on 2
-                           # houses: Wilson 38,210/5,792.59=$6.60, Watkins 28,862/4,518=$6.39
-                           # -> flat ~$6.50 (weighted). Replaces the old $5.50, which was
-                           # QUOTE-anchored; framing QUOTES run ~25% under ACTUAL (Wilson labor
-                           # quote $30,424 vs actual $38,210). Bid the actual, not the quote.
+FRAMING_LABOR_RATE = 6.00  # $/sf, blended under-roof FRAMED area. JASON LIVE 2026-08-04,
+                           # supersedes the $6.50 weighted constant. Framing is NOT turnkey:
+                           # material, labor and engineered floor are SEPARATE lines.
+                           # The actuals span both sides of this: Wilson 38,210/5,792.59=$6.60,
+                           # Watkins 28,862/4,518=$6.39, and $5.35/SF Feb-2025 (cal, conventional
+                           # truss single-story). $6.00 is Jason's current blended call inside
+                           # that range -- his number wins, but if a job grades over on framing
+                           # labor, this constant is the first place to look.
+                           # ⚠ framing QUOTES run ~25% under ACTUAL (Wilson labor quote $30,424
+                           # vs actual $38,210). Bid the actual, never the quote.
 
 # SQFT-schedule row classification (Jason's "under roof" rule):
 #   FRAMED   = heated levels, garage, covered porches/decks  -> count for labor
@@ -2968,11 +2973,18 @@ def roofing_estimate(zones, hip_ridge_lf=0.0, drip_edge_lf=0.0, n_pipe_boots=0,
 # item -> (rate, unit, category).  unit: 'sq' = $/100 SF (+waste on area); 'lf'; 'each'.
 SIDING_RATE_BOOK = {
     # FIELD (by the square) -- confirm B&B vs lap per house; lap rate depends on EXPOSURE
-    "lap_smooth_7":     (250.0, "sq", "field"),  # Hardie Smooth 8.25"/7" exp (⚠️ maybe $330 late-Jun-26 -- CONFIRM)
+    "lap_smooth_7":     (250.0, "sq", "field"),  # Hardie Smooth 8.25"/7" exp
+    # ⚠ OPEN 2026-08-04: Jason gave ONE flat rate for "horizontal lap Hardi" -- $3.30/SF
+    # = $330/sq -- with no exposure qualifier. That confirms the old "maybe $330" flag but
+    # does NOT say which exposure it maps to; this book splits lap by exposure because a
+    # narrower reveal means more boards. rate_book.json's "Siding (Fiber Cement, Horizontal)"
+    # already carries 3.30 and is what price_lines() uses, so estimates are correct today.
+    # Ask Jason whether $3.30 is flat regardless of exposure before touching these entries.
     "lap_cedarmill_5":  (350.0, "sq", "field"),  # Hardie Cedarmill 6.25"/5" exp (narrower = more boards)
     "lap_7":            (250.0, "sq", "field"),  # generic 7" exposure ($240-250)
     "lap_5":            (350.0, "sq", "field"),  # generic 5" exposure
-    "bnb":              (430.0, "sq", "field"),  # board & batten panel (rock-solid across houses)
+    "bnb":              (440.0, "sq", "field"),  # board & batten panel. Jason live 2026-08-04:
+                                                 # $4.40/SF of wall = $440/sq (was $430).
     "shake":            (820.0, "sq", "field"),  # Hardie shake accent (gables) -- often missed
     # PORCH CEILING (by the square) -- read which
     "porch_tg_wood":    (540.0, "sq", "porch_ceiling"),  # 1x6 wood T&G (~$5.40/SF)
@@ -3920,8 +3932,17 @@ def drywall_turnkey(net_surface_sf, waste=DRYWALL_WASTE, rate=DRYWALL_RATE_PER_S
 def load_rate_book(path=None):
     """The FULL machine-readable rate book: every line of the active estimate
     template (603 lines / 504 priced), extracted 7/6/26 and VERIFIED current against all
-    calibration-locked rates (framing $6.50, punch $1.75, shiplap $5.50, encapsulation
-    $3, mudroom $300/LF, garage wrap $200, foam 1.35/1.00 -- zero stale values, cal #53).
+    calibration-locked rates (punch $1.75, shiplap $5.50, encapsulation $3, mudroom
+    $300/LF, garage wrap $200, foam 1.35/1.00 -- cal #53).
+
+    JASON LIVE RATES 2026-08-04 (supersede the extracted template values; each carries an
+    entry in book["overrides"] with its evidence): framing lumber $10/SF under-roof,
+    framing labor $6.00/SF under-roof, electrical $6.00/SF of HEATED + GARAGE with PORCHES
+    EXCLUDED even when under roof, siding vertical B&B $4.40/SF wall. CONFIRMED unchanged:
+    horizontal lap Hardi $3.30/SF wall, drywall $1.44/SF.
+
+    ⚠ price_lines() reads book["lines"], NOT book["overrides"] -- an override is the audit
+    trail, so a new rate must be written into BOTH or it will not price.
     Rates change ONLY via rate_candidates.json + Jason's confirmation, then re-extract."""
     import json
     import os
