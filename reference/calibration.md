@@ -1617,3 +1617,55 @@ then a legend of what was measured on it. Each piece is its own **labelled polyg
 line per opening**, beam wrap is a **magenta vertical per post**. Waste is a SEPARATE
 column per line (25% shingle / 15% metal / 10% siding, masonry, insulation) — his
 quantities are RAW, so **compare raw-to-raw**.
+
+## Data point #64 — ⭐⭐⭐⭐⭐ FRAMING LABOR IS PER FRAMED **LAYER**, NOT PER FOOTPRINT (Jason, 2026-08-04)
+
+**This supersedes #33's "LABOR RATE LOCKED at $6.50/sf blended, DEFINITIVELY FLAT."** That
+conclusion was wrong, and it was wrong in the most dangerous way available: it reconciled all
+three actuals to within ~2% while being structurally incorrect.
+
+### The framer's actual formula (Jason's words)
+$6.00/SF buys **one framed system** over a given area. Count the systems:
+
+| What | Layers | $/SF |
+|---|---|---|
+| Basement / 1st / 2nd / 3rd / garage, **including the roof over them** | 1 | $6 |
+| Covered porch, or any roofed area outside the house | 1 | $6 |
+| Deck — framing and posts only, no roof | 1 | $6 |
+| **Covered deck** — the deck **and** the roof over it | **2** | **$12** |
+| **Covered concrete patio** — the roof only; a slab is not framed | **1** | **$6** |
+
+### It reconciles all three actuals at Jason's stated $6.00
+
+| job | framed SF | covered deck | layered @ $6 | ACTUAL | Δ |
+|---|---|---|---|---|---|
+| Watkins | 4,518.00 | 292 | $28,860 | $28,862 | **+0.0%** |
+| Peterson/Sailview | 3,198.00 | 258 (courtyard) | $20,736 | $20,688 | **+0.2%** |
+| Wilson | 5,792.59 | 667.02 | $38,758 | $38,210 | **+1.4%** |
+
+Flat $6.00 without the layer rule reads Wilson −9.0%, Peterson −7.3%, Watkins −6.1%.
+
+### Why $6.50 "worked" and why that was the trap
+The missing second layers averaged ~8% of framing labor. A flat rate absorbed them as a fake
+premium, and the residual then got explained away in #33 as *"the ~3% spread is
+complexity/site"* and *"DEFINITIVELY FLAT — NO size dependence."* Both readings were fitting
+noise that was really structure. **Same failure as the two earlier `footer_lf` formulas that
+hit Jason's number through cancelling errors: matching the number is not the same as being
+right, and a fudge factor breaks the moment the geometry changes.**
+
+Jason surfaced it by explaining the formula when the engine's assertion disagreed with his
+stated rate. **The assertion firing is what produced the correction** — had the tolerance been
+widened to make $6.00 pass, the structural rule would never have been found.
+
+### Engine
+- `framing_estimate(framed_sf, covered_deck_sf=...)` — the deck subset buys its second layer.
+- `covered_deck_sf(rows)` — reads roofed DECK rows off the SQFT schedule **by label**, and
+  returns a `review` list for what the label cannot settle. ⛔ `'uncovered'` contains
+  `'covered'`; an uncovered deck has no roof and must NOT be doubled.
+- ⚠ **A covered PORCH on a framed floor is also two layers and reads identical to a
+  slab-on-grade porch in the schedule.** Wilson's COVERED FRONT PORCH (313.59) is treated as
+  one layer, which is what reconciles it to +1.4% — but the label never proved that. Confirm
+  slab vs framed per house. L J Show's rear covered porch: **Jason confirms PORCH on slab = 1
+  layer** (house is slab), so the shipped estimate is unaffected.
+- ⚠ Watkins' 292 SF is **Jason-confirmed, not yet measured off the sheet.** Independent
+  measurement still owed.

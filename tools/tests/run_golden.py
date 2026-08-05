@@ -194,9 +194,16 @@ def _wilson_foundation_auto(plan):
 def probe_wilson_framing_labor_cost(plan):
     # Legacy comparison only: schedule read x the calibration-locked rate. Calling
     # estimate_from_takeoff() here would correctly fail the current core-area gate.
+    #
+    # 2026-08-04: the framer bills per framed LAYER, not per footprint (Jason). A COVERED
+    # DECK is a framed floor AND a framed roof, so it bills twice. The deck SF is READ OFF
+    # THE SCHEDULE by label -- not hardcoded -- so this probe fails if the reader stops
+    # finding it, which is the whole point of a regression test.
+    rows = eng.read_sqft_schedule(_doc(plan)[3])
     qty = probe_wilson_framing_sf(plan)
+    deck, _matched, _review = eng.covered_deck_sf(rows)
     spec = eng.RATE_BOOK["framing_sf"][0]
-    line = {"cost_type": spec["cost_type"], "qty": qty,
+    line = {"cost_type": spec["cost_type"], "qty": qty + deck,   # deck's 2nd layer
             "unit_cost": spec["unit_cost"], "markup_pct": 0}
     return eng.assemble_estimate([line])["builder_cost"]
 

@@ -2565,22 +2565,78 @@ def framed_under_roof_sf(rows):
     return total if (n == 0 and total is not None) else comp
 
 
-def framing_estimate(framed_sf, lumber_pkg=0.0, eng_floor=0.0, labor_rate=FRAMING_LABOR_RATE):
+def covered_deck_sf(rows):
+    """SF of roofed DECK from read_sqft_schedule() rows -- the subset that bills a SECOND
+    framing layer (Jason 2026-08-04; see framing_estimate).
+
+    A covered deck is a framed floor UNDER a framed roof, so the framer charges both.
+    A roofed porch over a SLAB is one layer -- the slab isn't framed.
+
+    Returns (sf, rows_matched, review). `review` names rows this CANNOT settle from the
+    label alone and that a human must rule on -- it is never silently zero:
+      - a "COVERED PORCH" on an elevated/framed floor is really two layers, but the label
+        reads identical to a slab-on-grade porch. Wilson's COVERED FRONT PORCH (313.59) is
+        exactly this case; treating it as one layer is what reconciles Wilson to +1.4%, so
+        it is slab or slab-like -- but the label alone never proved that.
+    ⛔ 'uncovered' CONTAINS 'covered' -- an uncovered deck is ONE layer (no roof), so the
+    substring trap here silently DOUBLES it. Guarded, same as framed_under_roof_sf."""
+    sf, matched, review = 0.0, [], []
+    for r in rows:
+        if _is_total_row(r["label"]):
+            continue
+        lab = r["label"].lower()
+        if "uncovered" in lab:                 # no roof -> single layer, never doubled
+            continue
+        roofed = "covered" in lab or "roofed" in lab
+        if roofed and "deck" in lab:
+            sf += r["sqft"]; matched.append(r["label"])
+        elif roofed and ("porch" in lab or "patio" in lab):
+            review.append({"label": r["label"], "sqft": r["sqft"],
+                           "question": "slab-on-grade (1 layer) or framed floor (2 layers)?"})
+    return round(sf, 2), matched, review
+
+
+def framing_estimate(framed_sf, lumber_pkg=0.0, eng_floor=0.0, labor_rate=FRAMING_LABOR_RATE,
+                     covered_deck_sf=0.0):
     """Framing trade — materials and labor SEPARATE.
-      framed_sf  = total area UNDER ROOF that gets FRAMED, summed per level
-                   (basement + main + any 2nd + garage + covered porches/decks).
-                   Measure each floor on its OWN sheet at its OWN scale (floors
-                   don't always stack). EXCLUDE slab-on-grade patios (flatwork), but
-                   INCLUDE deck framing (framer frames the deck at normal $/sf; he does
-                   NOT do deck flooring or railings -- those are a separate scope).
-      labor_rate = blended $/sf. Default $6.50, validated on 2 ACTUALS (Wilson $6.60,
-                   Watkins $6.39). NOT the quote rate -- framing quotes run ~25% light.
-      lumber_pkg = BFS lumber package quote (all lumber/OSB/subfloor/nails/straps/
-                   glue/anchors; STICK-FRAMED ROOF is inside this). Plug-in.
-      eng_floor  = BFS engineered floor system (main deck over basement/crawl, any
-                   2nd floor, + garage ceiling for the span). Plug-in; slab gets none."""
-    labor = round(framed_sf * labor_rate, 2)
-    return {"framed_sf": framed_sf, "labor_rate": labor_rate, "labor": labor,
+
+    ⭐ THE FRAMER CHARGES PER FRAMED *LAYER*, NOT PER FOOTPRINT (Jason, 2026-08-04).
+    $6.00/SF buys ONE framed system over a given area. Count the systems:
+
+        basement / 1st / 2nd / 3rd / garage, INCLUDING the roof over them .. 1 layer
+        covered porch, or any roofed area outside the house ................ 1 layer
+        deck — framing and posts only, no roof ............................. 1 layer
+        COVERED DECK = the deck AND the roof over it ....................... 2 layers
+        covered concrete patio = the roof only; a slab is not framed ....... 1 layer
+
+    This is why a flat $/SF never reconciled. The old locked $6.50 was a fudge factor
+    absorbing the double-charged covered decks, and the residual then got explained away
+    as "complexity" or "size" — cal #33 even concluded the rate was "DEFINITIVELY FLAT."
+    It fit three actuals by accident while being structurally wrong, exactly the way two
+    earlier `footer_lf` formulas hit Jason's number through cancelling errors.
+    At $6.00/layer all three reconcile (see _verify_selftest): Watkins +0.0%,
+    Peterson +0.2%, Wilson +1.4%.
+
+      framed_sf       = total area UNDER ROOF that gets FRAMED, each area counted ONCE
+                        (basement + main + any 2nd + garage + covered porches/decks).
+                        Measure each floor on its OWN sheet at its OWN scale — floors
+                        don't always stack. EXCLUDE slab-on-grade patios (flatwork).
+      covered_deck_sf = the SUBSET of framed_sf that is a roofed DECK, i.e. a framed
+                        floor with a framed roof over it. It is already inside
+                        framed_sf once; naming it here buys its SECOND layer.
+                        ⛔ A roofed porch over a SLAB is NOT this — the slab isn't
+                        framed, so it gets one layer. Confirm slab vs framed deck.
+      labor_rate      = $/SF per layer. $6.00, Jason live 2026-08-04. NOT the quote
+                        rate — framing quotes run ~25% light (Wilson quote $30,424 vs
+                        actual $38,210). Bid the actual.
+      lumber_pkg      = BFS lumber package quote (all lumber/OSB/subfloor/nails/straps/
+                        glue/anchors; STICK-FRAMED ROOF is inside this). Plug-in.
+      eng_floor       = BFS engineered floor system (main deck over basement/crawl, any
+                        2nd floor, + garage ceiling for the span). Plug-in; slab none."""
+    layer_sf = framed_sf + covered_deck_sf          # the deck's second layer
+    labor = round(layer_sf * labor_rate, 2)
+    return {"framed_sf": framed_sf, "covered_deck_sf": covered_deck_sf,
+            "layer_sf": layer_sf, "labor_rate": labor_rate, "labor": labor,
             "lumber_pkg": lumber_pkg, "eng_floor": eng_floor,
             "material": lumber_pkg + eng_floor,
             "total": round(labor + lumber_pkg + eng_floor, 2)}
@@ -4434,7 +4490,12 @@ RATE_BOOK = {
     # rates, never defaults).
     "framing_sf": [{"name": "Framing Labor (blended, per level under roof)",
                     "cost_type": "LABOR", "unit_cost": FRAMING_LABOR_RATE, "unit": "SF",
-                    "group": "Framing", "basis": "cal #33: $6.50 locked on 3 actuals"}],
+                    "group": "Framing",
+                    "basis": "cal #64: $6.00 per framed LAYER (Jason 2026-08-04). "
+                             "qty must be framed_sf + covered_deck_sf -- a roofed deck is "
+                             "a framed floor AND a framed roof, so it bills twice. "
+                             "Supersedes cal #33's flat $6.50, which fit 3 actuals only by "
+                             "absorbing those second layers into the rate."}],
     "heated_sf": [{"name": "Punch-Out Allowance", "cost_type": "SUBCONTRACTOR",
                    "unit_cost": 1.75, "unit": "SF", "group": "Punch Out",
                    "basis": "cal #41: $1.75/heated SF from 4 closed-job actuals"}],
@@ -5364,12 +5425,30 @@ if __name__ == "__main__":
     cap = parse_dim("596'-1", max_ft=250)
     ok = ok and cap is None
     print(f"  {'OK ' if cap is None else 'FAIL'} parse_dim('596\\'-1', max_ft=250) = {cap} (exp None)")
-    # framing: $6.50 default reconciles 3 ACTUALS within ~2%; classifier handles patio trap
-    acts = [(5792.59, 38210, "Wilson"), (4518.0, 28862, "Watkins"), (3198.0, 20688, "Peterson")]
-    fr_ok = all(abs(framing_estimate(sf)["labor"] - act) / act < 0.025 for sf, act, _ in acts)
+    # FRAMING = $6.00 PER FRAMED LAYER (Jason 2026-08-04). A covered deck is a framed floor
+    # AND a framed roof, so it bills twice. Naming the covered-deck subset is what makes all
+    # three actuals reconcile at Jason's stated $6.00 -- the old flat $6.50 only fit because
+    # it silently absorbed those second layers.
+    #   Wilson   667.02 covered deck  (cal: 'covered deck/screened porch' in the 5,792.59)
+    #   Peterson 258    outdoor living / courtyard  (printed SQFT table, Fairview Cottage p2)
+    #   Watkins  292    covered deck/porch -- ⚠ CONFIRMED BY JASON 2026-08-04, not yet
+    #            measured off the sheet. Independent measurement is still owed.
+    acts = [(5792.59, 667.02, 38210, "Wilson"),
+            (4518.00, 292.00, 28862, "Watkins"),
+            (3198.00, 258.00, 20688, "Peterson")]
+    fr_ok = all(abs(framing_estimate(sf, covered_deck_sf=d)["labor"] - act) / act < 0.02
+                for sf, d, act, _ in acts)
     ok = ok and fr_ok
-    msg = ", ".join(f"{n} {framing_estimate(sf)['labor']:.0f}/{act}" for sf, act, n in acts)
-    print(f"  {'OK ' if fr_ok else 'FAIL'} framing @6.50: {msg}")
+    msg = ", ".join(f"{n} {framing_estimate(sf, covered_deck_sf=d)['labor']:.0f}/{act}"
+                    for sf, d, act, n in acts)
+    print(f"  {'OK ' if fr_ok else 'FAIL'} framing $6.00/LAYER: {msg}")
+    # the layer rule must actually bite: same footprint, deck named vs not, must differ
+    _flat = framing_estimate(5792.59)["labor"]
+    _lyr = framing_estimate(5792.59, covered_deck_sf=667.02)["labor"]
+    _bites = abs(_lyr - _flat - 667.02 * FRAMING_LABOR_RATE) < 0.01 and _lyr > _flat
+    ok = ok and _bites
+    print(f"  {'OK ' if _bites else 'FAIL'} covered deck bills 2 layers: "
+          f"flat {_flat:.0f} -> layered {_lyr:.0f} (+{_lyr-_flat:.0f} = 667.02 x $6)")
     cls = [classify_area_row(s) for s in
            ("BASEMENT PATIO", "COVERED DECK", "GARAGE SQFT", "MAIN FLOOR HTD", "CONCRETE PATIO",
             "FUTURE EXPANSION", "OUTDOOR LIVING")]

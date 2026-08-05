@@ -23,5 +23,10 @@ asserts:
   - {trade: basement_area_sf, quantity: 1372, unit: SF, tolerance_pct: 8, source: takeoff, page_ref: "p4 FOUNDATION WALL PLAN"}
 
   # FULL CHAIN (cal #50): plan -> run_takeoff -> rate book -> assemble_estimate.
-  # Actual framing-labor spend $38,210 (cal #33); locked blended $6.50/SF reads ~-1.5%.
-  - {trade: framing_labor_cost_usd, quantity: 38210, unit: USD, tolerance_pct: 3, source: actual, assertion_type: comparison, page_ref: "comparison: SQFT schedule p4 x $6.50"}
+  # Actual framing-labor spend $38,210 (cal #33). UNCHANGED -- this is the invoice.
+  # 2026-08-04: the MODEL changed, not this number and not the tolerance. The framer bills
+  # $6.00 per framed LAYER (Jason); the COVERED DECK (667.02) is a framed floor under a
+  # framed roof, so it bills twice. (5,792.59 + 667.02) x $6.00 = $38,758 = +1.4%.
+  # The old flat $6.50 hit -1.5% only by silently absorbing that second layer into the rate
+  # -- right number, wrong structure, and it would break on different deck geometry.
+  - {trade: framing_labor_cost_usd, quantity: 38210, unit: USD, tolerance_pct: 3, source: actual, assertion_type: comparison, page_ref: "comparison: SQFT schedule p4, $6.00 x framed layers (deck x2)"}
