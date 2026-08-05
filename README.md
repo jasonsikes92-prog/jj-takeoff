@@ -7,6 +7,9 @@ same engine.
 **Consolidated 2026-08-04** from eleven locations into this one repo. `~\.claude\skills\jnj-estimate-takeoff`
 is a junction pointing here, so the `jnj-estimate-takeoff` skill resolves unchanged.
 
+> ## ➡ Start with [HANDOFF.md](HANDOFF.md)
+> Current state, what changed, what to do next, and what's owed. This README is just the map.
+
 ## Prove it works
 
 ```bash
