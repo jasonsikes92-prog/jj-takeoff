@@ -2597,7 +2597,7 @@ def covered_deck_sf(rows):
 
 
 def framing_estimate(framed_sf, lumber_pkg=0.0, eng_floor=0.0, labor_rate=FRAMING_LABOR_RATE,
-                     covered_deck_sf=0.0):
+                     covered_deck_sf=0.0, open_deck_sf=0.0):
     """Framing trade — materials and labor SEPARATE.
 
     ⭐ THE FRAMER CHARGES PER FRAMED *LAYER*, NOT PER FOOTPRINT (Jason, 2026-08-04).
@@ -2626,6 +2626,17 @@ def framing_estimate(framed_sf, lumber_pkg=0.0, eng_floor=0.0, labor_rate=FRAMIN
                         framed_sf once; naming it here buys its SECOND layer.
                         ⛔ A roofed porch over a SLAB is NOT this — the slab isn't
                         framed, so it gets one layer. Confirm slab vs framed deck.
+      open_deck_sf    = framed deck area that is NOT under roof and therefore NOT in
+                        framed_sf at all — an uncovered deck, a balcony, a ROOFTOP
+                        deck sitting on top of a roof below. It is an ADDITION, not a
+                        subset, and buys its ONE layer.
+                        ⛔ Do not reach for covered_deck_sf here. Both add SF × rate so
+                        the arithmetic hides the mistake, but the semantics differ and
+                        the next house is where it bites: a covered deck double-counts
+                        if it was never in framed_sf, and a rooftop deck vanishes if
+                        you assume it was. Wilson/Peterson are the SUBSET case; the
+                        Watkins master-bedroom deck + rooftop balcony over the master
+                        bath (Jason, 2026-08-04) is the ADDITION case.
       labor_rate      = $/SF per layer. $6.00, Jason live 2026-08-04. NOT the quote
                         rate — framing quotes run ~25% light (Wilson quote $30,424 vs
                         actual $38,210). Bid the actual.
@@ -2633,9 +2644,10 @@ def framing_estimate(framed_sf, lumber_pkg=0.0, eng_floor=0.0, labor_rate=FRAMIN
                         glue/anchors; STICK-FRAMED ROOF is inside this). Plug-in.
       eng_floor       = BFS engineered floor system (main deck over basement/crawl, any
                         2nd floor, + garage ceiling for the span). Plug-in; slab none."""
-    layer_sf = framed_sf + covered_deck_sf          # the deck's second layer
+    layer_sf = framed_sf + covered_deck_sf + open_deck_sf   # 2nd layer + not-under-roof decks
     labor = round(layer_sf * labor_rate, 2)
     return {"framed_sf": framed_sf, "covered_deck_sf": covered_deck_sf,
+            "open_deck_sf": open_deck_sf,
             "layer_sf": layer_sf, "labor_rate": labor_rate, "labor": labor,
             "lumber_pkg": lumber_pkg, "eng_floor": eng_floor,
             "material": lumber_pkg + eng_floor,
@@ -5431,17 +5443,29 @@ if __name__ == "__main__":
     # it silently absorbed those second layers.
     #   Wilson   667.02 covered deck  (cal: 'covered deck/screened porch' in the 5,792.59)
     #   Peterson 258    outdoor living / courtyard  (printed SQFT table, Fairview Cottage p2)
-    #   Watkins  292    covered deck/porch -- ⚠ CONFIRMED BY JASON 2026-08-04, not yet
-    #            measured off the sheet. Independent measurement is still owed.
+    # ⛔ WATKINS IS NOT EVIDENCE -- DO NOT COUNT IT AS A THIRD VALIDATION. Jason
+    # 2026-08-04: its master-bedroom deck + rooftop balcony was a SPECIAL CASE settled
+    # with a BLANKET ALLOWANCE, and it is not drawn on the only plan set on this machine
+    # (Leone Watkins (1).pdf) or in its change orders. So the $28,862 actual carries an
+    # allowance, not a measured deck, and the 292 SF was SOLVED BACKWARD from that actual
+    # -- fitting it would be circular. The rule stands on Wilson + Peterson, both of which
+    # have the deck area printed on the plan. Two clean points, not three.
     acts = [(5792.59, 667.02, 38210, "Wilson"),
-            (4518.00, 292.00, 28862, "Watkins"),
             (3198.00, 258.00, 20688, "Peterson")]
     fr_ok = all(abs(framing_estimate(sf, covered_deck_sf=d)["labor"] - act) / act < 0.02
                 for sf, d, act, _ in acts)
     ok = ok and fr_ok
     msg = ", ".join(f"{n} {framing_estimate(sf, covered_deck_sf=d)['labor']:.0f}/{act}"
                     for sf, d, act, n in acts)
-    print(f"  {'OK ' if fr_ok else 'FAIL'} framing $6.00/LAYER: {msg}")
+    print(f"  {'OK ' if fr_ok else 'FAIL'} framing $6.00/LAYER (2 clean pts): {msg}")
+    # open_deck_sf is an ADDITION (not under roof), covered_deck_sf a SUBSET -- both add
+    # SF x rate, so only an explicit test keeps the two from being used interchangeably.
+    _sub = framing_estimate(1000.0, covered_deck_sf=100.0)["layer_sf"]
+    _add = framing_estimate(1000.0, open_deck_sf=100.0)["layer_sf"]
+    _paths = _sub == 1100.0 and _add == 1100.0
+    ok = ok and _paths
+    print(f"  {'OK ' if _paths else 'FAIL'} deck paths: covered(subset) {_sub:.0f} sf, "
+          f"open/rooftop(addition) {_add:.0f} sf -- same math, different meaning")
     # the layer rule must actually bite: same footprint, deck named vs not, must differ
     _flat = framing_estimate(5792.59)["labor"]
     _lyr = framing_estimate(5792.59, covered_deck_sf=667.02)["labor"]

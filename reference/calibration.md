@@ -1639,11 +1639,18 @@ $6.00/SF buys **one framed system** over a given area. Count the systems:
 
 | job | framed SF | covered deck | layered @ $6 | ACTUAL | Δ |
 |---|---|---|---|---|---|
-| Watkins | 4,518.00 | 292 | $28,860 | $28,862 | **+0.0%** |
 | Peterson/Sailview | 3,198.00 | 258 (courtyard) | $20,736 | $20,688 | **+0.2%** |
 | Wilson | 5,792.59 | 667.02 | $38,758 | $38,210 | **+1.4%** |
 
-Flat $6.00 without the layer rule reads Wilson −9.0%, Peterson −7.3%, Watkins −6.1%.
+Flat $6.00 without the layer rule reads Wilson −9.0%, Peterson −7.3%.
+
+⛔ **WATKINS WAS REMOVED FROM THE EVIDENCE (Jason, 2026-08-04).** Its master-bedroom deck +
+rooftop balcony over the master bath was a SPECIAL CASE settled with a BLANKET ALLOWANCE, and
+it is not drawn on the only plan set on this machine (`Leone Watkins (1).pdf`) or in its change
+orders. So its $28,862 actual carries an allowance rather than a measured deck, and the 292 SF
+that reconciled it was SOLVED BACKWARD from that actual — fitting it would have been circular.
+**The rule stands on TWO clean points, Wilson and Peterson, both with the deck area printed on
+the plan.** Do not re-open Watkins; do not count it as a third validation.
 
 ### Why $6.50 "worked" and why that was the trap
 The missing second layers averaged ~8% of framing labor. A flat rate absorbed them as a fake
@@ -1667,5 +1674,7 @@ widened to make $6.00 pass, the structural rule would never have been found.
   one layer, which is what reconciles it to +1.4% — but the label never proved that. Confirm
   slab vs framed per house. L J Show's rear covered porch: **Jason confirms PORCH on slab = 1
   layer** (house is slab), so the shipped estimate is unaffected.
-- ⚠ Watkins' 292 SF is **Jason-confirmed, not yet measured off the sheet.** Independent
-  measurement still owed.
+- `open_deck_sf` vs `covered_deck_sf`: a roofed deck is a SUBSET of under-roof SF and buys a
+  SECOND layer; an uncovered deck, balcony or ROOFTOP deck is NOT under roof at all and is an
+  ADDITION buying its ONE layer. Both add SF × rate, so the arithmetic hides a mix-up — only
+  the explicit `deck paths` self-test keeps them apart.
