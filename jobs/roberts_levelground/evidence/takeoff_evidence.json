@@ -3,12 +3,13 @@
  "coordinate_frame": "pdf-points: PyMuPDF page coordinates, origin top-left, y-down, 1 pt = 1/72 in; page = 0-based page index",
  "plan": "C:\\Users\\jason\\JJ-Takeoff\\tools\\tests\\golden\\roberts\\plan.pdf",
  "plan_sha256": "0B5720FC85EC723DB2A64AFF913A2DF6DF39A578EB4B055BC1A80843ECAB4124",
- "generated": "2026-08-14T13:27:54",
+ "generated": "2026-08-14T14:41:38",
  "status": "more_information_required",
  "sheet_map": {
   "sqft_schedule": 2,
   "foundation": 3,
-  "roof": 6
+  "roof": 6,
+  "floor_area": 4
  },
  "sheet_ledger": [
   {
@@ -73,7 +74,9 @@
   },
   {
    "page": 4,
-   "roles": [],
+   "roles": [
+    "floor_area"
+   ],
    "ppf": null,
    "scale_method": null,
    "scale_confidence": null,
@@ -555,13 +558,13 @@
  "not_measured": [
   {
    "trade": "heated_sf",
-   "page": 2,
-   "why": "heated crawlspace envelope: geometry measures differ by 21.6% (limit 2.0%); garage slab: geometry measures differ by 2.6% (limit 2.0%); front porch slab: geometry measures differ by 7.7% (limit 2.0%)"
+   "page": 4,
+   "why": "garage slab: geometry measures differ by 2.6% (limit 2.0%); front porch slab: geometry measures differ by 7.7% (limit 2.0%); no heated component was measured"
   },
   {
    "trade": "framing_sf",
-   "page": 2,
-   "why": "heated crawlspace envelope: geometry measures differ by 21.6% (limit 2.0%); garage slab: geometry measures differ by 2.6% (limit 2.0%); front porch slab: geometry measures differ by 7.7% (limit 2.0%)"
+   "page": 4,
+   "why": "garage slab: geometry measures differ by 2.6% (limit 2.0%); front porch slab: geometry measures differ by 7.7% (limit 2.0%); no heated component was measured"
   },
   {
    "trade": "roof_surface_sq",
@@ -578,19 +581,19 @@
   "tolerance_pct": 2.0,
   "components": [
    {
-    "name": "heated crawlspace envelope",
-    "classification": "heated",
+    "name": "crawlspace envelope (foundation footprint)",
+    "classification": "foundation",
     "qty": 2169.92,
-    "verification_qty": 2766.26,
-    "delta_pct": 21.56,
-    "independence": "same-engine",
+    "verification_qty": 2129.4,
+    "delta_pct": 1.9,
+    "independence": "input-independent",
     "primary": {
      "qty": 2169.92,
      "unit": "SF",
      "source": "MEASURED",
      "sheet": "idx 3 FOUNDATION WALL PLAN",
      "page": 3,
-     "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\heated-crawlspace-envelope-primary.png",
+     "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\crawlspace-envelope-foundation-footprint-primary.png",
      "method": "trace-footprint-clean",
      "confidence": "high",
      "ppf": 16.646,
@@ -612,7 +615,7 @@
        "delta_pct": 0.22
       }
      ],
-     "id": "me6130f2c7c",
+     "id": "m055a4faeee",
      "clip": [
       770.71,
       193.09,
@@ -710,99 +713,74 @@
      "geometry_note": null
     },
     "verification": {
-     "qty": 2766.26,
+     "qty": 2129.4,
      "unit": "SF",
      "source": "MEASURED",
-     "sheet": "idx 3 FOUNDATION WALL PLAN",
+     "sheet": "idx 3 printed dimension chains",
      "page": 3,
-     "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\heated-crawlspace-envelope-verification.png",
-     "method": "trace-footprint-all-ink",
-     "confidence": "high",
+     "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\crawlspace-envelope-foundation-footprint-verification.png",
+     "method": "printed-dimension-chains",
+     "confidence": "review",
      "ppf": 16.646,
-     "origin": "jnj_takeoff.plan-pixel-geometry.v1",
-     "scale_method": "two-printed-dimension-checks",
-     "scale_checks": [
-      {
-       "label": "64'-3",
-       "printed_ft": 64.25,
-       "measured_points": 1071.99,
-       "ppf": 16.6847,
-       "delta_pct": 0.23
-      },
-      {
-       "label": "60'-10",
-       "printed_ft": 60.833333333333336,
-       "measured_points": 1014.86,
-       "ppf": 16.6826,
-       "delta_pct": 0.22
-      }
-     ],
-     "id": "m18e63f6f18",
-     "clip": [
-      770.71,
-      193.09,
-      1836.05,
-      1178.54
-     ],
+     "origin": "jnj_takeoff.plan-printed-dims.v1",
+     "scale_method": "text-dims",
+     "scale_checks": [],
+     "id": "m5919206106",
+     "clip": null,
      "geometry": {
       "kind": "polygon",
       "points": [
        [
-        778.96,
-        210.594
+        764.43,
+        207.32
        ],
        [
-        778.96,
-        770.844
+        764.43,
+        759.801
        ],
        [
-        1198.96,
-        777.344
+        1203.551,
+        759.801
        ],
        [
-        1191.96,
-        1141.094
+        1203.551,
+        1049.108
        ],
        [
-        1170.46,
-        1141.844
+        1594.4,
+        1049.108
        ],
        [
-        1169.96,
-        1164.844
+        1594.4,
+        1160.137
        ],
        [
-        958.71,
-        1170.344
+        1802.142,
+        1160.137
        ],
        [
-        1202.21,
-        1170.344
+        1802.142,
+        493.298
        ],
        [
-        1205.96,
-        1057.094
+        1202.553,
+        493.298
        ],
        [
-        1584.96,
-        1057.094
+        1202.553,
+        240.778
        ],
        [
-        1587.21,
-        1170.344
+        955.693,
+        240.778
        ],
        [
-        1802.46,
-        1170.344
-       ],
-       [
-        1793.71,
-        219.594
+        955.693,
+        206.155
        ]
       ],
       "closed": true,
-      "area_sf": 2766.26,
-      "perim_lf": 278.14
+      "area_sf": 2129.4
      },
      "geometry_note": null
     }
@@ -1229,22 +1207,22 @@
    {
     "trade": "heated_sf",
     "schedule_qty": 2161.0,
-    "measured_qty": 2169.9,
-    "delta_pct": 0.4,
+    "measured_qty": 0,
+    "delta_pct": 100.0,
     "role": "comparison-only"
    },
    {
     "trade": "framing_sf",
     "schedule_qty": 3431.0,
-    "measured_qty": 3128.8,
-    "delta_pct": 8.8,
+    "measured_qty": 958.8,
+    "delta_pct": 72.1,
     "role": "comparison-only"
    }
   ],
   "errors": [
-   "heated crawlspace envelope: geometry measures differ by 21.6% (limit 2.0%)",
    "garage slab: geometry measures differ by 2.6% (limit 2.0%)",
-   "front porch slab: geometry measures differ by 7.7% (limit 2.0%)"
+   "front porch slab: geometry measures differ by 7.7% (limit 2.0%)",
+   "no heated component was measured"
   ]
  },
  "roof_lines": {

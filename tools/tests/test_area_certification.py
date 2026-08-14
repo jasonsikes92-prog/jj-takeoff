@@ -106,6 +106,38 @@ class AreaCertificationTests(unittest.TestCase):
         self.assertTrue(any("origin does not match its method" in e for e in errors),
                         errors)
 
+    def test_review_confidence_admitted_for_printed_dims_only(self):
+        # Exposed end-to-end by the Roberts cal #67 restructure: a print-rescaled
+        # sheet votes confidence "review" BY DESIGN (it is cal #66's motivating
+        # case), and _measure_area_evidence admits the voted ppf for the dims walk
+        # because leg re-verification IS the scale proof — but the certify-side
+        # validator predated cal #66 and refused the very evidence the ruling
+        # admits. The tier is admissible ONLY where the method's declared origin
+        # is printed-dims; pixel tracers keep the strict bar.
+        comp = self._component(
+            "crawlspace envelope (foundation footprint)", "foundation",
+            2169.9, 2129.4, 11)
+        comp["verification"]["method"] = "printed-dimension-chains"
+        comp["verification"]["confidence"] = "review"
+        comp["primary"]["origin"] = eng._AREA_ENGINE_ORIGIN
+        comp["verification"]["origin"] = eng._AREA_DIMS_ORIGIN
+        heated = self._component("Conditioned residence", "heated", 3938, 3940, 12)
+        result = eng.certify_area_measurements([comp, heated])
+        self.assertTrue(result["ok"], result["errors"])
+        self.assertEqual(result["components"][0]["independence"], "input-independent")
+        # cal #67: a foundation-scope component feeds NEITHER rollup
+        by_trade = {line["trade"]: line for line in result["lines"]}
+        self.assertEqual(by_trade["heated_sf"]["qty"], 3938.0)
+        self.assertEqual(by_trade["framing_sf"]["qty"], 3938.0)
+        # a pixel tracer at "review" still refuses — the strict bar is unchanged
+        pixel = self._component("Conditioned residence", "heated", 3938, 3940, 13)
+        pixel["verification"]["confidence"] = "review"
+        result2 = eng.certify_area_measurements([pixel])
+        self.assertFalse(result2["ok"])
+        self.assertTrue(
+            any("confidence must be one of" in e for e in result2["errors"]),
+            result2["errors"])
+
     def test_total_or_under_roof_cannot_be_a_component(self):
         components = self._dugger_components()
         components.append(

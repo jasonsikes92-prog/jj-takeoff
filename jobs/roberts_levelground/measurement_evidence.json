@@ -150,8 +150,8 @@
   ],
   "components": [
     {
-      "name": "heated crawlspace envelope",
-      "classification": "heated",
+      "name": "crawlspace envelope (foundation footprint)",
+      "classification": "foundation",
       "clip": [
         770.7098000000001,
         193.09360000000004,
@@ -188,7 +188,7 @@
   ],
   "tracer_sweep": [
     {
-      "component": "heated crawlspace envelope",
+      "component": "crawlspace envelope (foundation footprint)",
       "inside_face_sf": 1962.0,
       "by_pad": {
         "1.5": {
@@ -253,12 +253,12 @@
   ],
   "takeoff_status": "more_information_required",
   "area_certification_errors": [
-    "heated crawlspace envelope: geometry measures differ by 21.6% (limit 2.0%)",
     "garage slab: geometry measures differ by 2.6% (limit 2.0%)",
-    "front porch slab: geometry measures differ by 7.7% (limit 2.0%)"
+    "front porch slab: geometry measures differ by 7.7% (limit 2.0%)",
+    "no heated component was measured"
   ],
   "seconds": {
-    "takeoff": 16.56,
+    "takeoff": 15.06,
     "report": 0.0
   }
 }

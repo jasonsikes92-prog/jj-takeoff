@@ -56,6 +56,7 @@ SHEET_MAP = {
     "sqft_schedule": 2,
     "foundation": 3,
     "roof": 6,
+    "floor_area": 4,  # MASTER FLOOR PLAN — the sheet heated SF must come from (cal #67)
     # NO "slab" key on purpose, and the reason is SCOPE, not the tracer. Roberts is a
     # CRAWLSPACE house with a slab garage and a slab porch -- its slab scope is 707 + 201 SF,
     # not a whole-footprint sheet. Pointing "slab" at the foundation sheet traces the entire
@@ -152,7 +153,14 @@ def area_components(doc, page_index, ppf, pad_ft=1.5):
     loops = eng.foundation_wall_loops(page, ppf=ppf, close_ft=2.0)
     # This set's foundation sheet resolves exactly three enclosed loops, in area order:
     # the crawlspace envelope, the garage slab, the front porch slab.
-    naming = [("heated crawlspace envelope", "heated"),
+    # cal #67: everything this sheet yields is FOUNDATION/slab scope. The crawlspace
+    # envelope was previously classified "heated" — right number (1.5% from the plan's
+    # figure), wrong SCOPE. Heated SF must come off the floor plan (SHEET_MAP
+    # "floor_area"), and HOW Jason reads heated off that sheet is undeclared teach-mode
+    # work — so no heated component exists yet and the area gate reports it honestly.
+    # The component name matches declared_walks.json exactly, so Jason's pink-markup
+    # walk wires in as the printed-dims verification below.
+    naming = [("crawlspace envelope (foundation footprint)", "foundation"),
               ("garage slab", "garage"),
               ("front porch slab", "covered")]
     out = []
@@ -304,6 +312,12 @@ def main():
                 }
                 print(f"  declared walk: {s['name']} <- {len(w['walk'])} printed legs "
                       f"(teach-mode, {w.get('confirmed_by', 'unconfirmed')})")
+
+    # cal #67: no heated spec exists until Jason declares how heated SF reads off the
+    # floor plan. The gate must fail on exactly that — not on a relabeled proxy.
+    if not any(s["classification"] in ("heated", "conditioned_accessory") for s in specs):
+        print(f"  heated: no component declared -- heated SF is a floor-plan scope "
+              f"(idx {SHEET_MAP['floor_area']}); awaiting teach-mode declaration")
 
     print("\n" + "=" * 78)
     print("RUN_TAKEOFF -- the real chain, on a real plan set")

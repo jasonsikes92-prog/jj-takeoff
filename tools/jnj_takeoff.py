@@ -3603,6 +3603,12 @@ AREA_COMPONENT_CLASSES = (
     "workshop",
     "conditioned_accessory",
     "uncovered",
+    # cal #67 (Jason's ruling 2026-08-14): a foundation-plan footprint (crawlspace
+    # envelope, stem walls) is a FOUNDATION scope — certifiable with the same
+    # two-input geometry gate, but deliberately absent from BOTH rollup sets below:
+    # heated SF is a floor-plan scope, and the floor-plan heated component already
+    # represents this footprint in framing_sf. Counting it there would double it.
+    "foundation",
 )
 UNDER_ROOF_AREA_CLASSES = {
     "heated", "garage", "covered", "workshop", "conditioned_accessory"
@@ -3661,8 +3667,18 @@ def _area_evidence_errors(component_name, evidence, label):
     elif not _os.path.isfile(view):
         errors.append(f"{prefix}: overlay view does not exist: {view}")
     confidence = str(evidence.get("confidence", "")).lower()
-    if confidence not in ("high", "good"):
-        errors.append(f"{prefix}: scale/trace confidence must be high or good")
+    # cal #66: the printed-dims walk re-verifies every declared leg against the
+    # sheet's own chains (≤1%), which IS the scale proof — so the voted ppf's
+    # "review" tier is admissible for that method alone (Roberts, the print-rescaled
+    # motivating case, votes "review" by design; _measure_area_evidence already
+    # admits it there). Pixel tracers keep the strict bar.
+    allowed = (("high", "good", "review")
+               if _AREA_METHOD_ORIGINS.get(method) == _AREA_DIMS_ORIGIN
+               else ("high", "good"))
+    if confidence not in allowed:
+        errors.append(
+            f"{prefix}: scale/trace confidence must be one of {'/'.join(allowed)}"
+        )
     return errors
 
 

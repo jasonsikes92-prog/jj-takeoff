@@ -2,11 +2,11 @@
  "schema": "roberts.proposed_walks.v1",
  "components": [
   {
-   "name": "heated crawlspace envelope",
-   "classification": "heated",
+   "name": "crawlspace envelope (foundation footprint)",
+   "classification": "foundation",
    "page": 3,
    "traced_primary_sf": 2169.92,
-   "traced_verification_sf": 2766.26,
+   "traced_verification_sf": 2129.4,
    "proposed_walk": null,
    "walk_area_sf": null,
    "walk_closure_ft": null,
