@@ -14,6 +14,9 @@ node_modules/
 .vercel/
 *.bak
 graphify-out/
+# viewer output is generated from evidence + template — rebuild with:
+#   python tools/viewer/build_viewer.py --job jobs/<job>
+jobs/**/viewer/
 
 # --- secrets ---
 .env
