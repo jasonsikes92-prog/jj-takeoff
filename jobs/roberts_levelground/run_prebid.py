@@ -282,6 +282,29 @@ def main():
                       "primary": {**common, "method": "clean-tracer"},
                       "verification": {**common, "method": "all-ink"}})
 
+    # --- cal #66: DECLARED walks upgrade the verification side -------------------------
+    # declared_walks.json is written by apply_walks.py from Jason's teach-mode answers
+    # in the viewer. A declared walk replaces the all-ink verification with the sheet's
+    # own printed dimension chains — input-independent of the pixel primary, and every
+    # leg re-verified against the page at run time (a wrong answer refuses, never lies).
+    walks_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                              "declared_walks.json")
+    if os.path.exists(walks_path):
+        with open(walks_path, encoding="utf-8") as fh:
+            declared = {w["name"]: w for w in json.load(fh).get("walks", [])}
+        for s in specs:
+            w = declared.get(s["name"])
+            if w:
+                s["verification"] = {
+                    "page": w.get("page", f_idx),
+                    "sheet": f"idx {w.get('page', f_idx)} printed dimension chains",
+                    "method": "printed-dims",
+                    "walk": w["walk"], "origin_pt": w["origin_pt"],
+                    "ppf": f_ppf, "scale_checks": checks,
+                }
+                print(f"  declared walk: {s['name']} <- {len(w['walk'])} printed legs "
+                      f"(teach-mode, {w.get('confirmed_by', 'unconfirmed')})")
+
     print("\n" + "=" * 78)
     print("RUN_TAKEOFF -- the real chain, on a real plan set")
     print("=" * 78)

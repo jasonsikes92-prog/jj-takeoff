@@ -33,6 +33,8 @@ _DIM_RE = re.compile(
     """,
     re.VERBOSE,
 )
+# extraction artifact: '13'-6 1 4"' is 13'-6 1/4" with the slash lost (see parse_dim)
+_SPACED_FRAC_RE = re.compile(r'^(.*?\s)(\d{1,2})\s+(\d{1,2})\s*"$')
 
 def parse_dim(text, max_ft=None):
     """Parse an architectural dimension string -> feet (float). None if not a dimension.
@@ -40,6 +42,24 @@ def parse_dim(text, max_ft=None):
     if text is None:
         return None
     t = text.strip().replace("''", '"').replace("’", "'").replace("”", '"')
+    # Unicode vulgar-fraction glyphs: CAD text exports print 60'-10¼" with a single
+    # ¼ codepoint, which the ASCII fraction regex can never match — on the Roberts
+    # foundation sheet EVERY overall dimension carries one, so the chain reader saw
+    # only the whole-inch minority until this normalization (2026-08-14).
+    for glyph, frac in (("¼", " 1/4"), ("½", " 1/2"), ("¾", " 3/4"),
+                        ("⅛", " 1/8"), ("⅜", " 3/8"), ("⅝", " 5/8"),
+                        ("⅞", " 7/8")):
+        t = t.replace(glyph, frac)
+    t = t.replace(" ", " ")
+    # The other way CAD fractions survive extraction: the slash drops and 13'-6 1/4"
+    # arrives as '13\'-6 1 4"'. A trailing pair of small integers with num < den and
+    # a dimension denominator is that lost fraction — restore it. (Roberts p4
+    # foundation: EVERY overall dim — 64'-3 3 4", 60'-10 1 4" — reads this way.)
+    m_sp = _SPACED_FRAC_RE.match(t)
+    if m_sp:
+        num, den = int(m_sp.group(2)), int(m_sp.group(3))
+        if num < den and den in (2, 4, 8, 16):
+            t = f'{m_sp.group(1)}{num}/{den}"'
     if "'" not in t and '"' not in t and "/" not in t:
         return None  # bare number with no unit mark — not a trusted dimension
     m = _DIM_RE.match(t)
@@ -5895,6 +5915,13 @@ if __name__ == "__main__":
     cap = parse_dim("596'-1", max_ft=250)
     ok = ok and cap is None
     print(f"  {'OK ' if cap is None else 'FAIL'} parse_dim('596\\'-1', max_ft=250) = {cap} (exp None)")
+    # Unicode vulgar fractions (Roberts foundation sheet: every overall dim has one)
+    uf = {"60'-10¼\"": 60.8542, "15'-4¼\"": 15.3542, "38'-8¾\"": 38.7292,
+          "12'-6½\"": 12.5417}
+    uf_ok = all((got := parse_dim(s)) and abs(got - exp) < 0.001 for s, exp in uf.items())
+    ok = ok and uf_ok
+    print(f"  {'OK ' if uf_ok else 'FAIL'} parse_dim Unicode fractions: "
+          f"{[round(parse_dim(s), 4) for s in uf]}")
     # FRAMING = $6.00 PER FRAMED LAYER (Jason 2026-08-04). A covered deck is a framed floor
     # AND a framed roof, so it bills twice. Naming the covered-deck subset is what makes all
     # three actuals reconcile at Jason's stated $6.00 -- the old flat $6.50 only fit because

@@ -1,0 +1,684 @@
+{
+ "schema": "roberts.proposed_walks.v1",
+ "components": [
+  {
+   "name": "heated crawlspace envelope",
+   "classification": "heated",
+   "page": 3,
+   "traced_primary_sf": 2169.92,
+   "traced_verification_sf": 2766.26,
+   "proposed_walk": null,
+   "walk_area_sf": null,
+   "walk_closure_ft": null,
+   "origin_pt": [
+    945.0,
+    211.0
+   ],
+   "legs": [
+    {
+     "traced_ft": 33.93,
+     "dir": "D",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      761.0,
+      211.3
+     ]
+    },
+    {
+     "traced_ft": 25.41,
+     "dir": "R",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      772.3,
+      776.0
+     ]
+    },
+    {
+     "traced_ft": 23.31,
+     "dir": "D",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      1195.3,
+      770.7
+     ]
+    },
+    {
+     "traced_ft": 14.16,
+     "dir": "L",
+     "printed_ft": 14.08,
+     "delta_ft": -0.08,
+     "at": [
+      1189.0,
+      1158.7
+     ]
+    },
+    {
+     "traced_ft": 0.98,
+     "dir": "?",
+     "printed_ft": null,
+     "at": [
+      953.333,
+      1159.0
+     ]
+    },
+    {
+     "traced_ft": 13.94,
+     "dir": "R",
+     "printed_ft": 14.08,
+     "delta_ft": 0.14,
+     "at": [
+      964.3,
+      1171.0
+     ]
+    },
+    {
+     "traced_ft": 6.7,
+     "dir": "U",
+     "printed_ft": 6.67,
+     "delta_ft": -0.03,
+     "at": [
+      1196.3,
+      1171.0
+     ]
+    },
+    {
+     "traced_ft": 23.01,
+     "dir": "R",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      1203.0,
+      1059.7
+     ]
+    },
+    {
+     "traced_ft": 5.96,
+     "dir": "D",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      1586.0,
+      1060.0
+     ]
+    },
+    {
+     "traced_ft": 16.92,
+     "dir": "L",
+     "printed_ft": 16.6,
+     "delta_ft": -0.32,
+     "at": [
+      1580.7,
+      1159.0
+     ]
+    },
+    {
+     "traced_ft": 16.91,
+     "dir": "R",
+     "printed_ft": 16.6,
+     "delta_ft": -0.31,
+     "at": [
+      1300.0,
+      1182.0
+     ]
+    },
+    {
+     "traced_ft": 2.02,
+     "dir": "?",
+     "printed_ft": null,
+     "at": [
+      1580.667,
+      1161.667
+     ]
+    },
+    {
+     "traced_ft": 1.32,
+     "dir": "U",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      1592.7,
+      1193.0
+     ]
+    },
+    {
+     "traced_ft": 12.52,
+     "dir": "R",
+     "printed_ft": 12.52,
+     "delta_ft": 0.0,
+     "at": [
+      1593.3,
+      1171.0
+     ]
+    },
+    {
+     "traced_ft": 40.17,
+     "dir": "U",
+     "printed_ft": 40.06,
+     "delta_ft": -0.11,
+     "at": [
+      1801.7,
+      1170.7
+     ]
+    },
+    {
+     "traced_ft": 36.02,
+     "dir": "L",
+     "printed_ft": 36.02,
+     "delta_ft": -0.0,
+     "at": [
+      1801.3,
+      502.0
+     ]
+    },
+    {
+     "traced_ft": 15.38,
+     "dir": "U",
+     "printed_ft": 15.38,
+     "delta_ft": 0.0,
+     "at": [
+      1201.7,
+      502.0
+     ]
+    },
+    {
+     "traced_ft": 15.34,
+     "dir": "L",
+     "printed_ft": 15.35,
+     "delta_ft": 0.01,
+     "at": [
+      1201.0,
+      246.0
+     ]
+    },
+    {
+     "traced_ft": 2.1,
+     "dir": "U",
+     "printed_ft": 2.08,
+     "delta_ft": -0.02,
+     "at": [
+      945.7,
+      246.0
+     ]
+    },
+    {
+     "traced_ft": 11.05,
+     "dir": "L",
+     "printed_ft": 11.02,
+     "delta_ft": -0.03,
+     "at": [
+      945.0,
+      211.0
+     ]
+    }
+   ],
+   "questions": [
+    "D edge traced 33.93 ft at (761,211) matches no printed dim (nearest 33.19)",
+    "R edge traced 25.41 ft at (772,776) matches no printed dim (nearest 26.08)",
+    "D edge traced 23.31 ft at (1195,771) matches no printed dim (nearest 20.17)",
+    "diagonal edge ~1.0 ft at (953,1159) \u2014 trace defect or real angled wall?",
+    "R edge traced 23.01 ft at (1203,1060) matches no printed dim (nearest 23.48)",
+    "D edge traced 5.96 ft at (1586,1060) matches no printed dim (nearest 6.67)",
+    "diagonal edge ~2.0 ft at (1581,1162) \u2014 trace defect or real angled wall?",
+    "U edge traced 1.32 ft at (1593,1193) matches no printed dim (nearest 2.08)"
+   ],
+   "printed_pool": {
+    "H": [
+     6.9,
+     8.21,
+     9.69,
+     10.21,
+     11.02,
+     11.48,
+     12.48,
+     12.52,
+     12.54,
+     13.52,
+     14.08,
+     14.29,
+     14.83,
+     15.35,
+     16.6,
+     23.48,
+     23.5,
+     26.08,
+     26.38,
+     34.98,
+     36.02,
+     61.06,
+     63.62,
+     64.31
+    ],
+    "V": [
+     2.08,
+     2.23,
+     4.27,
+     4.98,
+     6.67,
+     10.4,
+     14.83,
+     15.17,
+     15.38,
+     17.38,
+     17.46,
+     20.17,
+     26.67,
+     32.15,
+     33.19,
+     38.73,
+     40.06,
+     59.85,
+     60.85
+    ]
+   }
+  },
+  {
+   "name": "garage slab",
+   "classification": "garage",
+   "page": 3,
+   "traced_primary_sf": 732.19,
+   "traced_verification_sf": 751.38,
+   "proposed_walk": null,
+   "walk_area_sf": null,
+   "walk_closure_ft": null,
+   "origin_pt": [
+    1207.33,
+    758.33
+   ],
+   "legs": [
+    {
+     "traced_ft": 2.24,
+     "dir": "D",
+     "printed_ft": 2.23,
+     "delta_ft": -0.01,
+     "at": [
+      729.0,
+      764.7
+     ]
+    },
+    {
+     "traced_ft": 0.68,
+     "dir": "R",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      729.0,
+      802.0
+     ]
+    },
+    {
+     "traced_ft": 20.12,
+     "dir": "D",
+     "printed_ft": 20.17,
+     "delta_ft": 0.05,
+     "at": [
+      740.3,
+      802.7
+     ]
+    },
+    {
+     "traced_ft": 0.68,
+     "dir": "L",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      740.3,
+      1137.7
+     ]
+    },
+    {
+     "traced_ft": 4.29,
+     "dir": "D",
+     "printed_ft": 4.27,
+     "delta_ft": -0.02,
+     "at": [
+      729.0,
+      1138.3
+     ]
+    },
+    {
+     "traced_ft": 14.12,
+     "dir": "R",
+     "printed_ft": 14.08,
+     "delta_ft": -0.04,
+     "at": [
+      729.3,
+      1209.7
+     ]
+    },
+    {
+     "traced_ft": 2.32,
+     "dir": "U",
+     "printed_ft": 2.23,
+     "delta_ft": -0.09,
+     "at": [
+      964.3,
+      1209.7
+     ]
+    },
+    {
+     "traced_ft": 2.6,
+     "dir": "R",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      965.0,
+      1171.0
+     ]
+    },
+    {
+     "traced_ft": 1.86,
+     "dir": "D",
+     "printed_ft": 2.08,
+     "delta_ft": 0.22,
+     "at": [
+      1008.3,
+      1171.0
+     ]
+    },
+    {
+     "traced_ft": 0.82,
+     "dir": "R",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      1009.0,
+      1202.0
+     ]
+    },
+    {
+     "traced_ft": 1.84,
+     "dir": "U",
+     "printed_ft": 2.08,
+     "delta_ft": 0.24,
+     "at": [
+      1022.7,
+      1201.7
+     ]
+    },
+    {
+     "traced_ft": 7.01,
+     "dir": "R",
+     "printed_ft": 6.9,
+     "delta_ft": -0.11,
+     "at": [
+      1023.0,
+      1171.0
+     ]
+    },
+    {
+     "traced_ft": 2.36,
+     "dir": "D",
+     "printed_ft": 2.23,
+     "delta_ft": -0.13,
+     "at": [
+      1139.7,
+      1171.0
+     ]
+    },
+    {
+     "traced_ft": 0.82,
+     "dir": "R",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      1140.0,
+      1210.3
+     ]
+    },
+    {
+     "traced_ft": 2.38,
+     "dir": "U",
+     "printed_ft": 2.23,
+     "delta_ft": -0.15,
+     "at": [
+      1153.7,
+      1210.7
+     ]
+    },
+    {
+     "traced_ft": 2.48,
+     "dir": "R",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      1154.3,
+      1171.0
+     ]
+    },
+    {
+     "traced_ft": 3.3,
+     "dir": "D",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      1195.7,
+      1171.0
+     ]
+    },
+    {
+     "traced_ft": 0.7,
+     "dir": "R",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      1196.0,
+      1226.0
+     ]
+    },
+    {
+     "traced_ft": 28.09,
+     "dir": "U",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      1207.7,
+      1226.0
+     ]
+    },
+    {
+     "traced_ft": 28.74,
+     "dir": "L",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      1207.3,
+      758.3
+     ]
+    }
+   ],
+   "questions": [
+    "R edge traced 0.68 ft at (729,802) matches no printed dim (nearest 6.9)",
+    "L edge traced 0.68 ft at (740,1138) matches no printed dim (nearest 6.9)",
+    "R edge traced 2.60 ft at (965,1171) matches no printed dim (nearest 6.9)",
+    "R edge traced 0.82 ft at (1009,1202) matches no printed dim (nearest 6.9)",
+    "R edge traced 0.82 ft at (1140,1210) matches no printed dim (nearest 6.9)",
+    "R edge traced 2.48 ft at (1154,1171) matches no printed dim (nearest 6.9)",
+    "D edge traced 3.30 ft at (1196,1171) matches no printed dim (nearest 4.27)",
+    "R edge traced 0.70 ft at (1196,1226) matches no printed dim (nearest 6.9)",
+    "U edge traced 28.09 ft at (1208,1226) matches no printed dim (nearest 26.67)",
+    "L edge traced 28.74 ft at (1207,758) matches no printed dim (nearest 26.38)"
+   ],
+   "printed_pool": {
+    "H": [
+     6.9,
+     8.21,
+     9.69,
+     10.21,
+     11.02,
+     11.48,
+     12.48,
+     12.52,
+     12.54,
+     13.52,
+     14.08,
+     14.29,
+     14.83,
+     15.35,
+     16.6,
+     23.48,
+     23.5,
+     26.08,
+     26.38,
+     34.98,
+     36.02,
+     61.06,
+     63.62,
+     64.31
+    ],
+    "V": [
+     2.08,
+     2.23,
+     4.27,
+     4.98,
+     6.67,
+     10.4,
+     14.83,
+     15.17,
+     15.38,
+     17.38,
+     17.46,
+     20.17,
+     26.67,
+     32.15,
+     33.19,
+     38.73,
+     40.06,
+     59.85,
+     60.85
+    ]
+   }
+  },
+  {
+   "name": "front porch slab",
+   "classification": "covered",
+   "page": 3,
+   "traced_primary_sf": 226.65,
+   "traced_verification_sf": 245.44,
+   "proposed_walk": null,
+   "walk_area_sf": null,
+   "walk_closure_ft": null,
+   "origin_pt": [
+    1599.33,
+    1048.0
+   ],
+   "legs": [
+    {
+     "traced_ft": 10.65,
+     "dir": "D",
+     "printed_ft": 10.4,
+     "delta_ft": -0.25,
+     "at": [
+      1189.0,
+      1048.3
+     ]
+    },
+    {
+     "traced_ft": 6.91,
+     "dir": "R",
+     "printed_ft": 6.9,
+     "delta_ft": -0.01,
+     "at": [
+      1196.3,
+      1226.3
+     ]
+    },
+    {
+     "traced_ft": 2.0,
+     "dir": "U",
+     "printed_ft": 2.08,
+     "delta_ft": 0.08,
+     "at": [
+      1311.3,
+      1226.3
+     ]
+    },
+    {
+     "traced_ft": 16.88,
+     "dir": "R",
+     "printed_ft": 16.6,
+     "delta_ft": -0.28,
+     "at": [
+      1312.0,
+      1193.0
+     ]
+    },
+    {
+     "traced_ft": 8.65,
+     "dir": "U",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      1593.0,
+      1192.7
+     ]
+    },
+    {
+     "traced_ft": 24.65,
+     "dir": "L",
+     "printed_ft": null,
+     "delta_ft": null,
+     "at": [
+      1599.3,
+      1048.0
+     ]
+    }
+   ],
+   "questions": [
+    "U edge traced 8.65 ft at (1593,1193) matches no printed dim (nearest 10.4)",
+    "L edge traced 24.65 ft at (1599,1048) matches no printed dim (nearest 23.5)"
+   ],
+   "printed_pool": {
+    "H": [
+     6.9,
+     8.21,
+     9.69,
+     10.21,
+     11.02,
+     11.48,
+     12.48,
+     12.52,
+     12.54,
+     13.52,
+     14.08,
+     14.29,
+     14.83,
+     15.35,
+     16.6,
+     23.48,
+     23.5,
+     26.08,
+     26.38,
+     34.98,
+     36.02,
+     61.06,
+     63.62,
+     64.31
+    ],
+    "V": [
+     2.08,
+     2.23,
+     4.27,
+     4.98,
+     6.67,
+     10.4,
+     14.83,
+     15.17,
+     15.38,
+     17.38,
+     17.46,
+     20.17,
+     26.67,
+     32.15,
+     33.19,
+     38.73,
+     40.06,
+     59.85,
+     60.85
+    ]
+   }
+  }
+ ]
+}

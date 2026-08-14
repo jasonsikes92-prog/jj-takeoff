@@ -121,6 +121,11 @@ def build(job, zoom=2.0, out=None):
         sheets[str(pi)] = rec
     doc.close()
 
+    walks = None
+    walks_path = os.path.join(job, "proposed_walks.json")
+    if os.path.exists(walks_path):
+        with open(walks_path, encoding="utf-8") as fh:
+            walks = json.load(fh)
     data = {
         "job": os.path.basename(job),
         "evidence": ev,
@@ -128,6 +133,7 @@ def build(job, zoom=2.0, out=None):
         "sheets": sheets,
         "ledger": ledger,
         "roof_colors": {k: _hex(v) for k, v in eng.ROOF_LINE_COLORS.items()},
+        "walks": walks,
     }
 
     template = os.path.join(HERE, "viewer_template.html")
@@ -144,16 +150,69 @@ def build(job, zoom=2.0, out=None):
     return index
 
 
+def serve(job, port=5810):
+    """TEACH LOOP without leaving the browser: serve the viewer on localhost and
+    accept POST /teach with the walk answers — save them, run the job's
+    apply_walks.py (declare walks -> re-run takeoff -> rebuild viewer), and the
+    page reloads itself into the new state. Local machine only, fixed argv, no
+    request data ever reaches a shell."""
+    import http.server
+    import subprocess
+
+    job = os.path.abspath(job)
+    out = os.path.join(job, "viewer")
+
+    class Handler(http.server.SimpleHTTPRequestHandler):
+        def __init__(self, *a, **kw):
+            super().__init__(*a, directory=out, **kw)
+
+        def log_message(self, fmt, *a):
+            sys.stderr.write("  " + (fmt % a) + "\n")
+
+        def do_POST(self):
+            if self.path != "/teach":
+                self.send_error(404)
+                return
+            n = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(n)
+            try:
+                answers = json.loads(body)
+            except ValueError:
+                self.send_error(400, "answers must be JSON")
+                return
+            with open(os.path.join(job, "walk_answers.json"), "w",
+                      encoding="utf-8") as fh:
+                json.dump(answers, fh, indent=1)
+            apply_py = os.path.join(job, "apply_walks.py")
+            r = subprocess.run([sys.executable, apply_py], capture_output=True,
+                               text=True, timeout=900)
+            log = ((r.stdout or "") + (r.stderr or ""))[-4000:]
+            payload = json.dumps({"ok": r.returncode == 0, "log": log}).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(payload)))
+            self.end_headers()
+            self.wfile.write(payload)
+
+    httpd = http.server.ThreadingHTTPServer(("127.0.0.1", port), Handler)
+    print(f"teach loop live: http://localhost:{port}/  (Ctrl+C to stop)")
+    httpd.serve_forever()
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--job", required=True, help="job folder (contains evidence/)")
     ap.add_argument("--zoom", type=float, default=2.0,
                     help="render zoom for referenced sheets (default 2.0 = 144 dpi)")
     ap.add_argument("--out", default=None, help="output folder (default <job>/viewer)")
+    ap.add_argument("--serve", action="store_true",
+                    help="serve the viewer with the live teach loop (POST /teach)")
     args = ap.parse_args(argv)
     index = build(args.job, zoom=args.zoom, out=args.out)
     print(f"viewer : {index}")
     print(f"open   : file:///{index.replace(os.sep, '/')}")
+    if args.serve:
+        serve(args.job)
     return 0
 
 

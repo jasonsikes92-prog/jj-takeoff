@@ -124,6 +124,37 @@
   #panel footer{margin-top:26px; font-size:10.5px; color:var(--dim);
                 border-top:1px solid var(--edge); padding-top:8px}
   #panel footer a{color:#7fb3e8}
+  /* ---- teach mode ---- */
+  .card.teach{cursor:default; border-color:#3d5a7a}
+  .legrow{display:flex; align-items:center; gap:8px; font-size:12px; padding:2.5px 2px;
+          border-radius:4px}
+  .legrow.open{background:#2a2416}
+  .legrow .dir{font-weight:700; width:14px; color:var(--dim)}
+  .legrow .ok{color:#7ee2a0}
+  .legrow select{background:#10151b; color:var(--ink); border:1px solid var(--edge);
+                 border-radius:4px; font-size:11.5px; padding:1px 4px; max-width:150px}
+  .legrow .locate{margin-left:auto; background:none; border:1px solid var(--edge);
+                  color:var(--dim); border-radius:4px; cursor:pointer; font-size:11px}
+  .legrow .locate:hover{color:var(--sel); border-color:var(--sel)}
+  .teachfoot{display:flex; align-items:center; gap:10px; margin-top:7px; font-size:12px}
+  .teachfoot .walkarea{margin-left:auto; font-variant-numeric:tabular-nums;
+                       color:var(--dim)}
+  .teachfoot .walkarea.good{color:#7ee2a0}
+  .teachfoot .walkarea.bad{color:#ff8d8d}
+  .teachstat{font-size:10px; padding:1px 7px; border-radius:99px; margin-left:auto}
+  .teachstat.open{background:#4a3a1d; color:#ffce6b}
+  .teachstat.ready{background:#1d4a2c; color:#7ee2a0}
+  #teachsave{width:100%; margin:10px 0 4px; padding:8px; background:#1d4a2c;
+             color:#b9f0cc; border:1px solid #2c7a44; border-radius:7px;
+             cursor:pointer; font-size:13px; font-weight:600}
+  #teachsave:disabled{background:#222b35; color:var(--dim); border-color:var(--edge);
+                      cursor:not-allowed}
+  #teachlog{white-space:pre-wrap; font-size:10.5px; color:var(--dim);
+            background:#10151b; border-radius:6px; padding:6px; display:none;
+            max-height:180px; overflow:auto}
+  .pulse{fill:none; stroke:var(--sel); stroke-width:4; vector-effect:non-scaling-stroke;
+         animation:pulse 1.2s ease-out 3}
+  @keyframes pulse{0%{r:6; opacity:1} 100%{r:60; opacity:0}}
 </style>
 </head>
 <body>
@@ -473,6 +504,142 @@ function layerBox(checked, fn) {
     };
     panel.appendChild(card);
   }
+})();
+
+/* teach mode — confirm the printed-dims walks without leaving the browser */
+(function teach() {
+  const W = DATA.walks;
+  if (!W || !W.components || !W.components.length) return;
+  const answers = {components: {}, reviewed_by: "jason"};
+  h2("Teach — printed-dims walks");
+  const info = document.createElement("div");
+  info.className = "mnote";
+  info.textContent = "Every leg must be a value the sheet prints (the pick-lists ARE " +
+    "the sheet's own chains). Resolve the amber legs, tick confirm, Save — the engine " +
+    "re-verifies every leg against the page and refuses anything wrong.";
+  panel.appendChild(info);
+
+  const axisOf = d => (d === "R" || d === "L") ? "H" : (d === "U" || d === "D") ? "V" : null;
+  let saveBtn = null;   // created after the cards; refresh() must tolerate both phases
+  function walkStats(comp) {
+    // live closure + area from the answered walk — polygon_outline's math in JS
+    let x = 0, y = 0, per = 0, pts = [[0, 0]], missing = 0;
+    comp.legs.forEach((leg, i) => {
+      let v = answers.components[comp.name] &&
+              answers.components[comp.name].legs[i];
+      if (v === undefined) v = leg.printed_ft;
+      if (v === "defect" || v == null || leg.dir === "?") { missing++; return; }
+      v = Number(v);
+      const dd = {R:[1,0], L:[-1,0], U:[0,-1], D:[0,1]}[leg.dir];
+      x += dd[0] * v; y += dd[1] * v; per += v; pts.push([x, y]);
+    });
+    let a = 0;
+    for (let i = 0; i < pts.length - 1; i++)
+      a += pts[i][0] * pts[i + 1][1] - pts[i + 1][0] * pts[i][1];
+    return {missing, closure: Math.hypot(x, y), area: Math.abs(a) / 2, perim: per};
+  }
+  function refresh(comp, card) {
+    const s = walkStats(comp);
+    const conf = card.querySelector("[data-confirm]").checked;
+    const stat = card.querySelector(".teachstat");
+    const wa = card.querySelector(".walkarea");
+    if (s.missing) {
+      stat.textContent = `${s.missing} open`; stat.className = "teachstat open";
+      wa.textContent = ""; wa.className = "walkarea";
+    } else {
+      const closes = s.closure <= 0.5;
+      const dPct = comp.traced_primary_sf
+        ? Math.abs(s.area - comp.traced_primary_sf) / comp.traced_primary_sf * 100 : null;
+      stat.textContent = conf ? "ready" : "answered"; stat.className = "teachstat ready";
+      wa.textContent = `walk ${fmt(s.area)} SF · closes ${fmt(s.closure, 2)} ft` +
+        (dPct != null ? ` · Δ trace ${fmt(dPct, 1)}%` : "");
+      wa.className = "walkarea " + (closes && (dPct == null || dPct <= 2) ? "good" : "bad");
+    }
+    if (saveBtn)
+      saveBtn.disabled = !Object.values(answers.components).some(c => c.confirmed);
+  }
+  for (const comp of W.components) {
+    answers.components[comp.name] = {legs: {}, confirmed: false};
+    const card = document.createElement("div");
+    card.className = "card teach";
+    const rows = comp.legs.map((leg, i) => {
+      const pool = (comp.printed_pool || {})[axisOf(leg.dir)] || [];
+      const open = leg.printed_ft == null;
+      const opts = pool.map(v => `<option value="${v}">${v} ft</option>`).join("");
+      return `<div class="legrow ${open ? "open" : ""}" data-leg="${i}">
+        <span class="dir">${esc(leg.dir)}</span>
+        <span>traced ${fmt(leg.traced_ft, 2)} ft</span>
+        ${open ? `<select data-ans><option value="">— printed value —</option>${opts}
+                  <option value="defect">trace defect here</option></select>`
+               : `<span class="ok">printed ${leg.printed_ft} ft</span>`}
+        <button class="locate" title="show this edge on the sheet">◎</button>
+      </div>`;
+    }).join("");
+    card.innerHTML = `<div class="nm">${esc(comp.name)}
+        <span class="conf">(${esc(comp.classification)}) traced ${fmt(comp.traced_primary_sf)} SF</span>
+        <span class="teachstat open"></span></div>
+      ${rows}
+      <div class="teachfoot">
+        <label><input type="checkbox" data-confirm> confirm this walk is the
+          ${esc(comp.classification)} scope</label>
+        <span class="walkarea"></span></div>`;
+    panel.appendChild(card);
+    card.addEventListener("change", e => {
+      if (e.target.matches("[data-ans]")) {
+        const i = +e.target.closest(".legrow").dataset.leg;
+        const v = e.target.value;
+        if (v === "") delete answers.components[comp.name].legs[i];
+        else answers.components[comp.name].legs[i] = v === "defect" ? "defect" : +v;
+      }
+      if (e.target.matches("[data-confirm]"))
+        answers.components[comp.name].confirmed = e.target.checked;
+      refresh(comp, card);
+    });
+    card.addEventListener("click", e => {
+      const b = e.target.closest(".locate");
+      if (!b) return;
+      const leg = comp.legs[+b.closest(".legrow").dataset.leg];
+      if (comp.page !== state.page) showPage(comp.page);
+      const [ax, ay] = leg.at;
+      zoomTo([[ax - 15, ay - 15], [ax + 15, ay + 15]]);
+      const c = document.createElementNS(SVGNS, "circle");
+      c.setAttribute("cx", ax); c.setAttribute("cy", ay); c.setAttribute("r", 8);
+      c.setAttribute("class", "pulse");
+      svg.appendChild(c);
+      setTimeout(() => c.remove(), 3800);
+    });
+    refresh(comp, card);
+  }
+  saveBtn = document.createElement("button");
+  saveBtn.id = "teachsave"; saveBtn.disabled = true;
+  saveBtn.textContent = "Save answers → re-verify → rebuild";
+  const log = document.createElement("div"); log.id = "teachlog";
+  saveBtn.onclick = async () => {
+    saveBtn.disabled = true; saveBtn.textContent = "applying…";
+    try {
+      const r = await fetch("/teach", {method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(answers)});
+      const j = await r.json();
+      log.style.display = "block"; log.textContent = j.log || "(no log)";
+      if (j.ok) { saveBtn.textContent = "reloading…"; setTimeout(() => location.reload(), 1500); return; }
+      saveBtn.textContent = "apply FAILED — see log"; saveBtn.disabled = false;
+    } catch (e) {
+      // no teach server (file:// or static host): hand the answers over as a file
+      const blob = new Blob([JSON.stringify(answers, null, 1)],
+                            {type: "application/json"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob); a.download = "walk_answers.json"; a.click();
+      log.style.display = "block";
+      log.textContent = "No live teach server. Saved walk_answers.json — drop it in " +
+        "the job folder and run:  python apply_walks.py\n(or start the live loop: " +
+        "python tools/viewer/build_viewer.py --job <job> --serve)";
+      saveBtn.textContent = "Save answers → re-verify → rebuild";
+      saveBtn.disabled = false;
+    }
+  };
+  panel.appendChild(saveBtn);
+  panel.appendChild(log);
 })();
 
 /* measurements by trade */
