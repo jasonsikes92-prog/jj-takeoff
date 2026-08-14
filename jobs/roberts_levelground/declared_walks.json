@@ -1,0 +1,64 @@
+{
+ "schema": "roberts.declared_walks.v1",
+ "walks": [
+  {
+   "name": "crawlspace envelope (foundation footprint)",
+   "page": 3,
+   "walk": [
+    [
+     33.19,
+     "D"
+    ],
+    [
+     26.38,
+     "R"
+    ],
+    [
+     17.38,
+     "D"
+    ],
+    [
+     23.48,
+     "R"
+    ],
+    [
+     6.67,
+     "D"
+    ],
+    [
+     12.48,
+     "R"
+    ],
+    [
+     40.06,
+     "U"
+    ],
+    [
+     36.02,
+     "L"
+    ],
+    [
+     15.17,
+     "U"
+    ],
+    [
+     14.83,
+     "L"
+    ],
+    [
+     2.08,
+     "U"
+    ],
+    [
+     11.02,
+     "L"
+    ]
+   ],
+   "origin_pt": [
+    764.43,
+    207.32
+   ],
+   "confirmed_by": "jason-pink-markup Screenshot 2026-08-14 140952"
+  }
+ ]
+}

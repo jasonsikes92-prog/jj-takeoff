@@ -1740,3 +1740,23 @@ foundation sheet.
 ⚠ **Open on Roberts:** its own chains validate only partial totals on p4 (largest ~26
 ft — the 64'-3¾"/60'-10¼" overalls read as singles). Real component walks (heated
 envelope, garage, porch) are declared-input work to do IN the viewer, not invented here.
+
+## Data point #67 — A CRAWLSPACE IS NOT HEATED + Jason teaches by DRAWING (2026-08-14)
+
+**Ruling:** the foundation-plan footprint is a FOUNDATION scope (crawlspace envelope,
+slab regions); heated SF is a FLOOR-PLAN scope. The Roberts harness had been using the
+crawlspace envelope trace as the "heated" component — right number (2,169.9 vs plan
+2,161), wrong SCOPE, the proxy variant of the right-number-wrong-shape disease. Never
+classify a foundation trace "heated"; heated components must come off the floor plan.
+
+**The teach interface that actually fits Jason: colored markup on the drawing.** He
+answered a 20-dropdown teach panel by redrawing the footprint in magenta marker on a
+screenshot (precedent: the roof-line review in the roberts fixture was born the same
+way). `jobs/roberts_levelground/ingest_pink_markup.py` consumed it: red-channel
+registration (blue linework dark in R; magenta/red overlays self-erase) verified by a
+LANDMARK ORACLE (100% of 50 printed dimension labels land on ink; shifted control
+22%), magenta centerline -> polygon -> legs snapped to printed chains ON AXIS ->
+closure 0.48 ft -> declared: 12 printed legs, 2,129.4 SF crawlspace envelope,
+1.9% from the pixel trace, 1.5% from the plan's heated figure — the walk his pink
+drew is provably the sheet's own numbers. Build markup ingestion INTO the teach loop;
+demote per-leg forms to verification detail.
