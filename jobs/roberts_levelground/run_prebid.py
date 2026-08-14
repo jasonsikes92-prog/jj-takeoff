@@ -156,8 +156,8 @@ def area_components(doc, page_index, ppf, pad_ft=1.5):
     # cal #67: everything this sheet yields is FOUNDATION/slab scope. The crawlspace
     # envelope was previously classified "heated" — right number (1.5% from the plan's
     # figure), wrong SCOPE. Heated SF must come off the floor plan (SHEET_MAP
-    # "floor_area"), and HOW Jason reads heated off that sheet is undeclared teach-mode
-    # work — so no heated component exists yet and the area gate reports it honestly.
+    # "floor_area"): main() builds that component only when Jason's declared magenta
+    # walk exists; until then the area gate reports heated honestly missing.
     # The component name matches declared_walks.json exactly, so Jason's pink-markup
     # walk wires in as the printed-dims verification below.
     naming = [("crawlspace envelope (foundation footprint)", "foundation"),
@@ -297,6 +297,7 @@ def main():
     # leg re-verified against the page at run time (a wrong answer refuses, never lies).
     walks_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                               "declared_walks.json")
+    declared = {}
     if os.path.exists(walks_path):
         with open(walks_path, encoding="utf-8") as fh:
             declared = {w["name"]: w for w in json.load(fh).get("walks", [])}
@@ -313,8 +314,42 @@ def main():
                 print(f"  declared walk: {s['name']} <- {len(w['walk'])} printed legs "
                       f"(teach-mode, {w.get('confirmed_by', 'unconfirmed')})")
 
-    # cal #67: no heated spec exists until Jason declares how heated SF reads off the
-    # floor plan. The gate must fail on exactly that — not on a relabeled proxy.
+    # cal #67: heated is a FLOOR-PLAN scope. Once Jason's magenta declares the
+    # floor-plan walk, the heated component is built the same input-independent way
+    # the crawlspace certifies: pixel primary clipped by his declared boundary
+    # (the model says WHERE, the engine measures), printed-dims verification from
+    # the walk itself. Until then the gate must fail on exactly the missing heated
+    # component — never a relabeled proxy.
+    HEATED_WALK = "heated envelope (floor plan)"
+    w = declared.get(HEATED_WALK)
+    if w:
+        fp_idx = w.get("page", SHEET_MAP["floor_area"])
+        fp_ppf = next(r["ppf"] for r in rows if r["index"] == fp_idx)
+        fp_checks = scale_checks(doc[fp_idx], fp_ppf)
+        x, y = w["origin_pt"]
+        xs, ys = [x], [y]
+        for L, d in w["walk"]:
+            dx, dy = {"R": (1, 0), "L": (-1, 0), "D": (0, 1), "U": (0, -1)}[d]
+            x += dx * L * fp_ppf
+            y += dy * L * fp_ppf
+            xs.append(x)
+            ys.append(y)
+        pad = 1.5 * fp_ppf
+        specs.append({
+            "name": HEATED_WALK, "classification": "heated",
+            "primary": {"page": fp_idx, "sheet": f"idx {fp_idx} MASTER FLOOR PLAN",
+                        "method": "clean-tracer",
+                        "clip": [min(xs) - pad, min(ys) - pad,
+                                 max(xs) + pad, max(ys) + pad],
+                        "ppf": fp_ppf, "scale_checks": fp_checks},
+            "verification": {"page": fp_idx,
+                             "sheet": f"idx {fp_idx} printed dimension chains",
+                             "method": "printed-dims",
+                             "walk": w["walk"], "origin_pt": w["origin_pt"],
+                             "ppf": fp_ppf, "scale_checks": fp_checks},
+        })
+        print(f"  heated: floor-plan walk declared ({len(w['walk'])} printed legs, "
+              f"{w.get('confirmed_by', 'unconfirmed')}) -> heated component built")
     if not any(s["classification"] in ("heated", "conditioned_accessory") for s in specs):
         print(f"  heated: no component declared -- heated SF is a floor-plan scope "
               f"(idx {SHEET_MAP['floor_area']}); awaiting teach-mode declaration")
