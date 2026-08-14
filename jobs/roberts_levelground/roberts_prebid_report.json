@@ -1,0 +1,146 @@
+{
+  "meta": {
+    "report_id": "LG-DRYRUN-ROBERTS",
+    "report_type": "pre_bid",
+    "is_sample": true,
+    "prepared_for": "Roberts (fixture dry run)",
+    "property_label": "Roberts Residence -- Jasper County, GA",
+    "region": {
+      "state": "GA",
+      "zip3": "310",
+      "market": "Middle Georgia"
+    },
+    "date": "2026-08-06",
+    "home": {
+      "heated_sf": 0,
+      "stories": 1,
+      "foundation": "crawlspace + slab garage",
+      "garage": "2-car",
+      "finish_level": "mid"
+    },
+    "bid_total": null,
+    "our_range": null,
+    "cost_basis": null,
+    "pricing_confirmed": null,
+    "market_calibrated": null,
+    "pricing_tier": null,
+    "verdict_note": "This is a pre-bid review: your home measured straight off your drawings, plus the scope to make sure any bid you get actually covers. Bring it to the table before you sign."
+  },
+  "findings": [
+    {
+      "category": "missing_scope",
+      "title": "Site work, driveway & final grading",
+      "detail": "Grading, the driveway, and the final grade are the single most common thing a bid under-carries or buries in a vague \"site allowance.\" It lands late, and it is rarely small.",
+      "bid_amount": null,
+      "realistic_low": null,
+      "realistic_high": null,
+      "confidence": "estimate_regional",
+      "basis": "Standard scope for a build like yours -- confirm your bid addresses it."
+    },
+    {
+      "category": "missing_scope",
+      "title": "Gutters & downspouts",
+      "detail": "A small line that goes missing from bids more than almost any other. It never gets cheaper after the paint is on.",
+      "bid_amount": null,
+      "realistic_low": null,
+      "realistic_high": null,
+      "confidence": "estimate_regional",
+      "basis": "Standard scope for a build like yours -- confirm your bid addresses it."
+    },
+    {
+      "category": "missing_scope",
+      "title": "Home technology, security & low-voltage",
+      "detail": "Structured wiring, cameras, alarm, and automation are frequently left out and come back as a five-figure change order mid-build, when your leverage is gone.",
+      "bid_amount": null,
+      "realistic_low": null,
+      "realistic_high": null,
+      "confidence": "estimate_regional",
+      "basis": "Standard scope for a build like yours -- confirm your bid addresses it."
+    },
+    {
+      "category": "low_allowance",
+      "title": "Every allowance defined in writing",
+      "detail": "Countertops, flooring, plumbing fixtures, lighting, and appliances usually ride as allowances. A low or undefined allowance is a change order waiting to happen -- the overage is on you.",
+      "bid_amount": null,
+      "realistic_low": null,
+      "realistic_high": null,
+      "confidence": "fact",
+      "basis": "Standard scope for a build like yours -- confirm your bid addresses it."
+    },
+    {
+      "category": "missing_scope",
+      "title": "Landscaping, sod & irrigation",
+      "detail": "Almost always excluded or zeroed. Fine if you know it going in -- a surprise if you don't.",
+      "bid_amount": null,
+      "realistic_low": null,
+      "realistic_high": null,
+      "confidence": "estimate_regional",
+      "basis": "Standard scope for a build like yours -- confirm your bid addresses it."
+    },
+    {
+      "category": "mispriced",
+      "title": "Insulation matches the plan spec",
+      "detail": "If your plans call for spray foam and the bid is priced for a batt package, the real number is different. Confirm the grade the bid actually carries.",
+      "bid_amount": null,
+      "realistic_low": null,
+      "realistic_high": null,
+      "confidence": "estimate_regional",
+      "basis": "Standard scope for a build like yours -- confirm your bid addresses it."
+    },
+    {
+      "category": "vague_lump",
+      "title": "No vague lump sums",
+      "detail": "A one-line \"Electrical -- $35,000\" with no breakdown is where change orders breed. It isn't wrong; it's unverifiable -- and unverifiable favors the builder.",
+      "bid_amount": null,
+      "realistic_low": null,
+      "realistic_high": null,
+      "confidence": "fact",
+      "basis": "Standard scope for a build like yours -- confirm your bid addresses it."
+    },
+    {
+      "category": "missing_scope",
+      "title": "Change-order pricing is in the contract",
+      "detail": "How overages are priced matters as much as the bid. Cost-plus-a-fixed-markup vs. re-quoted-each-time is the difference between a fair overage and a painful one.",
+      "bid_amount": null,
+      "realistic_low": null,
+      "realistic_high": null,
+      "confidence": "fact",
+      "basis": "Standard scope for a build like yours -- confirm your bid addresses it."
+    }
+  ],
+  "quantities": [
+    {
+      "item": "Foundation / slab edge",
+      "qty": "251",
+      "unit": "lin ft",
+      "source": "page 4 \u00b7 enclosed-region",
+      "confidence": "measured"
+    },
+    {
+      "item": "Basement footprint",
+      "qty": "1,885",
+      "unit": "sq ft",
+      "source": "page 4 \u00b7 enclosed-region",
+      "confidence": "measured"
+    }
+  ],
+  "questions": [
+    "What exactly does the site/allowance line cover -- clearing, driveway, and final grade -- and what happens if it runs over?",
+    "Are gutters and downspouts in the bid, and who is carrying them?",
+    "Is low-voltage / structured wiring / security in the contract as a defined line, or is it excluded?",
+    "Can you list every allowance, its dollar figure, and the exact material and square footage it buys -- in writing?",
+    "Is any landscaping, sod, or irrigation included, or is that on me?",
+    "Does the insulation line match the spec on my plans (foam vs. batt), and can I see the quote behind it?",
+    "Can the big trade lines (electrical, plumbing, HVAC) be broken into scope and allowances so I can see what's actually included?",
+    "How are change orders priced -- cost plus a fixed markup, or re-quoted each time -- and is that language in the contract?"
+  ],
+  "unknowns": [
+    "What's under the dirt -- rock, unsuitable soil, or drainage surprises no plan can show.",
+    "Your final selections -- a $12 tile and a $40 tile read identically on a floor plan.",
+    "Market swings between signing and dry-in -- lumber and labor move.",
+    "Permit and utility-connection fees, which vary by county and can't be verified from plans alone.",
+    "We could not measure heated living area from the plans provided (heated crawlspace envelope: geometry measures differ by 21.6% (limit 2.0%); garage slab: geometry measures differ by 2.6% (limit 2.0%); front porch slab: geometry measures differ by 7.7% (limit 2.0%)) -- ask your builder for it.",
+    "We could not measure total area under roof from the plans provided (heated crawlspace envelope: geometry measures differ by 21.6% (limit 2.0%); garage slab: geometry measures differ by 2.6% (limit 2.0%); front porch slab: geometry measures differ by 7.7% (limit 2.0%)) -- ask your builder for it.",
+    "We could not measure roof area from the plans provided (needs eye/VLM-verified pitch_calls + certified measured framing_sf (OCR pitch trap, cal #43 \u2014 never automated away)) -- ask your builder for it."
+  ]
+}

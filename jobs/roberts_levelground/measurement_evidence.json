@@ -1,0 +1,264 @@
+{
+  "plan": "C:\\Users\\jason\\JJ-Takeoff\\tools\\tests\\golden\\roberts\\plan.pdf",
+  "sheet_ledger": [
+    {
+      "index": 0,
+      "sheet": "cover / index of drawings / project summary",
+      "ppf": null,
+      "scale_confidence": null,
+      "scale_method": null
+    },
+    {
+      "index": 1,
+      "sheet": "site plan (topo, gravel drive)",
+      "ppf": 0.7,
+      "scale_confidence": "review",
+      "scale_method": "text-dims"
+    },
+    {
+      "index": 2,
+      "sheet": "SQFT PLANS -- the AREAS table (comparison-only) + colour-coded area diagram",
+      "ppf": null,
+      "scale_confidence": null,
+      "scale_method": null
+    },
+    {
+      "index": 3,
+      "sheet": "FOUNDATION WALL PLAN -- crawlspace + slab garage + slab porch",
+      "ppf": 16.646,
+      "scale_confidence": "review",
+      "scale_method": "text-dims"
+    },
+    {
+      "index": 4,
+      "sheet": "MASTER FLOOR PLAN (redlined)",
+      "ppf": 16.714,
+      "scale_confidence": "review",
+      "scale_method": "text-dims"
+    },
+    {
+      "index": 5,
+      "sheet": "framing / header schedule",
+      "ppf": 12.506,
+      "scale_confidence": "review",
+      "scale_method": "text-dims"
+    },
+    {
+      "index": 6,
+      "sheet": "ROOF PLAN",
+      "ppf": 16.549,
+      "scale_confidence": "review",
+      "scale_method": "text-dims"
+    },
+    {
+      "index": 7,
+      "sheet": "electrical",
+      "ppf": null,
+      "scale_confidence": null,
+      "scale_method": null
+    },
+    {
+      "index": 8,
+      "sheet": "elevations -- front / rear",
+      "ppf": 10.389,
+      "scale_confidence": "review",
+      "scale_method": "text-dims"
+    },
+    {
+      "index": 9,
+      "sheet": "elevations -- right / left",
+      "ppf": null,
+      "scale_confidence": null,
+      "scale_method": null
+    },
+    {
+      "index": 10,
+      "sheet": "interior elevations + cabinet elevations",
+      "ppf": null,
+      "scale_confidence": null,
+      "scale_method": null
+    },
+    {
+      "index": 11,
+      "sheet": "renderings",
+      "ppf": null,
+      "scale_confidence": null,
+      "scale_method": null
+    }
+  ],
+  "scale_guard": [
+    {
+      "index": 1,
+      "sheet": "site plan (topo, gravel drive)",
+      "ppf": 0.7,
+      "scale_confidence": "review",
+      "scale_method": "text-dims",
+      "area_shortfall_pct_if_nominal": -99.8
+    },
+    {
+      "index": 3,
+      "sheet": "FOUNDATION WALL PLAN -- crawlspace + slab garage + slab porch",
+      "ppf": 16.646,
+      "scale_confidence": "review",
+      "scale_method": "text-dims",
+      "area_shortfall_pct_if_nominal": -14.5
+    },
+    {
+      "index": 4,
+      "sheet": "MASTER FLOOR PLAN (redlined)",
+      "ppf": 16.714,
+      "scale_confidence": "review",
+      "scale_method": "text-dims",
+      "area_shortfall_pct_if_nominal": -13.8
+    },
+    {
+      "index": 5,
+      "sheet": "framing / header schedule",
+      "ppf": 12.506,
+      "scale_confidence": "review",
+      "scale_method": "text-dims",
+      "area_shortfall_pct_if_nominal": -51.7
+    },
+    {
+      "index": 6,
+      "sheet": "ROOF PLAN",
+      "ppf": 16.549,
+      "scale_confidence": "review",
+      "scale_method": "text-dims",
+      "area_shortfall_pct_if_nominal": -15.5
+    },
+    {
+      "index": 8,
+      "sheet": "elevations -- front / rear",
+      "ppf": 10.389,
+      "scale_confidence": "review",
+      "scale_method": "text-dims",
+      "area_shortfall_pct_if_nominal": -66.7
+    }
+  ],
+  "scale_checks": [
+    {
+      "label": "64'-3",
+      "printed_ft": 64.25,
+      "measured_points": 1071.99
+    },
+    {
+      "label": "60'-10",
+      "printed_ft": 60.833333333333336,
+      "measured_points": 1014.86
+    }
+  ],
+  "components": [
+    {
+      "name": "heated crawlspace envelope",
+      "classification": "heated",
+      "clip": [
+        770.7098000000001,
+        193.09360000000004,
+        1836.0538000000001,
+        1178.5368000000003
+      ],
+      "inside_face_sf": 1962.0,
+      "loop_perim_lf": 245.8
+    },
+    {
+      "name": "garage slab",
+      "classification": "garage",
+      "clip": [
+        709.9519,
+        734.9209,
+        1214.3257,
+        1212.6611
+      ],
+      "inside_face_sf": 654.9,
+      "loop_perim_lf": 104.9
+    },
+    {
+      "name": "front porch slab",
+      "classification": "covered",
+      "clip": [
+        1168.5492,
+        1022.8967000000001,
+        1604.6743999999999,
+        1227.6425
+      ],
+      "inside_face_sf": 177.4,
+      "loop_perim_lf": 64.6
+    }
+  ],
+  "tracer_sweep": [
+    {
+      "component": "heated crawlspace envelope",
+      "inside_face_sf": 1962.0,
+      "by_pad": {
+        "1.5": {
+          "clean": 2169.9,
+          "all-ink": 2766.3,
+          "enclosed": 1887.4
+        },
+        "3.0": {
+          "clean": 2847.5,
+          "all-ink": 2953.6,
+          "enclosed": 1884.6
+        },
+        "5.0": {
+          "clean": 3066.7,
+          "all-ink": 4378.4,
+          "enclosed": 1884.6
+        }
+      }
+    },
+    {
+      "component": "garage slab",
+      "inside_face_sf": 654.9,
+      "by_pad": {
+        "1.5": {
+          "clean": 732.2,
+          "all-ink": 751.4,
+          "enclosed": 784.1
+        },
+        "3.0": {
+          "clean": 732.2,
+          "all-ink": 821.2,
+          "enclosed": 816.9
+        },
+        "5.0": {
+          "clean": 736.1,
+          "all-ink": 970.3,
+          "enclosed": 868.8
+        }
+      }
+    },
+    {
+      "component": "front porch slab",
+      "inside_face_sf": 177.4,
+      "by_pad": {
+        "1.5": {
+          "clean": 226.6,
+          "all-ink": 245.4,
+          "enclosed": 180.9
+        },
+        "3.0": {
+          "clean": 226.6,
+          "all-ink": 321.3,
+          "enclosed": 177.1
+        },
+        "5.0": {
+          "clean": 226.6,
+          "all-ink": 405.9,
+          "enclosed": 177.1
+        }
+      }
+    }
+  ],
+  "takeoff_status": "more_information_required",
+  "area_certification_errors": [
+    "heated crawlspace envelope: geometry measures differ by 21.6% (limit 2.0%)",
+    "garage slab: geometry measures differ by 2.6% (limit 2.0%)",
+    "front porch slab: geometry measures differ by 7.7% (limit 2.0%)"
+  ],
+  "seconds": {
+    "takeoff": 7.19,
+    "report": 0.0
+  }
+}

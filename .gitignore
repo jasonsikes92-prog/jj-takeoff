@@ -13,6 +13,7 @@ __pycache__/
 node_modules/
 .vercel/
 *.bak
+graphify-out/
 
 # --- secrets ---
 .env

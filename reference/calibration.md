@@ -1678,3 +1678,35 @@ widened to make $6.00 pass, the structural rule would never have been found.
   SECOND layer; an uncovered deck, balcony or ROOFTOP deck is NOT under roof at all and is an
   ADDITION buying its ONE layer. Both add SF × rate, so the arithmetic hides a mix-up — only
   the explicit `deck paths` self-test keeps them apart.
+
+## Data point #65 — cal #46's TRACER CHOICE IS A DECLARED INPUT, NOT AN INFERENCE (Jason, 2026-08-06)
+
+**#46 said "pick the tracer by BOUNDARY STYLE." The code tested DISAGREEMENT instead** —
+`if the two tracers differ by >8%, report the all-ink number, dashed boundary suspected`.
+Disagreement standing in for boundary style is right on Holbrook by luck and catastrophic
+elsewhere.
+
+**What it shipped:** Roberts p4 foundation, `slab_area_sf = 5,033 SF` stamped `MEASURED` on a
+house whose entire under-roof is 3,431. The all-ink tracer had locked onto the outer
+**dimension-line rectangle** (overlay proof: `jobs/roberts_levelground/evidence/slab_allink.png`).
+The clean tracer is right at **3,066.7 SF vs the sheet's own heated+garage+front-porch 3,069 =
+−0.1%**, identical at clip pads 2/8/15 ft. Roberts' walls are drawn SOLID, so #46's own rule said
+clean tracer; the code took the opposite side and a homeowner-facing report carried the number.
+
+**The fix:** `sheet_map["slab_boundary"] = "solid" | "dashed"`, read off the sheet by whoever
+looked at it — the same contract as `pitch_calls` under cal #43. Tracers agreeing within 8% still
+average (style cannot change that answer). Undeclared + disagreeing = `more_information_required`.
+Both readings always land in `checks` as `slab_tracers` for audit. Pinned in
+`tools/tests/test_slab_boundary_style.py`: holbrook `dashed` → all-ink **3,174.7 vs GEO invoice
+3,122 = +1.7%**; roberts `solid` → clean **3,066.7 vs plan 3,069 = −0.1%**; roberts undeclared →
+refuses; roberts declared WRONG → returns the wrong number rather than silently self-correcting.
+
+⛔ **Why declared and not detected.** Five auto-classifiers were tested against these two sheets:
+global segment-length statistics; the dashed-flag population (fires on NEITHER sheet); extreme-run
+solid/dashed classification (picks up sheet borders); dash-tolerance growth — re-tracing with the
+clean tracer's 1.2-ft floor dropped to 0.2 ft and dashes admitted, which recovered only **+0.8%**
+on Holbrook, so its boundary is not merely below the floor; and traced-area ÷ ink-envelope
+(**49.4% vs 51.6%** — no separation). None separated the two without fitting a threshold to
+exactly those two houses. **Two examples cannot validate a classifier**, and a threshold tuned to
+two houses is the `footer_lf` failure mode wearing a new hat. Boundary style is a two-second read
+off the sheet; make the human do the two seconds.

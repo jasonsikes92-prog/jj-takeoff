@@ -4317,6 +4317,11 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
 
     The legacy `underroof_sf` argument is deliberately ignored. Roof geometry uses the
     certified measured framing_sf so an external total can never bypass the area gate.
+
+    sheet_map keys: sqft_schedule, foundation, slab, roof, roof_clip, floor_area, plus
+    `slab_boundary` = "solid" | "dashed" -- the DECLARED boundary style of the slab sheet
+    (cal #46). Read it off the sheet; it is not inferred. Without it, a slab whose two
+    tracers disagree is reported as more_information_required rather than guessed.
     """
     import fitz as _f
     doc = _f.open(plan_pdf)
@@ -4420,12 +4425,26 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
                         "MEASURED", "wall-pairs", sc["confidence"], pi,
                         f"{len(loops)} enclosed loops total")
 
-    # --- slab: BOTH tracers, reconciled (cal #46 tracer-choice rule, coded) -------------
+    # --- slab: tracer choice is a BOUNDARY-STYLE decision (cal #46) ---------------------
+    # cal #46's rule is "pick the tracer by BOUNDARY STYLE": solid drawn walls ->
+    # trace_footprint_clean, dashed/below-grade edge (slab, footing) -> trace_footprint.
+    # This used to be coded as "if the tracers disagree by >8%, report the all-ink number,
+    # dashed boundary suspected" -- disagreement standing in for boundary style. On a fully
+    # dimensioned sheet the all-ink tracer locks onto the outer DIMENSION-LINE rectangle, so
+    # the disagreement has nothing to do with dashes and the rule picks the contaminated
+    # side: Roberts p4 shipped 5,033 SF on a house whose whole under-roof is 3,431
+    # (jobs/roberts_levelground/FINDINGS.md, overlay evidence in that folder).
+    # Boundary style is a two-second read off the sheet and is NOT reliably inferable --
+    # five candidate signals were tested against the two known sheets and none separated
+    # them without fitting a threshold to those two houses. So it is a DECLARED input,
+    # exactly like pitch_calls (cal #43): sheet_map["slab_boundary"] = "solid" | "dashed".
+    # Undeclared + disagreeing tracers = more_information_required, never a guess.
     pi = sheet_map.get("slab")
     if pi is not None:
         page = doc[pi]
         sc = _page_scale(page)
         out["pages"][pi] = sc
+        style = str(sheet_map.get("slab_boundary", "") or "").strip().lower() or None
         if sc is None:
             out["not_measured"].append({"trade": "slab_area_sf", "page": pi,
                                         "why": "no scale solvable from sheet"})
@@ -4439,25 +4458,35 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
                 t2 = trace_footprint(page, r["clip"], ppf=sc["ppf"])
                 if t2:
                     a_ink = t2["area_sf"]
-            if a_clean and a_ink:
-                hi, lo = max(a_clean, a_ink), min(a_clean, a_ink)
-                if (hi - lo) / hi <= 0.08:
-                    add("slab_area_sf", (a_clean + a_ink) / 2, "SF", "MEASURED",
-                        "two-tracer-agree", "high", pi,
-                        f"clean {a_clean:,.0f} / all-ink {a_ink:,.0f}")
-                else:
-                    # dashed-boundary sheets read LOW on the clean tracer (cal #46):
-                    # report the all-ink number, keep both visible, flag review
-                    add("slab_area_sf", a_ink, "SF", "MEASURED", "all-ink-tracer",
-                        "review", pi,
-                        f"tracers disagree: clean {a_clean:,.0f} vs all-ink "
-                        f"{a_ink:,.0f} — dashed-boundary sheet suspected (cal #46)")
-            elif a_ink or a_clean:
-                add("slab_area_sf", a_ink or a_clean, "SF", "MEASURED",
-                    "single-tracer", "review", pi, "only one tracer returned")
+            both = (f"clean {a_clean:,.0f} / all-ink {a_ink:,.0f}"
+                    if a_clean and a_ink else
+                    f"clean {a_clean:,.0f}" if a_clean else
+                    f"all-ink {a_ink:,.0f}" if a_ink else "neither tracer returned")
+            out["checks"].append({"check": "slab_tracers", "page": pi, "role": "audit",
+                                  "clean_sf": round(a_clean, 1) if a_clean else None,
+                                  "all_ink_sf": round(a_ink, 1) if a_ink else None,
+                                  "declared_boundary": style})
+            if a_clean and a_ink and abs(a_clean - a_ink) / max(a_clean, a_ink) <= 0.08:
+                # the tracers agree, so boundary style cannot change the answer
+                add("slab_area_sf", (a_clean + a_ink) / 2, "SF", "MEASURED",
+                    "two-tracer-agree", "high", pi, both)
+            elif style == "solid" and a_clean:
+                add("slab_area_sf", a_clean, "SF", "MEASURED", "clean-tracer",
+                    "good", pi, f"solid drawn boundary (declared) — cal #46; {both}")
+            elif style == "dashed" and a_ink:
+                add("slab_area_sf", a_ink, "SF", "MEASURED", "all-ink-tracer",
+                    "good", pi, f"dashed/below-grade boundary (declared) — cal #46; {both}")
+            elif style in ("solid", "dashed"):
+                out["not_measured"].append({
+                    "trade": "slab_area_sf", "page": pi,
+                    "why": f"the {style}-boundary tracer returned nothing ({both})"})
             else:
-                out["not_measured"].append({"trade": "slab_area_sf", "page": pi,
-                                            "why": "both tracers returned None"})
+                out["not_measured"].append({
+                    "trade": "slab_area_sf", "page": pi,
+                    "why": "the two tracers disagree and sheet_map['slab_boundary'] was not "
+                           "declared; cal #46 picks the tracer by BOUNDARY STYLE (solid drawn "
+                           f"walls -> clean, dashed/below-grade edge -> all-ink), not by which "
+                           f"number is larger ({both})"})
 
     # --- roof: face decomposition (needs verified pitch callouts) -----------------------
     pi = sheet_map.get("roof")
