@@ -1,0 +1,1675 @@
+{
+ "schema": "jnj_takeoff.takeoff_evidence.v1",
+ "coordinate_frame": "pdf-points: PyMuPDF page coordinates, origin top-left, y-down, 1 pt = 1/72 in; page = 0-based page index",
+ "plan": "C:\\Users\\jason\\JJ-Takeoff\\tools\\tests\\golden\\roberts\\plan.pdf",
+ "plan_sha256": "0B5720FC85EC723DB2A64AFF913A2DF6DF39A578EB4B055BC1A80843ECAB4124",
+ "generated": "2026-08-14T12:39:57",
+ "status": "more_information_required",
+ "sheet_map": {
+  "sqft_schedule": 2,
+  "foundation": 3,
+  "roof": 6
+ },
+ "sheet_ledger": [
+  {
+   "page": 3,
+   "roles": [
+    "foundation"
+   ],
+   "ppf": 16.646,
+   "scale_method": "text-dims",
+   "scale_confidence": "review"
+  }
+ ],
+ "measurements": [
+  {
+   "trade": "foundation_wall_lf",
+   "qty": 250.9,
+   "unit": "LF",
+   "source": "MEASURED",
+   "method": "enclosed-region",
+   "confidence": "review",
+   "page": 3,
+   "note": "inside-face; scope (poured vs framed/ledge) needs heights",
+   "geometry": {
+    "kind": "polygon",
+    "points": [
+     [
+      773.464,
+      267.126
+     ],
+     [
+      773.464,
+      557.126
+     ],
+     [
+      817.464,
+      557.376
+     ],
+     [
+      817.464,
+      758.126
+     ],
+     [
+      1255.214,
+      758.376
+     ],
+     [
+      1255.464,
+      833.376
+     ],
+     [
+      1208.464,
+      833.626
+     ],
+     [
+      1208.464,
+      1000.626
+     ],
+     [
+      1255.214,
+      1000.626
+     ],
+     [
+      1255.464,
+      1047.626
+     ],
+     [
+      1646.964,
+      1047.876
+     ],
+     [
+      1646.964,
+      1090.876
+     ],
+     [
+      1600.214,
+      1090.876
+     ],
+     [
+      1600.214,
+      1158.876
+     ],
+     [
+      1745.964,
+      1158.876
+     ],
+     [
+      1745.964,
+      1090.126
+     ],
+     [
+      1789.964,
+      1089.876
+     ],
+     [
+      1789.964,
+      558.376
+     ],
+     [
+      1746.214,
+      558.376
+     ],
+     [
+      1745.964,
+      514.376
+     ],
+     [
+      1189.964,
+      514.376
+     ],
+     [
+      1189.714,
+      258.126
+     ],
+     [
+      989.464,
+      258.126
+     ],
+     [
+      989.214,
+      301.876
+     ],
+     [
+      933.964,
+      301.876
+     ],
+     [
+      933.714,
+      257.876
+     ],
+     [
+      889.964,
+      257.876
+     ],
+     [
+      889.714,
+      223.126
+     ],
+     [
+      817.464,
+      223.126
+     ],
+     [
+      817.464,
+      266.876
+     ]
+    ],
+    "closed": true,
+    "area_sf": 1884.57,
+    "perim_lf": 250.89
+   },
+   "id": "me75f3bc2f9"
+  },
+  {
+   "trade": "basement_area_sf",
+   "qty": 1884.6,
+   "unit": "SF",
+   "source": "MEASURED",
+   "method": "enclosed-region",
+   "confidence": "review",
+   "page": 3,
+   "note": "",
+   "geometry": {
+    "kind": "polygon",
+    "points": [
+     [
+      773.464,
+      267.126
+     ],
+     [
+      773.464,
+      557.126
+     ],
+     [
+      817.464,
+      557.376
+     ],
+     [
+      817.464,
+      758.126
+     ],
+     [
+      1255.214,
+      758.376
+     ],
+     [
+      1255.464,
+      833.376
+     ],
+     [
+      1208.464,
+      833.626
+     ],
+     [
+      1208.464,
+      1000.626
+     ],
+     [
+      1255.214,
+      1000.626
+     ],
+     [
+      1255.464,
+      1047.626
+     ],
+     [
+      1646.964,
+      1047.876
+     ],
+     [
+      1646.964,
+      1090.876
+     ],
+     [
+      1600.214,
+      1090.876
+     ],
+     [
+      1600.214,
+      1158.876
+     ],
+     [
+      1745.964,
+      1158.876
+     ],
+     [
+      1745.964,
+      1090.126
+     ],
+     [
+      1789.964,
+      1089.876
+     ],
+     [
+      1789.964,
+      558.376
+     ],
+     [
+      1746.214,
+      558.376
+     ],
+     [
+      1745.964,
+      514.376
+     ],
+     [
+      1189.964,
+      514.376
+     ],
+     [
+      1189.714,
+      258.126
+     ],
+     [
+      989.464,
+      258.126
+     ],
+     [
+      989.214,
+      301.876
+     ],
+     [
+      933.964,
+      301.876
+     ],
+     [
+      933.714,
+      257.876
+     ],
+     [
+      889.964,
+      257.876
+     ],
+     [
+      889.714,
+      223.126
+     ],
+     [
+      817.464,
+      223.126
+     ],
+     [
+      817.464,
+      266.876
+     ]
+    ],
+    "closed": true,
+    "area_sf": 1884.57,
+    "perim_lf": 250.89
+   },
+   "id": "mf85103c867"
+  },
+  {
+   "trade": "foundation_main_loop_lf",
+   "qty": 245.8,
+   "unit": "LF",
+   "source": "MEASURED",
+   "method": "wall-pairs",
+   "confidence": "review",
+   "page": 3,
+   "note": "3 enclosed loops total",
+   "geometry": {
+    "kind": "polygon",
+    "points": [
+     [
+      773.964,
+      223.876
+     ],
+     [
+      773.964,
+      757.876
+     ],
+     [
+      1207.964,
+      757.876
+     ],
+     [
+      1208.964,
+      1047.543
+     ],
+     [
+      1599.631,
+      1047.543
+     ],
+     [
+      1600.631,
+      1158.876
+     ],
+     [
+      1789.631,
+      1158.876
+     ],
+     [
+      1789.631,
+      514.876
+     ],
+     [
+      1190.297,
+      514.876
+     ],
+     [
+      1189.297,
+      258.543
+     ],
+     [
+      1154.631,
+      258.543
+     ],
+     [
+      1140.631,
+      320.543
+     ],
+     [
+      1139.631,
+      258.543
+     ],
+     [
+      836.297,
+      275.543
+     ],
+     [
+      874.964,
+      260.209
+     ],
+     [
+      874.964,
+      223.876
+     ]
+    ],
+    "closed": true,
+    "area_sf": 1962.0,
+    "perim_lf": 245.8
+   },
+   "id": "m24c4e1c01e"
+  }
+ ],
+ "not_measured": [
+  {
+   "trade": "heated_sf",
+   "page": 2,
+   "why": "heated crawlspace envelope: geometry measures differ by 21.6% (limit 2.0%); garage slab: geometry measures differ by 2.6% (limit 2.0%); front porch slab: geometry measures differ by 7.7% (limit 2.0%)"
+  },
+  {
+   "trade": "framing_sf",
+   "page": 2,
+   "why": "heated crawlspace envelope: geometry measures differ by 21.6% (limit 2.0%); garage slab: geometry measures differ by 2.6% (limit 2.0%); front porch slab: geometry measures differ by 7.7% (limit 2.0%)"
+  },
+  {
+   "trade": "roof_surface_sq",
+   "page": 6,
+   "why": "needs eye/VLM-verified pitch_calls + certified measured framing_sf (OCR pitch trap, cal #43 \u2014 never automated away)"
+  }
+ ],
+ "assumptions": [
+  "roof not measured: supply pitch callouts from a verified read"
+ ],
+ "area_certification": {
+  "ok": false,
+  "status": "more_information_required",
+  "tolerance_pct": 2.0,
+  "components": [
+   {
+    "name": "heated crawlspace envelope",
+    "classification": "heated",
+    "qty": 2169.92,
+    "verification_qty": 2766.26,
+    "delta_pct": 21.56,
+    "primary": {
+     "qty": 2169.92,
+     "unit": "SF",
+     "source": "MEASURED",
+     "sheet": "idx 3 FOUNDATION WALL PLAN",
+     "page": 3,
+     "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\heated-crawlspace-envelope-primary.png",
+     "method": "trace-footprint-clean",
+     "confidence": "high",
+     "ppf": 16.646,
+     "origin": "jnj_takeoff.plan-pixel-geometry.v1",
+     "scale_method": "two-printed-dimension-checks",
+     "scale_checks": [
+      {
+       "label": "64'-3",
+       "printed_ft": 64.25,
+       "measured_points": 1071.99,
+       "ppf": 16.6847,
+       "delta_pct": 0.23
+      },
+      {
+       "label": "60'-10",
+       "printed_ft": 60.833333333333336,
+       "measured_points": 1014.86,
+       "ppf": 16.6826,
+       "delta_pct": 0.22
+      }
+     ],
+     "id": "me6130f2c7c",
+     "clip": [
+      770.71,
+      193.09,
+      1836.05,
+      1178.54
+     ],
+     "geometry": {
+      "kind": "polygon",
+      "points": [
+       [
+        761.0,
+        211.333
+       ],
+       [
+        772.333,
+        776.0
+       ],
+       [
+        1195.333,
+        770.667
+       ],
+       [
+        1189.0,
+        1158.667
+       ],
+       [
+        953.333,
+        1159.0
+       ],
+       [
+        964.333,
+        1171.0
+       ],
+       [
+        1196.333,
+        1171.0
+       ],
+       [
+        1203.0,
+        1059.667
+       ],
+       [
+        1586.0,
+        1060.0
+       ],
+       [
+        1580.667,
+        1159.0
+       ],
+       [
+        1300.0,
+        1182.0
+       ],
+       [
+        1580.667,
+        1161.667
+       ],
+       [
+        1592.667,
+        1193.0
+       ],
+       [
+        1593.333,
+        1171.0
+       ],
+       [
+        1801.667,
+        1170.667
+       ],
+       [
+        1801.333,
+        502.0
+       ],
+       [
+        1201.667,
+        502.0
+       ],
+       [
+        1201.0,
+        246.0
+       ],
+       [
+        945.667,
+        246.0
+       ],
+       [
+        945.0,
+        211.0
+       ]
+      ],
+      "closed": true,
+      "area_sf": 2169.92,
+      "perim_lf": 317.14
+     },
+     "geometry_note": null
+    },
+    "verification": {
+     "qty": 2766.26,
+     "unit": "SF",
+     "source": "MEASURED",
+     "sheet": "idx 3 FOUNDATION WALL PLAN",
+     "page": 3,
+     "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\heated-crawlspace-envelope-verification.png",
+     "method": "trace-footprint-all-ink",
+     "confidence": "high",
+     "ppf": 16.646,
+     "origin": "jnj_takeoff.plan-pixel-geometry.v1",
+     "scale_method": "two-printed-dimension-checks",
+     "scale_checks": [
+      {
+       "label": "64'-3",
+       "printed_ft": 64.25,
+       "measured_points": 1071.99,
+       "ppf": 16.6847,
+       "delta_pct": 0.23
+      },
+      {
+       "label": "60'-10",
+       "printed_ft": 60.833333333333336,
+       "measured_points": 1014.86,
+       "ppf": 16.6826,
+       "delta_pct": 0.22
+      }
+     ],
+     "id": "m18e63f6f18",
+     "clip": [
+      770.71,
+      193.09,
+      1836.05,
+      1178.54
+     ],
+     "geometry": {
+      "kind": "polygon",
+      "points": [
+       [
+        778.96,
+        210.594
+       ],
+       [
+        778.96,
+        770.844
+       ],
+       [
+        1198.96,
+        777.344
+       ],
+       [
+        1191.96,
+        1141.094
+       ],
+       [
+        1170.46,
+        1141.844
+       ],
+       [
+        1169.96,
+        1164.844
+       ],
+       [
+        958.71,
+        1170.344
+       ],
+       [
+        1202.21,
+        1170.344
+       ],
+       [
+        1205.96,
+        1057.094
+       ],
+       [
+        1584.96,
+        1057.094
+       ],
+       [
+        1587.21,
+        1170.344
+       ],
+       [
+        1802.46,
+        1170.344
+       ],
+       [
+        1793.71,
+        219.594
+       ]
+      ],
+      "closed": true,
+      "area_sf": 2766.26,
+      "perim_lf": 278.14
+     },
+     "geometry_note": null
+    }
+   },
+   {
+    "name": "garage slab",
+    "classification": "garage",
+    "qty": 732.19,
+    "verification_qty": 751.38,
+    "delta_pct": 2.55,
+    "primary": {
+     "qty": 732.19,
+     "unit": "SF",
+     "source": "MEASURED",
+     "sheet": "idx 3 FOUNDATION WALL PLAN",
+     "page": 3,
+     "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\garage-slab-primary.png",
+     "method": "trace-footprint-clean",
+     "confidence": "high",
+     "ppf": 16.646,
+     "origin": "jnj_takeoff.plan-pixel-geometry.v1",
+     "scale_method": "two-printed-dimension-checks",
+     "scale_checks": [
+      {
+       "label": "64'-3",
+       "printed_ft": 64.25,
+       "measured_points": 1071.99,
+       "ppf": 16.6847,
+       "delta_pct": 0.23
+      },
+      {
+       "label": "60'-10",
+       "printed_ft": 60.833333333333336,
+       "measured_points": 1014.86,
+       "ppf": 16.6826,
+       "delta_pct": 0.22
+      }
+     ],
+     "id": "m9acc2e1eb5",
+     "clip": [
+      709.95,
+      734.92,
+      1214.33,
+      1212.66
+     ],
+     "geometry": {
+      "kind": "polygon",
+      "points": [
+       [
+        729.0,
+        764.667
+       ],
+       [
+        729.0,
+        802.0
+       ],
+       [
+        740.333,
+        802.667
+       ],
+       [
+        740.333,
+        1137.667
+       ],
+       [
+        729.0,
+        1138.333
+       ],
+       [
+        729.333,
+        1209.667
+       ],
+       [
+        964.333,
+        1209.667
+       ],
+       [
+        965.0,
+        1171.0
+       ],
+       [
+        1008.333,
+        1171.0
+       ],
+       [
+        1009.0,
+        1202.0
+       ],
+       [
+        1022.667,
+        1201.667
+       ],
+       [
+        1023.0,
+        1171.0
+       ],
+       [
+        1139.667,
+        1171.0
+       ],
+       [
+        1140.0,
+        1210.333
+       ],
+       [
+        1153.667,
+        1210.667
+       ],
+       [
+        1154.333,
+        1171.0
+       ],
+       [
+        1195.667,
+        1171.0
+       ],
+       [
+        1196.0,
+        1226.0
+       ],
+       [
+        1207.667,
+        1226.0
+       ],
+       [
+        1207.333,
+        758.333
+       ]
+      ],
+      "closed": true,
+      "area_sf": 732.19,
+      "perim_lf": 127.48
+     },
+     "geometry_note": null
+    },
+    "verification": {
+     "qty": 751.38,
+     "unit": "SF",
+     "source": "MEASURED",
+     "sheet": "idx 3 FOUNDATION WALL PLAN",
+     "page": 3,
+     "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\garage-slab-verification.png",
+     "method": "trace-footprint-all-ink",
+     "confidence": "high",
+     "ppf": 16.646,
+     "origin": "jnj_takeoff.plan-pixel-geometry.v1",
+     "scale_method": "two-printed-dimension-checks",
+     "scale_checks": [
+      {
+       "label": "64'-3",
+       "printed_ft": 64.25,
+       "measured_points": 1071.99,
+       "ppf": 16.6847,
+       "delta_pct": 0.23
+      },
+      {
+       "label": "60'-10",
+       "printed_ft": 60.833333333333336,
+       "measured_points": 1014.86,
+       "ppf": 16.6826,
+       "delta_pct": 0.22
+      }
+     ],
+     "id": "m7aabbf61ac",
+     "clip": [
+      709.95,
+      734.92,
+      1214.33,
+      1212.66
+     ],
+     "geometry": {
+      "kind": "polygon",
+      "points": [
+       [
+        728.952,
+        764.421
+       ],
+       [
+        728.952,
+        1204.421
+       ],
+       [
+        1010.952,
+        1204.421
+       ],
+       [
+        1012.452,
+        1171.421
+       ],
+       [
+        1195.452,
+        1171.421
+       ],
+       [
+        1195.702,
+        1204.421
+       ],
+       [
+        1206.202,
+        1204.421
+       ],
+       [
+        1206.202,
+        754.921
+       ],
+       [
+        767.702,
+        754.921
+       ],
+       [
+        760.952,
+        743.171
+       ],
+       [
+        760.702,
+        764.171
+       ]
+      ],
+      "closed": true,
+      "area_sf": 751.38,
+      "perim_lf": 116.29
+     },
+     "geometry_note": null
+    }
+   },
+   {
+    "name": "front porch slab",
+    "classification": "covered",
+    "qty": 226.65,
+    "verification_qty": 245.44,
+    "delta_pct": 7.66,
+    "primary": {
+     "qty": 226.65,
+     "unit": "SF",
+     "source": "MEASURED",
+     "sheet": "idx 3 FOUNDATION WALL PLAN",
+     "page": 3,
+     "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\front-porch-slab-primary.png",
+     "method": "trace-footprint-clean",
+     "confidence": "high",
+     "ppf": 16.646,
+     "origin": "jnj_takeoff.plan-pixel-geometry.v1",
+     "scale_method": "two-printed-dimension-checks",
+     "scale_checks": [
+      {
+       "label": "64'-3",
+       "printed_ft": 64.25,
+       "measured_points": 1071.99,
+       "ppf": 16.6847,
+       "delta_pct": 0.23
+      },
+      {
+       "label": "60'-10",
+       "printed_ft": 60.833333333333336,
+       "measured_points": 1014.86,
+       "ppf": 16.6826,
+       "delta_pct": 0.22
+      }
+     ],
+     "id": "m68a0171682",
+     "clip": [
+      1168.55,
+      1022.9,
+      1604.67,
+      1227.64
+     ],
+     "geometry": {
+      "kind": "polygon",
+      "points": [
+       [
+        1189.0,
+        1048.333
+       ],
+       [
+        1189.0,
+        1159.333
+       ],
+       [
+        1196.0,
+        1160.0
+       ],
+       [
+        1196.333,
+        1226.333
+       ],
+       [
+        1311.333,
+        1226.333
+       ],
+       [
+        1312.0,
+        1193.0
+       ],
+       [
+        1593.0,
+        1192.667
+       ],
+       [
+        1593.0,
+        1160.0
+       ],
+       [
+        1599.667,
+        1159.333
+       ],
+       [
+        1599.333,
+        1048.0
+       ]
+      ],
+      "closed": true,
+      "area_sf": 226.65,
+      "perim_lf": 70.57
+     },
+     "geometry_note": null
+    },
+    "verification": {
+     "qty": 245.44,
+     "unit": "SF",
+     "source": "MEASURED",
+     "sheet": "idx 3 FOUNDATION WALL PLAN",
+     "page": 3,
+     "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\front-porch-slab-verification.png",
+     "method": "trace-footprint-all-ink",
+     "confidence": "high",
+     "ppf": 16.646,
+     "origin": "jnj_takeoff.plan-pixel-geometry.v1",
+     "scale_method": "two-printed-dimension-checks",
+     "scale_checks": [
+      {
+       "label": "64'-3",
+       "printed_ft": 64.25,
+       "measured_points": 1071.99,
+       "ppf": 16.6847,
+       "delta_pct": 0.23
+      },
+      {
+       "label": "60'-10",
+       "printed_ft": 60.833333333333336,
+       "measured_points": 1014.86,
+       "ppf": 16.6826,
+       "delta_pct": 0.22
+      }
+     ],
+     "id": "m1f653e4da2",
+     "clip": [
+      1168.55,
+      1022.9,
+      1604.67,
+      1227.64
+     ],
+     "geometry": {
+      "kind": "polygon",
+      "points": [
+       [
+        1198.799,
+        1031.147
+       ],
+       [
+        1198.799,
+        1050.397
+       ],
+       [
+        1191.799,
+        1050.897
+       ],
+       [
+        1191.799,
+        1164.647
+       ],
+       [
+        1176.799,
+        1164.897
+       ],
+       [
+        1176.799,
+        1171.397
+       ],
+       [
+        1195.549,
+        1171.647
+       ],
+       [
+        1195.549,
+        1219.397
+       ],
+       [
+        1584.549,
+        1219.397
+       ],
+       [
+        1584.549,
+        1193.897
+       ],
+       [
+        1596.299,
+        1193.647
+       ],
+       [
+        1596.299,
+        1050.647
+       ],
+       [
+        1205.549,
+        1050.647
+       ],
+       [
+        1205.299,
+        1031.147
+       ]
+      ],
+      "closed": true,
+      "area_sf": 245.44,
+      "perim_lf": 72.93
+     },
+     "geometry_note": null
+    }
+   }
+  ],
+  "lines": [],
+  "schedule_checks": [
+   {
+    "trade": "heated_sf",
+    "schedule_qty": 2161.0,
+    "measured_qty": 2169.9,
+    "delta_pct": 0.4,
+    "role": "comparison-only"
+   },
+   {
+    "trade": "framing_sf",
+    "schedule_qty": 3431.0,
+    "measured_qty": 3128.8,
+    "delta_pct": 8.8,
+    "role": "comparison-only"
+   }
+  ],
+  "errors": [
+   "heated crawlspace envelope: geometry measures differ by 21.6% (limit 2.0%)",
+   "garage slab: geometry measures differ by 2.6% (limit 2.0%)",
+   "front porch slab: geometry measures differ by 7.7% (limit 2.0%)"
+  ]
+ },
+ "roof_lines": {
+  "page": 6,
+  "pitch_factor": 1.3413,
+  "confidence": "high",
+  "lf": {
+   "eave_lf": 194.9,
+   "rake_lf": 114.8,
+   "ridge_lf": 110.2,
+   "hip_valley_lf": 325.0,
+   "transition_lf": 1.7,
+   "fascia_lf": 309.7,
+   "gutter_lf": 194.9
+  },
+  "roles": {
+   "eave": [
+    {
+     "seg": [
+      780.956,
+      872.317,
+      780.956,
+      318.818
+     ],
+     "len_ft": 33.44609648217982
+    },
+    {
+     "seg": [
+      991.353,
+      353.384,
+      991.353,
+      318.818
+     ],
+     "len_ft": 2.088703153442995
+    },
+    {
+     "seg": [
+      1847.61,
+      609.905,
+      1626.543,
+      609.905
+     ],
+     "len_ft": 13.358293930146838
+    },
+    {
+     "seg": [
+      1847.721,
+      1311.56,
+      1847.721,
+      609.905
+     ],
+     "len_ft": 42.398632440734715
+    },
+    {
+     "seg": [
+      1847.499,
+      1311.449,
+      1642.104,
+      1311.449
+     ],
+     "len_ft": 12.411317750978156
+    },
+    {
+     "seg": [
+      1255.654,
+      353.606,
+      991.131,
+      353.606
+     ],
+     "len_ft": 15.98427353168054
+    },
+    {
+     "seg": [
+      1013.804,
+      1350.35,
+      1013.804,
+      1311.671
+     ],
+     "len_ft": 2.3371939486524864
+    },
+    {
+     "seg": [
+      1212.864,
+      1367.021,
+      1212.864,
+      1311.671
+     ],
+     "len_ft": 3.344604115996435
+    },
+    {
+     "seg": [
+      1360.797,
+      1367.021,
+      1360.797,
+      1318.229
+     ],
+     "len_ft": 2.948356903645991
+    },
+    {
+     "seg": [
+      1642.104,
+      353.606,
+      1255.543,
+      353.606
+     ],
+     "len_ft": 23.358536757791256
+    },
+    {
+     "seg": [
+      743.501,
+      1350.35,
+      743.501,
+      872.317
+     ],
+     "len_ft": 28.885871508710874
+    },
+    {
+     "seg": [
+      781.068,
+      872.317,
+      743.501,
+      872.317
+     ],
+     "len_ft": 2.270036467224228
+    },
+    {
+     "seg": [
+      1212.975,
+      1311.449,
+      1013.693,
+      1311.449
+     ],
+     "len_ft": 12.041935006458095
+    }
+   ],
+   "rake": [
+    {
+     "seg": [
+      886.21,
+      318.818,
+      780.956,
+      318.818
+     ],
+     "len_ft": 6.360133253661475
+    },
+    {
+     "seg": [
+      991.353,
+      318.818,
+      886.21,
+      318.818
+     ],
+     "len_ft": 6.353413448556182
+    },
+    {
+     "seg": [
+      1013.804,
+      1350.35,
+      878.652,
+      1350.35
+     ],
+     "len_ft": 8.166757650811606
+    },
+    {
+     "seg": [
+      1286.886,
+      1367.021,
+      1212.864,
+      1367.021
+     ],
+     "len_ft": 4.4729117648725
+    },
+    {
+     "seg": [
+      1642.215,
+      1333.678,
+      1427.595,
+      1333.678
+     ],
+     "len_ft": 12.968751770310895
+    },
+    {
+     "seg": [
+      1642.215,
+      1333.678,
+      1642.215,
+      1311.671
+     ],
+     "len_ft": 1.3297837813085382
+    },
+    {
+     "seg": [
+      1360.797,
+      1367.021,
+      1286.886,
+      1367.021
+     ],
+     "len_ft": 4.466191959767206
+    },
+    {
+     "seg": [
+      1642.104,
+      764.063,
+      1642.104,
+      353.606
+     ],
+     "len_ft": 24.80249637145277
+    },
+    {
+     "seg": [
+      878.652,
+      1350.35,
+      743.501,
+      1350.35
+     ],
+     "len_ft": 8.166757650811606
+    },
+    {
+     "seg": [
+      1427.595,
+      1333.678,
+      1286.886,
+      1333.678
+     ],
+     "len_ft": 8.502559810543689
+    }
+   ],
+   "ridge": [
+    {
+     "seg": [
+      886.21,
+      484.979,
+      886.21,
+      318.818
+     ],
+     "len_ft": 10.04054506161154
+    },
+    {
+     "seg": [
+      886.21,
+      511.098,
+      886.21,
+      484.979
+     ],
+     "len_ft": 1.5782801087395764
+    },
+    {
+     "seg": [
+      1018.361,
+      730.942,
+      1018.361,
+      709.491
+     ],
+     "len_ft": 1.2962031965205603
+    },
+    {
+     "seg": [
+      1018.361,
+      955.565,
+      1018.361,
+      730.942
+     ],
+     "len_ft": 13.573205984642199
+    },
+    {
+     "seg": [
+      1566.97,
+      960.677,
+      1427.373,
+      960.677
+     ],
+     "len_ft": 8.435398640967733
+    },
+    {
+     "seg": [
+      1427.373,
+      960.677,
+      1021.807,
+      960.677
+     ],
+     "len_ft": 24.50698906939241
+    },
+    {
+     "seg": [
+      878.652,
+      1350.35,
+      878.652,
+      1333.678
+     ],
+     "len_ft": 1.0074101673439484
+    },
+    {
+     "seg": [
+      878.652,
+      1333.678,
+      878.652,
+      1108.833
+     ],
+     "len_ft": 13.586634530409693
+    },
+    {
+     "seg": [
+      1427.595,
+      1333.678,
+      1427.595,
+      1018.139
+     ],
+     "len_ft": 19.066960150773838
+    },
+    {
+     "seg": [
+      1286.886,
+      1367.021,
+      1286.886,
+      1333.678
+     ],
+     "len_ft": 2.014820334687897
+    },
+    {
+     "seg": [
+      1286.886,
+      1333.678,
+      1286.886,
+      1311.449
+     ],
+     "len_ft": 1.3432160152237296
+    },
+    {
+     "seg": [
+      1613.762,
+      960.677,
+      1566.97,
+      960.677
+     ],
+     "len_ft": 2.8274667984092696
+    },
+    {
+     "seg": [
+      956.787,
+      1048.037,
+      919.22,
+      1048.037
+     ],
+     "len_ft": 2.270036467224228
+    },
+    {
+     "seg": [
+      919.22,
+      1048.037,
+      909.217,
+      1063.041
+     ],
+     "len_ft": 1.0896774308330275
+    },
+    {
+     "seg": [
+      935.336,
+      1334.901,
+      880.431,
+      1334.901
+     ],
+     "len_ft": 3.3177433363137503
+    },
+    {
+     "seg": [
+      880.431,
+      1334.901,
+      825.637,
+      1334.901
+     ],
+     "len_ft": 3.3110272193561547
+    },
+    {
+     "seg": [
+      1626.543,
+      764.063,
+      1642.104,
+      764.063
+     ],
+     "len_ft": 0.9402563740633876
+    }
+   ],
+   "hip_valley": [
+    {
+     "seg": [
+      1018.361,
+      709.491,
+      886.21,
+      511.098
+     ],
+     "len_ft": 14.404306387270939
+    },
+    {
+     "seg": [
+      1015.027,
+      960.677,
+      956.787,
+      1048.037
+     ],
+     "len_ft": 6.344381022980769
+    },
+    {
+     "seg": [
+      956.787,
+      1048.037,
+      780.956,
+      872.317
+     ],
+     "len_ft": 15.021052191556555
+    },
+    {
+     "seg": [
+      991.353,
+      353.384,
+      903.66,
+      484.979
+     ],
+     "len_ft": 9.55568363092184
+    },
+    {
+     "seg": [
+      903.66,
+      484.979,
+      886.21,
+      511.098
+     ],
+     "len_ft": 1.8980979782791851
+    },
+    {
+     "seg": [
+      1847.61,
+      609.905,
+      1616.318,
+      956.898
+     ],
+     "len_ft": 25.198693224837506
+    },
+    {
+     "seg": [
+      1152.957,
+      764.063,
+      1021.807,
+      960.677
+     ],
+     "len_ft": 14.281369110355088
+    },
+    {
+     "seg": [
+      1847.721,
+      1311.56,
+      1613.873,
+      960.899
+     ],
+     "len_ft": 25.468782089625837
+    },
+    {
+     "seg": [
+      1642.104,
+      1311.449,
+      1427.595,
+      989.575
+     ],
+     "len_ft": 23.373240253219503
+    },
+    {
+     "seg": [
+      1427.595,
+      989.575,
+      1212.975,
+      1311.449
+     ],
+     "len_ft": 23.376967507501593
+    },
+    {
+     "seg": [
+      1013.693,
+      1311.449,
+      878.652,
+      1108.833
+     ],
+     "len_ft": 14.713516737076183
+    },
+    {
+     "seg": [
+      909.217,
+      1063.041,
+      878.652,
+      1108.833
+     ],
+     "len_ft": 3.3268005263175597
+    },
+    {
+     "seg": [
+      1171.629,
+      689.151,
+      1152.957,
+      764.063
+     ],
+     "len_ft": 4.66514067706751
+    },
+    {
+     "seg": [
+      1168.073,
+      484.979,
+      1019.917,
+      707.157
+     ],
+     "len_ft": 16.136624870625866
+    },
+    {
+     "seg": [
+      1243.206,
+      372.278,
+      1168.073,
+      484.979
+     ],
+     "len_ft": 8.18473134538796
+    },
+    {
+     "seg": [
+      1255.432,
+      353.94,
+      1243.206,
+      372.278
+     ],
+     "len_ft": 1.331833028728799
+    },
+    {
+     "seg": [
+      1255.432,
+      353.94,
+      1171.629,
+      689.151
+     ],
+     "len_ft": 20.879104194217142
+    },
+    {
+     "seg": [
+      909.217,
+      1038.034,
+      862.981,
+      991.798
+     ],
+     "len_ft": 3.9511595987740464
+    },
+    {
+     "seg": [
+      862.981,
+      991.798,
+      743.501,
+      872.317
+     ],
+     "len_ft": 10.210323306224396
+    }
+   ],
+   "transition": [
+    {
+     "seg": [
+      1427.595,
+      1018.139,
+      1427.595,
+      989.575
+     ],
+     "len_ft": 1.7260346818066803
+    }
+   ]
+  }
+ },
+ "checks": [
+  {
+   "check": "area_schedule",
+   "page": 2,
+   "role": "comparison-only",
+   "rows": [
+    {
+     "label": "HEATED",
+     "sqft": 2161.0,
+     "klass": "framed"
+    },
+    {
+     "label": "GARAGE",
+     "sqft": 707.0,
+     "klass": "framed"
+    },
+    {
+     "label": "FRONT PORCH - COVERED",
+     "sqft": 201.0,
+     "klass": "framed"
+    },
+    {
+     "label": "REAR DECK - COVERED",
+     "sqft": 362.0,
+     "klass": "framed"
+    }
+   ],
+   "note": "schedule values cannot feed estimate quantities"
+  }
+ ]
+}

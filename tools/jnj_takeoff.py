@@ -456,7 +456,8 @@ def trace_enclosed_region(page, clip, zoom=4.0, ppf=None, prefer="left",
     ap = cv2.approxPolyDP(c, 0.004 * cv2.arcLength(c, True), True)
     res = {"perimeter_lf": cv2.arcLength(ap, True) / ppx,
            "area_sf": cv2.contourArea(ap) / ppx ** 2,
-           "corners": len(ap), "ppx": ppx}
+           "corners": len(ap), "ppx": ppx,
+           "polygon_pts": _px_poly_to_page_pts(ap, zoom, clip)}
     if overlay_path:
         cv2.drawContours(rgb, [ap], -1, (255, 0, 0), 4)
         cv2.imwrite(overlay_path, cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
@@ -491,7 +492,7 @@ def trace_footprint(page, clip, zoom=4.0, ppf=None, close_ft=1.0, overlay_path=N
         cv2.drawContours(rgb, [ap], -1, (255, 0, 0), 4)
         cv2.imwrite(overlay_path, cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
     return {"area_sf": cv2.contourArea(ap) / ppx**2, "perim_lf": cv2.arcLength(ap, True) / ppx,
-            "corners": len(ap)}
+            "corners": len(ap), "polygon_pts": _px_poly_to_page_pts(ap, zoom, clip)}
 
 
 def ocr_words(page, zoom=2.5, psm=11, clip=None, min_conf=40):
@@ -778,7 +779,10 @@ def foundation_wall_loops(page, ppf, clip=None, zoom=3.0, thick_ft=(0.40, 1.00),
                     "perim_lf": round(cv2.arcLength(ap, True) / ppx, 1),
                     "corners": len(ap),
                     "bbox_ft": (round(bbox_w / ppx, 1), round(bbox_h / ppx, 1)),
-                    "centroid_ft": (round(cent[i][0] / ppx, 1), round(cent[i][1] / ppx, 1))})
+                    "centroid_ft": (round(cent[i][0] / ppx, 1), round(cent[i][1] / ppx, 1)),
+                    "polygon_pts": _px_poly_to_page_pts(ap, zoom, clip),
+                    "clip_pts": [round(clip.x0, 2), round(clip.y0, 2),
+                                 round(clip.x1, 2), round(clip.y1, 2)]})
     out.sort(key=lambda d: -d["area_sf"])
     return out
 
@@ -908,7 +912,8 @@ def trace_footprint_clean(page, clip=None, ppf=None, zoom=3.0, close_ft=1.5,
         cv2.drawContours(bgr, [ap], -1, (0, 0, 255), 6)
         cv2.imwrite(overlay_path, bgr)
     return {"area_sf": cv2.contourArea(ap) / ppx ** 2, "perim_lf": cv2.arcLength(ap, True) / ppx,
-            "corners": len(ap), "n_segs": len(keep)}
+            "corners": len(ap), "n_segs": len(keep),
+            "polygon_pts": _px_poly_to_page_pts(ap, zoom)}
 
 
 def measure_colored_path(image_path, ppf, color="green", overlay_path=None):
@@ -966,7 +971,97 @@ def polygon_outline(segments):
     area = abs(sum(pts[i][0] * pts[i + 1][1] - pts[i + 1][0] * pts[i][1]
                    for i in range(len(pts) - 1))) / 2.0
     return {"perimeter_lf": round(perim, 1), "area_sf": round(area, 1),
-            "closure_err_ft": round((x ** 2 + y ** 2) ** 0.5, 2), "corners": len(segments)}
+            "closure_err_ft": round((x ** 2 + y ** 2) ** 0.5, 2), "corners": len(segments),
+            "pts_ft": [[round(px, 3), round(py, 3)] for px, py in pts]}
+
+
+# ---------------------------------------------------------------------------
+# VIRTUAL TAKEOFF — persisted geometry (2026-08-14).  Every tracer above already
+# computes a real polygon and then discards it at the return statement; these helpers
+# keep it.  ONE coordinate frame for everything persisted: PDF points as PyMuPDF
+# reports page coordinates (origin top-left, y-down, 1 pt = 1/72 in) + 0-based page
+# index.  That is SVG's own model, and it is the frame the roof-line review already
+# chose — "registration and render zoom cannot change the review."
+# ---------------------------------------------------------------------------
+def _px_poly_to_page_pts(contour, zoom, clip=None):
+    """cv2 contour/approxPolyDP pixels -> page-point vertex list [[x, y], ...].
+
+    Frame rule: pixmaps/canvases rendered WITH a clip (trace_enclosed_region,
+    trace_footprint, foundation_wall_loops) are clip-relative -> add the clip origin;
+    trace_footprint_clean draws a full-page canvas -> clip=None.  The 5-px
+    copyMakeBorder some tracers add is sliced off before findContours, so it never
+    reaches here.  Precedent: room_perimeters maps centroids back the same way."""
+    ox = clip.x0 if clip is not None else 0.0
+    oy = clip.y0 if clip is not None else 0.0
+    try:
+        seq = contour.reshape(-1, 2).tolist()
+    except AttributeError:
+        seq = [list(p) for p in contour]
+    return [[round(ox + x / zoom, 3), round(oy + y / zoom, 3)] for x, y in seq]
+
+
+def _poly_area_perim_pts(points):
+    """Shoelace area (pt^2) and closed-loop perimeter (pt) of [[x, y], ...]."""
+    n = len(points)
+    a = p = 0.0
+    for i in range(n):
+        x0, y0 = points[i]
+        x1, y1 = points[(i + 1) % n]
+        a += x0 * y1 - x1 * y0
+        p += math.hypot(x1 - x0, y1 - y0)
+    return abs(a) / 2.0, p
+
+
+def _geometry_record(points, ppf, area_sf=None, perim_lf=None, clip=None,
+                     tol_pct=0.5, clip_pad_ft=3.0):
+    """Fail-closed geometry attachment: the polygon must REPRODUCE the tracer's own
+    numbers or no geometry ships at all — a wrong overlay invites wrong corrections.
+
+    Two independent checks, because area alone cannot see both failure modes: a
+    zoom/scale slip changes the recomputed SF (shoelace check), but a missed clip
+    offset is a pure translation and leaves area untouched — only containment (every
+    vertex inside the clip it was traced from, padded for morphological growth)
+    catches it.  Returns (geometry_dict, None) or (None, why)."""
+    if not points or len(points) < 3 or not ppf:
+        return None, "no polygon returned by tracer"
+    area_pt2, perim_pt = _poly_area_perim_pts(points)
+    if area_sf is not None:
+        got = area_pt2 / float(ppf) ** 2
+        if abs(got - area_sf) > max(0.5, abs(area_sf) * tol_pct / 100.0):
+            return None, (f"geometry self-check failed: polygon recomputes to "
+                          f"{got:.1f} SF vs traced {area_sf:.1f}")
+    if perim_lf is not None:
+        got = perim_pt / float(ppf)
+        if abs(got - perim_lf) > max(0.2, abs(perim_lf) * tol_pct / 100.0):
+            return None, (f"geometry self-check failed: polygon recomputes to "
+                          f"{got:.1f} LF vs traced {perim_lf:.1f}")
+    if clip is not None:
+        x0, y0, x1, y1 = ((clip.x0, clip.y0, clip.x1, clip.y1)
+                          if hasattr(clip, "x0") else tuple(clip))
+        pad = clip_pad_ft * float(ppf)
+        for x, y in points:
+            if not (x0 - pad <= x <= x1 + pad and y0 - pad <= y <= y1 + pad):
+                return None, (f"geometry self-check failed: vertex ({x:.0f}, {y:.0f}) "
+                              f"outside its trace clip — coordinate-frame bug")
+    geom = {"kind": "polygon", "points": points, "closed": True}
+    if area_sf is not None:
+        geom["area_sf"] = round(float(area_sf), 2)
+    if perim_lf is not None:
+        geom["perim_lf"] = round(float(perim_lf), 2)
+    return geom, None
+
+
+def _measurement_id(trade, page, kind, payload):
+    """Stable, content-derived measurement id (viewer DOM anchors + estimate
+    provenance).  Coordinates — not ids — remain the durable key for human review,
+    exactly like the roof-line review contract."""
+    import hashlib
+    if isinstance(payload, (list, tuple)):
+        body = ";".join(f"{float(x):.2f},{float(y):.2f}" for x, y in payload)
+    else:
+        body = str(payload)
+    return "m" + hashlib.sha1(
+        f"{trade}|{page}|{kind}|{body}".encode("utf-8")).hexdigest()[:10]
 
 
 # ---------------------------------------------------------------------------
@@ -3600,6 +3695,13 @@ def certify_area_measurements(components, schedule_rows=None, tolerance_pct=2.0)
                 "note": f"derived once from: {', '.join(component_names)}",
                 "certified": True,
                 "proof": proof,
+                "component_ids": [e["id"] for c in normalized
+                                  for e in (c["primary"], c["verification"])
+                                  if e.get("id")],
+                "id": _measurement_id(
+                    trade, "|".join(sheets), "rollup",
+                    ",".join(e.get("id") or "" for c in normalized
+                             for e in (c["primary"], c["verification"]))),
             })
     return {
         "ok": ok,
@@ -3709,6 +3811,12 @@ def _measure_area_evidence(doc, spec, evidence_dir, label):
         raise ValueError(f"{label}: unsupported geometry method {method!r}")
     if not result or not result.get("area_sf"):
         raise ValueError(f"{label}: geometry tracer returned no area")
+    geometry, geometry_note = _geometry_record(
+        result.get("polygon_pts"), scale["ppf"],
+        area_sf=result["area_sf"],
+        perim_lf=result.get("perim_lf", result.get("perimeter_lf")),
+        clip=clip,
+    )
     return {
         "qty": round(float(result["area_sf"]), 2),
         "unit": "SF",
@@ -3722,6 +3830,13 @@ def _measure_area_evidence(doc, spec, evidence_dir, label):
         "origin": _AREA_ENGINE_ORIGIN,
         "scale_method": scale["method"],
         "scale_checks": scale.get("checks", []),
+        "id": _measurement_id(label, page_i, "area-component",
+                              result.get("polygon_pts")
+                              or f"{result['area_sf']:.2f}"),
+        "clip": [round(clip.x0, 2), round(clip.y0, 2),
+                 round(clip.x1, 2), round(clip.y1, 2)],
+        "geometry": geometry,
+        "geometry_note": geometry_note,
     }
 
 
@@ -4304,6 +4419,69 @@ def _page_scale(page):
     return None
 
 
+TAKEOFF_EVIDENCE_SCHEMA = "jnj_takeoff.takeoff_evidence.v1"
+COORDINATE_FRAME = ("pdf-points: PyMuPDF page coordinates, origin top-left, y-down, "
+                    "1 pt = 1/72 in; page = 0-based page index")
+
+
+def write_takeoff_evidence(out, plan_pdf, sheet_map, evidence_dir):
+    """Persist the takeoff WITH its geometry as evidence_dir/takeoff_evidence.json.
+
+    This is the substrate the viewer renders and the review loop corrects against.
+    One declared coordinate frame (COORDINATE_FRAME); measurements are run_takeoff's
+    own lines verbatim (they now carry id + geometry); the plan is pinned by sha256 so
+    a review or a viewer can refuse a file that no longer matches its drawing."""
+    import hashlib
+    import json
+    from datetime import datetime
+    _os.makedirs(evidence_dir, exist_ok=True)
+    h = hashlib.sha256()
+    with open(plan_pdf, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    roles = {}
+    for k, v in (sheet_map or {}).items():
+        if isinstance(v, int):
+            roles.setdefault(v, []).append(k)
+    ledger = []
+    for pi in sorted(out.get("pages", {})):
+        sc = out["pages"][pi] or {}
+        ledger.append({"page": pi, "roles": sorted(roles.get(pi, [])),
+                       "ppf": sc.get("ppf"), "scale_method": sc.get("method"),
+                       "scale_confidence": sc.get("confidence")})
+    declared = {}
+    for k, v in (sheet_map or {}).items():
+        if isinstance(v, (int, float, str)) or v is None:
+            declared[k] = v
+        else:
+            try:
+                declared[k] = [round(float(x), 2) for x in v]
+            except (TypeError, ValueError):
+                declared[k] = str(v)
+    doc = {
+        "schema": TAKEOFF_EVIDENCE_SCHEMA,
+        "coordinate_frame": COORDINATE_FRAME,
+        "plan": str(plan_pdf),
+        "plan_sha256": h.hexdigest().upper(),
+        "generated": datetime.now().isoformat(timespec="seconds"),
+        "status": out.get("status"),
+        "sheet_map": declared,
+        "sheet_ledger": ledger,
+        "measurements": out.get("lines", []),
+        "not_measured": out.get("not_measured", []),
+        "assumptions": out.get("assumptions", []),
+        "area_certification": out.get("area_certification"),
+        "roof_lines": out.get("roof_lines"),
+        "checks": out.get("checks", []),
+    }
+    path = _os.path.join(evidence_dir, "takeoff_evidence.json")
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(doc, fh, indent=1)
+    out["evidence_json"] = path
+    out["plan_sha256"] = doc["plan_sha256"]
+    return path
+
+
 def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
                 overhang_in=(12.0, 17.0), area_specs=None, evidence_dir=None,
                 area_tolerance_pct=2.0):
@@ -4329,10 +4507,14 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
            "not_measured": [], "assumptions": [],
            "status": "more_information_required"}
 
-    def add(trade, qty, unit, source, method, conf, page, note=""):
-        out["lines"].append({"trade": trade, "qty": round(float(qty), 1), "unit": unit,
-                             "source": source, "method": method, "confidence": conf,
-                             "page": page, "note": note})
+    def add(trade, qty, unit, source, method, conf, page, note="", geometry=None):
+        line = {"trade": trade, "qty": round(float(qty), 1), "unit": unit,
+                "source": source, "method": method, "confidence": conf,
+                "page": page, "note": note, "geometry": geometry}
+        line["id"] = _measurement_id(
+            trade, page, "line",
+            (geometry or {}).get("points") or f"{line['qty']}|{unit}|{method}")
+        out["lines"].append(line)
 
     # --- schedule: comparison only; never emits heated/framed SF ----------------------
     schedule_rows = []
@@ -4414,16 +4596,33 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
                 t = trace_enclosed_region(page, r["clip"], ppf=sc["ppf"],
                                           prefer="largest")
                 if t:
+                    g, gerr = _geometry_record(
+                        t.get("polygon_pts"), sc["ppf"], area_sf=t["area_sf"],
+                        perim_lf=t["perimeter_lf"], clip=r["clip"])
+                    if gerr:
+                        out["checks"].append({"check": "geometry_selfcheck",
+                                              "page": pi, "trade": "foundation",
+                                              "error": gerr})
                     add("foundation_wall_lf", t["perimeter_lf"], "LF", "MEASURED",
                         "enclosed-region", sc["confidence"], pi,
-                        "inside-face; scope (poured vs framed/ledge) needs heights")
+                        "inside-face; scope (poured vs framed/ledge) needs heights",
+                        geometry=g)
                     add("basement_area_sf", t["area_sf"], "SF", "MEASURED",
-                        "enclosed-region", sc["confidence"], pi)
+                        "enclosed-region", sc["confidence"], pi, geometry=g)
                 loops = foundation_wall_loops(page, ppf=sc["ppf"])
                 if loops:
+                    lg, lgerr = _geometry_record(
+                        loops[0].get("polygon_pts"), sc["ppf"],
+                        area_sf=loops[0]["area_sf"], perim_lf=loops[0]["perim_lf"],
+                        clip=loops[0].get("clip_pts"))
+                    if lgerr:
+                        out["checks"].append({"check": "geometry_selfcheck",
+                                              "page": pi,
+                                              "trade": "foundation_main_loop_lf",
+                                              "error": lgerr})
                     add("foundation_main_loop_lf", loops[0]["perim_lf"], "LF",
                         "MEASURED", "wall-pairs", sc["confidence"], pi,
-                        f"{len(loops)} enclosed loops total")
+                        f"{len(loops)} enclosed loops total", geometry=lg)
 
     # --- slab: tracer choice is a BOUNDARY-STYLE decision (cal #46) ---------------------
     # cal #46's rule is "pick the tracer by BOUNDARY STYLE": solid drawn walls ->
@@ -4450,14 +4649,30 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
                                         "why": "no scale solvable from sheet"})
         else:
             a_clean = a_ink = None
+            g_clean = g_ink = None
             t1 = trace_footprint_clean(page, ppf=sc["ppf"])
             if t1:
                 a_clean = t1["area_sf"]
+                g_clean, g1err = _geometry_record(
+                    t1.get("polygon_pts"), sc["ppf"], area_sf=t1["area_sf"],
+                    perim_lf=t1["perim_lf"])
+                if g1err:
+                    out["checks"].append({"check": "geometry_selfcheck", "page": pi,
+                                          "trade": "slab_area_sf (clean)",
+                                          "error": g1err})
             r = find_drawing_region(page, ppf=sc["ppf"], pad_ft=8.0)
             if r is not None:
                 t2 = trace_footprint(page, r["clip"], ppf=sc["ppf"])
                 if t2:
                     a_ink = t2["area_sf"]
+                    g_ink, g2err = _geometry_record(
+                        t2.get("polygon_pts"), sc["ppf"], area_sf=t2["area_sf"],
+                        perim_lf=t2["perim_lf"], clip=r["clip"])
+                    if g2err:
+                        out["checks"].append({"check": "geometry_selfcheck",
+                                              "page": pi,
+                                              "trade": "slab_area_sf (all-ink)",
+                                              "error": g2err})
             both = (f"clean {a_clean:,.0f} / all-ink {a_ink:,.0f}"
                     if a_clean and a_ink else
                     f"clean {a_clean:,.0f}" if a_clean else
@@ -4467,15 +4682,20 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
                                   "all_ink_sf": round(a_ink, 1) if a_ink else None,
                                   "declared_boundary": style})
             if a_clean and a_ink and abs(a_clean - a_ink) / max(a_clean, a_ink) <= 0.08:
-                # the tracers agree, so boundary style cannot change the answer
+                # the tracers agree, so boundary style cannot change the answer.
+                # The polygon shown is the clean trace; the line qty is the average —
+                # the geometry dict carries the polygon's OWN area so the two never lie.
                 add("slab_area_sf", (a_clean + a_ink) / 2, "SF", "MEASURED",
-                    "two-tracer-agree", "high", pi, both)
+                    "two-tracer-agree", "high", pi, both,
+                    geometry=g_clean or g_ink)
             elif style == "solid" and a_clean:
                 add("slab_area_sf", a_clean, "SF", "MEASURED", "clean-tracer",
-                    "good", pi, f"solid drawn boundary (declared) — cal #46; {both}")
+                    "good", pi, f"solid drawn boundary (declared) — cal #46; {both}",
+                    geometry=g_clean)
             elif style == "dashed" and a_ink:
                 add("slab_area_sf", a_ink, "SF", "MEASURED", "all-ink-tracer",
-                    "good", pi, f"dashed/below-grade boundary (declared) — cal #46; {both}")
+                    "good", pi, f"dashed/below-grade boundary (declared) — cal #46; {both}",
+                    geometry=g_ink)
             elif style in ("solid", "dashed"):
                 out["not_measured"].append({
                     "trade": "slab_area_sf", "page": pi,
@@ -4491,6 +4711,28 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
     # --- roof: face decomposition (needs verified pitch callouts) -----------------------
     pi = sheet_map.get("roof")
     if pi is not None:
+        # Viewer layer: the classified roof segments themselves (already page points —
+        # extract_styled_segments reads get_drawings() directly, no clip/zoom).
+        # Independent of the pitch/cert gate below: rendering what was SEEN must not
+        # depend on whether it could be priced. Never fatal to the takeoff.
+        try:
+            rcls = classify_roof_lines(doc[pi])
+            out["roof_lines"] = {
+                "page": pi,
+                "pitch_factor": rcls.get("pitch_factor"),
+                "confidence": rcls.get("confidence"),
+                "lf": {k: rcls.get(k) for k in
+                       ("eave_lf", "rake_lf", "ridge_lf", "hip_valley_lf",
+                        "transition_lf", "fascia_lf", "gutter_lf")},
+                "roles": {role: [{"seg": [round(v, 3) for v in s["seg"]],
+                                  "len_ft": s.get("len_ft")}
+                                 for s in (rcls.get(role) or [])]
+                          for role in ("eave", "rake", "ridge", "hip_valley",
+                                       "transition")},
+            }
+        except Exception as exc:
+            out["checks"].append({"check": "roof_lines", "page": pi, "role": "viewer",
+                                  "error": str(exc)})
         certified_underroof = next(
             (line["qty"] for line in area_cert.get("lines", [])
              if line.get("trade") == "framing_sf" and line.get("certified")),
@@ -4520,6 +4762,8 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
                         "(OCR pitch trap, cal #43 — never automated away)"})
             out["assumptions"].append(
                 "roof not measured: supply pitch callouts from a verified read")
+    if evidence_dir:
+        write_takeoff_evidence(out, plan_pdf, sheet_map, evidence_dir)
     doc.close()
     return out
 
@@ -4576,7 +4820,8 @@ def estimate_from_takeoff(takeoff, rate_book=None):
                            "unit": spec["unit"], "group": spec.get("group"),
                            "basis": spec.get("basis"),
                            "meas_source": ln["source"],
-                           "meas_confidence": ln["confidence"]})
+                           "meas_confidence": ln["confidence"],
+                           "measurement_ids": [ln["id"]] if ln.get("id") else []})
     est = assemble_estimate(priced)
     return {"estimate": est, "unpriced": unpriced, "n_priced": len(priced)}
 
@@ -5776,4 +6021,29 @@ if __name__ == "__main__":
     _bw_ok = abs(_bw['total_beam_wrap_lf'] - 289.0) < 1.0
     ok = ok and _bw_ok
     print(f"  {'OK ' if _bw_ok else 'FAIL'} beam_wrap_lf: 121 LF horizontal + 14 posts = {_bw['total_beam_wrap_lf']} LF (Jason 291)")
+    # ---- virtual takeoff (8/14): persisted geometry must REPRODUCE the tracer's own
+    # number after the pixel->page-point mapping, and land inside its trace clip.
+    # Area alone cannot see a translation bug (a missed clip offset moves the polygon
+    # without changing its SF) — the containment clause is what catches that.
+    import fitz as _fzt
+    _vd = _fzt.open(); _vp = _vd.new_page(width=400, height=300)
+    _vp.draw_rect(_fzt.Rect(100, 80, 250, 200), color=(0, 0, 0), width=2)
+    _vt = trace_enclosed_region(_vp, _fzt.Rect(60, 40, 300, 260), ppf=10.0)
+    _gp = (_vt or {}).get("polygon_pts")
+    _g_ok = bool(_gp)
+    if _g_ok:
+        _va, _vpm = _poly_area_perim_pts(_gp)
+        _g_ok = (abs(_va / 100.0 - _vt["area_sf"]) <= _vt["area_sf"] * 0.005
+                 and abs(_vpm / 10.0 - _vt["perimeter_lf"]) <= _vt["perimeter_lf"] * 0.005
+                 and _geometry_record(_gp, 10.0, area_sf=_vt["area_sf"],
+                                      perim_lf=_vt["perimeter_lf"],
+                                      clip=(60, 40, 300, 260))[0] is not None
+                 and _geometry_record(_gp, 10.0, area_sf=_vt["area_sf"] * 1.2)[0] is None
+                 and _geometry_record(_gp, 10.0, area_sf=_vt["area_sf"],
+                                      clip=(1060, 1040, 1300, 1260))[0] is None)
+    ok = ok and _g_ok
+    print(f"  {'OK ' if _g_ok else 'FAIL'} geometry round-trip: traced polygon reproduces "
+          f"{(_vt or {}).get('area_sf', 0):.1f} SF / {(_vt or {}).get('perimeter_lf', 0):.1f} LF "
+          f"in page points; fabricated SF and shifted clip both refused")
+    _vd.close()
     print("ALL PASS" if ok else "SOME FAILED")
