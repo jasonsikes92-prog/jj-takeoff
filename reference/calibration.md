@@ -1710,3 +1710,33 @@ on Holbrook, so its boundary is not merely below the floor; and traced-area ÷ i
 exactly those two houses. **Two examples cannot validate a classifier**, and a threshold tuned to
 two houses is the `footer_lf` failure mode wearing a new hat. Boundary style is a two-second read
 off the sheet; make the human do the two seconds.
+
+## Data point #66 — PRINTED DIMENSION CHAINS ADMITTED AS THE AREA-GATE VERIFICATION (Jason's ruling, 2026-08-14)
+
+**The question FINDINGS.md logged as "Owed by Jason #1" — what counts as the second
+independent measurement of an area component — is answered: the sheet's own printed
+dimension chains, walked into a closed outline.** Primary stays a pixel trace;
+verification is `dims_outline_evidence()` (`read_dimension_chains` + `polygon_outline`);
+the 2% reconciliation is unchanged.
+
+**Why.** The three pixel methods measure different envelopes — outside face of wall
+strokes / every stroke of ink / inside face — so requiring two of THEM to agree within
+2% could never pass on a drawing with wall thickness and printed dimensions (real
+Roberts deltas 21.6% / 2.5% / 7.7%). Printed text layer vs ink raster are different
+INPUTS measuring the same envelope — the check a human estimator actually performs, and
+one a 2% gate can pass (Roberts slab: clean trace 3,066.7 vs the sheet's own 3,069 =
+−0.1%).
+
+**Contract.** The walk is a DECLARED input, `[[len_ft, R|L|U|D], ...]` — the
+`pitch_calls`/`slab_boundary` pattern (#43, #65): a human reads it off the sheet in
+seconds; classifiers overfit. The engine verifies every declared leg against the sheet
+(each length must appear in the page's chains within 1%; closure ≤ 0.5 ft; a leg the
+sheet does not print is a hard error — a fabricated walk cannot certify). Origins now
+recorded: `plan-pixel-geometry.v1` vs `plan-printed-dims.v1`; a pixel/printed-dims pair
+is marked `input-independent` (closes FINDINGS defect 4, where path-based independence
+could never fail). Pinned in `tools/tests/test_dims_outline.py` on the real Roberts
+foundation sheet.
+
+⚠ **Open on Roberts:** its own chains validate only partial totals on p4 (largest ~26
+ft — the 64'-3¾"/60'-10¼" overalls read as singles). Real component walks (heated
+envelope, garage, porch) are declared-input work to do IN the viewer, not invented here.

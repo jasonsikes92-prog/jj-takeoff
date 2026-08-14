@@ -975,6 +975,75 @@ def polygon_outline(segments):
             "pts_ft": [[round(px, 3), round(py, 3)] for px, py in pts]}
 
 
+def dims_outline_evidence(page, ppf, walk, origin_pt, overlay_path=None,
+                          chain_tol_pct=1.0, closure_tol_ft=0.5):
+    """AREA-GATE VERIFICATION FROM THE SHEET'S OWN PRINTED NUMBERS (cal #66, Jason's
+    ruling 2026-08-14): walk the plan's dimension chains into a closed outline and use
+    it as the measurement INDEPENDENT of pixels. Printed text layer vs ink raster is
+    how a human estimator checks a trace, and it is a comparison a 2% gate can pass —
+    the three pixel methods measure different envelopes (FINDINGS.md root cause) and
+    never could.
+
+    `walk` is a DECLARED input, [[len_ft, 'R'|'L'|'U'|'D'], ...] read off the sheet by
+    whoever looked at it — the pitch_calls / slab_boundary contract (cal #43/#65:
+    auto-classifiers overfit; a human read is two seconds). The engine then VERIFIES
+    every declared leg against the sheet itself: each length must appear in
+    read_dimension_chains (as a chain run or total) within chain_tol_pct; the walk
+    must close within closure_tol_ft; a leg the sheet does not print is a hard error
+    — a fabricated walk cannot certify. origin_pt (page points, the walk's start
+    corner) anchors the polygon for display; polygon_outline's y-down 'D' matches PDF
+    page coordinates."""
+    if not walk:
+        raise ValueError("printed-dims verification requires a declared walk")
+    if not origin_pt or len(tuple(origin_pt)) != 2:
+        raise ValueError("printed-dims verification requires origin_pt (page points)")
+    walk = [(float(l), str(d).upper()) for l, d in walk]
+    po = polygon_outline(walk)
+    if po["closure_err_ft"] > closure_tol_ft:
+        raise ValueError(
+            f"printed-dims walk does not close: {po['closure_err_ft']} ft error "
+            f"(limit {closure_tol_ft} ft) — re-read the chain")
+    printed = set()
+    for c in read_dimension_chains(page, ppf):
+        printed.update(c["runs"])
+        printed.add(c["total"])
+    checks, missing = [], []
+    for length, d in walk:
+        best = min(printed, key=lambda v: abs(v - length)) if printed else None
+        ok = (best is not None
+              and abs(best - length) <= max(0.06, length * chain_tol_pct / 100.0))
+        checks.append({"leg_ft": length, "dir": d,
+                       "printed_ft": best if ok else None, "ok": ok})
+        if not ok:
+            missing.append(f"{length} ft {d}")
+    if missing:
+        raise ValueError(
+            "printed-dims walk declares lengths the sheet does not print: "
+            + ", ".join(missing)
+            + " — every leg must appear in the page's own dimension chains")
+    ox, oy = float(origin_pt[0]), float(origin_pt[1])
+    pts = [[round(ox + x * ppf, 3), round(oy + y * ppf, 3)] for x, y in po["pts_ft"]]
+    if len(pts) > 1 and abs(pts[0][0] - pts[-1][0]) < 0.5 \
+            and abs(pts[0][1] - pts[-1][1]) < 0.5:
+        pts = pts[:-1]                     # drop the duplicated closing vertex
+    if overlay_path:
+        import cv2
+        import numpy as np
+        import fitz
+        zoom = 2.0
+        pix = page.get_pixmap(matrix=fitz.Matrix(zoom, zoom))
+        img = np.frombuffer(pix.samples, dtype=np.uint8).reshape(
+            pix.height, pix.width, pix.n)[:, :, :3].copy()
+        bgr = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+        poly = np.array([[int(round(x * zoom)), int(round(y * zoom))]
+                         for x, y in pts])
+        cv2.polylines(bgr, [poly], True, (200, 0, 160), 5)
+        cv2.imwrite(overlay_path, bgr)
+    return {"area_sf": po["area_sf"], "perim_lf": po["perimeter_lf"],
+            "corners": po["corners"], "closure_err_ft": po["closure_err_ft"],
+            "polygon_pts": pts, "chain_checks": checks}
+
+
 # ---------------------------------------------------------------------------
 # VIRTUAL TAKEOFF — persisted geometry (2026-08-14).  Every tracer above already
 # computes a real polygon and then discards it at the return statement; these helpers
@@ -3511,10 +3580,15 @@ UNDER_ROOF_AREA_CLASSES = {
 HEATED_AREA_CLASSES = {"heated", "conditioned_accessory"}
 _AREA_FORBIDDEN_METHOD_TOKENS = ("schedule", "given", "hardcod", "allowance")
 _AREA_ENGINE_ORIGIN = "jnj_takeoff.plan-pixel-geometry.v1"
+# cal #66 (Jason's ruling 2026-08-14): the sheet's own printed dimension chains, walked
+# into a closed outline, are an admitted verification measurement. Printed text layer
+# vs ink raster = genuinely different inputs — the comparison a 2% gate can pass.
+_AREA_DIMS_ORIGIN = "jnj_takeoff.plan-printed-dims.v1"
 _AREA_ENGINE_METHODS = {
     "trace-footprint-clean",
     "trace-footprint-all-ink",
     "trace-enclosed-region",
+    "printed-dimension-chains",
 }
 _AREA_SCALE_METHODS = {
     "text-dims",
@@ -3627,7 +3701,15 @@ def certify_area_measurements(components, schedule_rows=None, tolerance_pct=2.0)
         errors.extend(_area_evidence_errors(name, verification, "verification"))
         if not isinstance(primary, dict) or not isinstance(verification, dict):
             continue
-        independent = (
+        # cal #66: origins differing (pixel trace vs printed dims) is REAL independence
+        # — different inputs, not different code paths over the same ink. Same-origin
+        # pairs keep the old (weak) rule for back-compat; FINDINGS.md defect 4 stands
+        # recorded against it.
+        input_independent = bool(
+            primary.get("origin") and verification.get("origin")
+            and primary.get("origin") != verification.get("origin")
+        )
+        independent = input_independent or (
             primary.get("method") != verification.get("method")
             or primary.get("sheet") != verification.get("sheet")
             or _os.path.abspath(str(primary.get("view", "")))
@@ -3653,6 +3735,7 @@ def certify_area_measurements(components, schedule_rows=None, tolerance_pct=2.0)
             "qty": round(primary_qty, 2),
             "verification_qty": round(verification_qty, 2),
             "delta_pct": round(delta_pct, 2),
+            "independence": "input-independent" if input_independent else "same-engine",
             "primary": dict(primary),
             "verification": dict(verification),
         })
@@ -3791,7 +3874,15 @@ def _measure_area_evidence(doc, spec, evidence_dir, label):
     method = str(spec.get("method", "clean-tracer")).lower()
     safe = _re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-")
     view = _os.path.join(evidence_dir, f"{safe}.png")
-    if method in ("clean", "clean-tracer", "trace_footprint_clean"):
+    origin_label = _AREA_ENGINE_ORIGIN
+    if method in ("printed-dims", "printed-dimension-chains", "dims"):
+        result = dims_outline_evidence(
+            page, scale["ppf"], spec.get("walk"), spec.get("origin_pt"),
+            overlay_path=view,
+        )
+        method_name = "printed-dimension-chains"
+        origin_label = _AREA_DIMS_ORIGIN
+    elif method in ("clean", "clean-tracer", "trace_footprint_clean"):
         result = trace_footprint_clean(
             page, clip=clip, ppf=scale["ppf"], overlay_path=view
         )
@@ -3827,7 +3918,7 @@ def _measure_area_evidence(doc, spec, evidence_dir, label):
         "method": method_name,
         "confidence": scale["confidence"],
         "ppf": scale["ppf"],
-        "origin": _AREA_ENGINE_ORIGIN,
+        "origin": origin_label,
         "scale_method": scale["method"],
         "scale_checks": scale.get("checks", []),
         "id": _measurement_id(label, page_i, "area-component",
@@ -3904,9 +3995,10 @@ def certify_takeoff_for_pricing(takeoff, required_area_trades=CORE_AREA_TRADES):
         for label in ("primary", "verification"):
             evidence = component.get(label) or {}
             prefix = f"{component_name} {label}"
-            if evidence.get("origin") != _AREA_ENGINE_ORIGIN:
+            if evidence.get("origin") not in (_AREA_ENGINE_ORIGIN, _AREA_DIMS_ORIGIN):
                 errors.append(
-                    f"{prefix}: evidence was not produced by the plan-pixel measurement engine"
+                    f"{prefix}: evidence was not produced by a recognized measurement "
+                    f"engine (plan-pixel or printed-dims)"
                 )
             if evidence.get("method") not in _AREA_ENGINE_METHODS:
                 errors.append(f"{prefix}: unsupported engine geometry method")
