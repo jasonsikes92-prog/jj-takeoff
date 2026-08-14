@@ -19,10 +19,8 @@ Design constraints (docs/EVALUATION.md row 14: "Verification UX is the product")
 """
 
 import argparse
-import hashlib
 import json
 import os
-import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -32,14 +30,6 @@ import jnj_takeoff as eng  # noqa: E402
 
 MAX_RENDER_PX = 6000
 THUMB_ZOOM = 0.2
-
-
-def _sha256(path):
-    h = hashlib.sha256()
-    with open(path, "rb") as fh:
-        for chunk in iter(lambda: fh.read(1 << 20), b""):
-            h.update(chunk)
-    return h.hexdigest().upper()
 
 
 def _hex(rgb01):
@@ -83,7 +73,7 @@ def build(job, zoom=2.0, out=None):
     plan = ev.get("plan")
     if not plan or not os.path.exists(plan):
         raise ValueError(f"plan PDF not found: {plan!r}")
-    sha = _sha256(plan)
+    sha = eng.sha256_file(plan)
     if sha != ev.get("plan_sha256"):
         raise ValueError(
             "plan sha256 mismatch — the PDF on disk is not the drawing this takeoff "
@@ -102,19 +92,20 @@ def build(job, zoom=2.0, out=None):
     for pi in range(len(doc)):
         page = doc[pi]
         W, H = page.rect.width, page.rect.height
-        # independent scale read for EVERY page (votes/err_pct feed the badge; the
-        # run's own solved scale, when present, stays authoritative)
-        try:
-            det = eng.detect_scale(page)
-        except Exception:
-            det = None
         entry = dict(run_ledger.get(pi) or {"page": pi, "roles": [],
                                             "ppf": None, "scale_method": None,
                                             "scale_confidence": None})
-        entry["detect"] = ({"ppf": det.get("ppf"), "scale": det.get("scale"),
-                            "confidence": det.get("confidence"),
-                            "votes": det.get("votes"), "err_pct": det.get("err_pct")}
-                           if det else None)
+        # the evidence writer freezes each page's detect verdict at takeoff time
+        # (sha-pinned, so it cannot change); re-detect only for older evidence
+        # files that predate the persisted field — this was 74% of rebuild time.
+        if "detect" not in entry:
+            try:
+                det = eng.detect_scale(page)
+                entry["detect"] = {k: det.get(k) for k in
+                                   ("ppf", "scale", "confidence", "votes",
+                                    "err_pct")}
+            except Exception:
+                entry["detect"] = None
         ledger.append(entry)
 
         thumb = f"sheets/thumb_{pi}.png"
@@ -143,11 +134,10 @@ def build(job, zoom=2.0, out=None):
     with open(template, encoding="utf-8") as fh:
         html = fh.read()
     blob = json.dumps(data, separators=(",", ":")).replace("</", "<\\/")
-    html, n = re.subn(
-        r'(<script id="takeoff-data" type="application/json">)(.*?)(</script>)',
-        lambda m: m.group(1) + blob + m.group(3), html, count=1, flags=re.S)
-    if n != 1:
-        raise ValueError("viewer_template.html has no takeoff-data script block")
+    if html.count("__TAKEOFF_DATA__") != 1:
+        raise ValueError("viewer_template.html must contain exactly one "
+                         "__TAKEOFF_DATA__ placeholder")
+    html = html.replace("__TAKEOFF_DATA__", blob, 1)
     index = os.path.join(out, "index.html")
     with open(index, "w", encoding="utf-8") as fh:
         fh.write(html)

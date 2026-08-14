@@ -993,8 +993,9 @@ def dims_outline_evidence(page, ppf, walk, origin_pt, overlay_path=None,
     — a fabricated walk cannot certify. origin_pt (page points, the walk's start
     corner) anchors the polygon for display; polygon_outline's y-down 'D' matches PDF
     page coordinates."""
-    if not walk:
-        raise ValueError("printed-dims verification requires a declared walk")
+    if not walk or len(walk) < 3:
+        raise ValueError("printed-dims verification requires a declared walk of "
+                         "at least 3 legs")
     if not origin_pt or len(tuple(origin_pt)) != 2:
         raise ValueError("printed-dims verification requires origin_pt (page points)")
     walk = [(float(l), str(d).upper()) for l, d in walk]
@@ -1003,16 +1004,22 @@ def dims_outline_evidence(page, ppf, walk, origin_pt, overlay_path=None,
         raise ValueError(
             f"printed-dims walk does not close: {po['closure_err_ft']} ft error "
             f"(limit {closure_tol_ft} ft) — re-read the chain")
-    printed = set()
+    # A leg must appear on ITS OWN AXIS: R/L legs are horizontal distances and may
+    # only match H-oriented chains, U/D only V. Pooling both axes once let a walk
+    # validate a horizontal leg against a vertical chain value — a hole in
+    # "a fabricated walk cannot certify".
+    printed = {"H": set(), "V": set()}
     for c in read_dimension_chains(page, ppf):
-        printed.update(c["runs"])
-        printed.add(c["total"])
+        printed[c["orient"]].update(c["runs"])
+        printed[c["orient"]].add(c["total"])
+    axis = {"R": "H", "L": "H", "U": "V", "D": "V"}
     checks, missing = [], []
     for length, d in walk:
-        best = min(printed, key=lambda v: abs(v - length)) if printed else None
+        pool = printed[axis[d]]
+        best = min(pool, key=lambda v: abs(v - length)) if pool else None
         ok = (best is not None
               and abs(best - length) <= max(0.06, length * chain_tol_pct / 100.0))
-        checks.append({"leg_ft": length, "dir": d,
+        checks.append({"leg_ft": length, "dir": d, "axis": axis[d],
                        "printed_ft": best if ok else None, "ok": ok})
         if not ok:
             missing.append(f"{length} ft {d}")
@@ -1020,12 +1027,15 @@ def dims_outline_evidence(page, ppf, walk, origin_pt, overlay_path=None,
         raise ValueError(
             "printed-dims walk declares lengths the sheet does not print: "
             + ", ".join(missing)
-            + " — every leg must appear in the page's own dimension chains")
+            + " — every leg must appear in the page's own dimension chains "
+            "on its axis")
     ox, oy = float(origin_pt[0]), float(origin_pt[1])
     pts = [[round(ox + x * ppf, 3), round(oy + y * ppf, 3)] for x, y in po["pts_ft"]]
-    if len(pts) > 1 and abs(pts[0][0] - pts[-1][0]) < 0.5 \
-            and abs(pts[0][1] - pts[-1][1]) < 0.5:
-        pts = pts[:-1]                     # drop the duplicated closing vertex
+    # polygon_outline appends one vertex per leg after the origin, so a gated walk
+    # always ends within closure_tol_ft of its start: drop that near-duplicate
+    # closing vertex UNCONDITIONALLY. (A 0.5-pt threshold here once stranded it for
+    # legal walks closing 0.04-0.5 ft off — pt/ft unit mismatch.)
+    pts = pts[:-1]
     if overlay_path:
         import cv2
         import numpy as np
@@ -3584,12 +3594,17 @@ _AREA_ENGINE_ORIGIN = "jnj_takeoff.plan-pixel-geometry.v1"
 # into a closed outline, are an admitted verification measurement. Printed text layer
 # vs ink raster = genuinely different inputs — the comparison a 2% gate can pass.
 _AREA_DIMS_ORIGIN = "jnj_takeoff.plan-printed-dims.v1"
-_AREA_ENGINE_METHODS = {
-    "trace-footprint-clean",
-    "trace-footprint-all-ink",
-    "trace-enclosed-region",
-    "printed-dimension-chains",
+# One total map from method to the origin it implies. Everything derives from it:
+# the evidence stamp, the independence test, and the pricing gate's cross-check —
+# so a new method CANNOT be added without declaring its origin, and a relabeled
+# origin string can never masquerade as a different input.
+_AREA_METHOD_ORIGINS = {
+    "trace-footprint-clean": _AREA_ENGINE_ORIGIN,
+    "trace-footprint-all-ink": _AREA_ENGINE_ORIGIN,
+    "trace-enclosed-region": _AREA_ENGINE_ORIGIN,
+    "printed-dimension-chains": _AREA_DIMS_ORIGIN,
 }
+_AREA_ENGINE_METHODS = set(_AREA_METHOD_ORIGINS)
 _AREA_SCALE_METHODS = {
     "text-dims",
     "ocr-chains",
@@ -3702,12 +3717,17 @@ def certify_area_measurements(components, schedule_rows=None, tolerance_pct=2.0)
         if not isinstance(primary, dict) or not isinstance(verification, dict):
             continue
         # cal #66: origins differing (pixel trace vs printed dims) is REAL independence
-        # — different inputs, not different code paths over the same ink. Same-origin
-        # pairs keep the old (weak) rule for back-compat; FINDINGS.md defect 4 stands
-        # recorded against it.
+        # — different inputs, not different code paths over the same ink. But an origin
+        # STRING is trusted only when it matches what the side's METHOD implies;
+        # otherwise one dict copy-pasted with a relabeled origin would verify itself at
+        # 0.0% delta. Same-origin pairs keep the old (weak) rule for back-compat;
+        # FINDINGS.md defect 4 stands recorded against it.
+        def _origin_consistent(e):
+            return _AREA_METHOD_ORIGINS.get(e.get("method")) == e.get("origin")
         input_independent = bool(
-            primary.get("origin") and verification.get("origin")
-            and primary.get("origin") != verification.get("origin")
+            primary.get("origin") != verification.get("origin")
+            and _origin_consistent(primary)
+            and _origin_consistent(verification)
         )
         independent = input_independent or (
             primary.get("method") != verification.get("method")
@@ -3767,6 +3787,13 @@ def certify_area_measurements(components, schedule_rows=None, tolerance_pct=2.0)
             "delta_pct": c["delta_pct"],
         } for c in normalized]
         for trade, qty in measured.items():
+            # provenance lists ONLY the components this rollup actually summed —
+            # heated_sf must not claim garage/porch evidence as its own.
+            klass = (HEATED_AREA_CLASSES if trade == "heated_sf"
+                     else UNDER_ROOF_AREA_CLASSES)
+            ids = [e.get("id") or "" for c in normalized
+                   if c["classification"] in klass
+                   for e in (c["primary"], c["verification"])]
             lines.append({
                 "trade": trade,
                 "qty": round(qty, 1),
@@ -3778,13 +3805,9 @@ def certify_area_measurements(components, schedule_rows=None, tolerance_pct=2.0)
                 "note": f"derived once from: {', '.join(component_names)}",
                 "certified": True,
                 "proof": proof,
-                "component_ids": [e["id"] for c in normalized
-                                  for e in (c["primary"], c["verification"])
-                                  if e.get("id")],
-                "id": _measurement_id(
-                    trade, "|".join(sheets), "rollup",
-                    ",".join(e.get("id") or "" for c in normalized
-                             for e in (c["primary"], c["verification"]))),
+                "component_ids": [i for i in ids if i],
+                "id": _measurement_id(trade, "|".join(sheets), "rollup",
+                                      ",".join(ids)),
             })
     return {
         "ok": ok,
@@ -3847,12 +3870,21 @@ def certify_explicit_scale(ppf, checks, tolerance_pct=2.0):
 
 
 def _measure_area_evidence(doc, spec, evidence_dir, label):
-    """Measure one area from plan pixels; the caller supplies WHERE, never the SF."""
+    """Measure one area from the plan; the caller supplies WHERE, never the SF."""
     import fitz as _fitz
     page_i = int(spec["page"])
     page = doc[page_i]
+    method = str(spec.get("method", "clean-tracer")).lower()
+    is_dims = method in ("printed-dims", "printed-dimension-chains", "dims")
     scale = _page_scale(page)
-    if scale is None or scale.get("confidence") not in ("high", "good"):
+    # Pixel tracers need a snap-grade scale (high/good). The printed-dims walk needs
+    # only the voted ppf: every declared leg must then reproduce a printed chain
+    # within 1%, which IS the scale proof — a wrong ppf cannot match the sheet's own
+    # numbers. (Roberts, the print-rescaled fixture cal #66 exists for, reads
+    # confidence "review" by design; demanding high/good here would refuse the
+    # method on its motivating case.)
+    if scale is None or (not is_dims
+                         and scale.get("confidence") not in ("high", "good")):
         explicit = certify_explicit_scale(
             spec.get("ppf"), spec.get("scale_checks"),
             tolerance_pct=spec.get("scale_tolerance_pct", 2.0),
@@ -3863,25 +3895,29 @@ def _measure_area_evidence(doc, spec, evidence_dir, label):
                 + "; ".join(explicit["errors"])
             )
         scale = explicit
-    clip = spec.get("clip")
-    if clip is None:
-        region = find_drawing_region(page, ppf=scale["ppf"])
-        if region is None:
-            raise ValueError(f"{label}: no drawing region found on page {page_i + 1}")
-        clip = region["clip"]
-    else:
-        clip = _fitz.Rect(clip)
-    method = str(spec.get("method", "clean-tracer")).lower()
+    # Clip machinery is pixel-only: the dims walk is anchored by a declared
+    # origin_pt, never by a raster region — forcing it through find_drawing_region
+    # would hard-fail flattened sheets (the very case printed dims exists for) and
+    # containment-check the polygon against a region it never consulted.
+    clip = None
+    if not is_dims:
+        clip = spec.get("clip")
+        if clip is None:
+            region = find_drawing_region(page, ppf=scale["ppf"])
+            if region is None:
+                raise ValueError(
+                    f"{label}: no drawing region found on page {page_i + 1}")
+            clip = region["clip"]
+        else:
+            clip = _fitz.Rect(clip)
     safe = _re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-")
     view = _os.path.join(evidence_dir, f"{safe}.png")
-    origin_label = _AREA_ENGINE_ORIGIN
-    if method in ("printed-dims", "printed-dimension-chains", "dims"):
+    if is_dims:
         result = dims_outline_evidence(
             page, scale["ppf"], spec.get("walk"), spec.get("origin_pt"),
             overlay_path=view,
         )
         method_name = "printed-dimension-chains"
-        origin_label = _AREA_DIMS_ORIGIN
     elif method in ("clean", "clean-tracer", "trace_footprint_clean"):
         result = trace_footprint_clean(
             page, clip=clip, ppf=scale["ppf"], overlay_path=view
@@ -3905,7 +3941,11 @@ def _measure_area_evidence(doc, spec, evidence_dir, label):
     geometry, geometry_note = _geometry_record(
         result.get("polygon_pts"), scale["ppf"],
         area_sf=result["area_sf"],
-        perim_lf=result.get("perim_lf", result.get("perimeter_lf")),
+        # dims perimeter is the declared-leg sum; the polygon closes the (gated,
+        # <=0.5 ft) walk gap as one extra edge, so a perimeter self-check would
+        # strip valid geometry on small components. Area binds either way.
+        perim_lf=(None if is_dims
+                  else result.get("perim_lf", result.get("perimeter_lf"))),
         clip=clip,
     )
     return {
@@ -3918,14 +3958,15 @@ def _measure_area_evidence(doc, spec, evidence_dir, label):
         "method": method_name,
         "confidence": scale["confidence"],
         "ppf": scale["ppf"],
-        "origin": origin_label,
+        "origin": _AREA_METHOD_ORIGINS[method_name],
         "scale_method": scale["method"],
         "scale_checks": scale.get("checks", []),
         "id": _measurement_id(label, page_i, "area-component",
                               result.get("polygon_pts")
                               or f"{result['area_sf']:.2f}"),
-        "clip": [round(clip.x0, 2), round(clip.y0, 2),
-                 round(clip.x1, 2), round(clip.y1, 2)],
+        "clip": ([round(clip.x0, 2), round(clip.y0, 2),
+                  round(clip.x1, 2), round(clip.y1, 2)]
+                 if clip is not None else None),
         "geometry": geometry,
         "geometry_note": geometry_note,
     }
@@ -4002,6 +4043,11 @@ def certify_takeoff_for_pricing(takeoff, required_area_trades=CORE_AREA_TRADES):
                 )
             if evidence.get("method") not in _AREA_ENGINE_METHODS:
                 errors.append(f"{prefix}: unsupported engine geometry method")
+            elif evidence.get("origin") != _AREA_METHOD_ORIGINS[evidence.get("method")]:
+                errors.append(
+                    f"{prefix}: origin does not match its method — relabeled evidence "
+                    f"cannot claim a different input"
+                )
             if evidence.get("scale_method") not in _AREA_SCALE_METHODS:
                 errors.append(f"{prefix}: verified scale method is missing")
             try:
@@ -4516,31 +4562,53 @@ COORDINATE_FRAME = ("pdf-points: PyMuPDF page coordinates, origin top-left, y-do
                     "1 pt = 1/72 in; page = 0-based page index")
 
 
-def write_takeoff_evidence(out, plan_pdf, sheet_map, evidence_dir):
+def sha256_file(path, chunk=1 << 20):
+    """The one canonical file fingerprint. Writer, viewer, and any future verifier
+    must agree byte-for-byte on how a plan is hashed — a second implementation that
+    drifts produces a viewer refusing a valid plan."""
+    import hashlib
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for block in iter(lambda: fh.read(chunk), b""):
+            h.update(block)
+    return h.hexdigest().upper()
+
+
+def write_takeoff_evidence(out, plan_pdf, sheet_map, evidence_dir, doc=None):
     """Persist the takeoff WITH its geometry as evidence_dir/takeoff_evidence.json.
 
     This is the substrate the viewer renders and the review loop corrects against.
     One declared coordinate frame (COORDINATE_FRAME); measurements are run_takeoff's
     own lines verbatim (they now carry id + geometry); the plan is pinned by sha256 so
-    a review or a viewer can refuse a file that no longer matches its drawing."""
-    import hashlib
+    a review or a viewer can refuse a file that no longer matches its drawing.
+    With `doc` (the open fitz document), the ledger ENUMERATES EVERY SHEET —
+    SheetLedger doctrine — and freezes each page's detect_scale verdict, so viewer
+    rebuilds never re-derive what the sha pin already made immutable."""
     import json
     from datetime import datetime
     _os.makedirs(evidence_dir, exist_ok=True)
-    h = hashlib.sha256()
-    with open(plan_pdf, "rb") as fh:
-        for chunk in iter(lambda: fh.read(1 << 20), b""):
-            h.update(chunk)
     roles = {}
     for k, v in (sheet_map or {}).items():
         if isinstance(v, int):
             roles.setdefault(v, []).append(k)
+    pages = set(out.get("pages", {})) | set(roles)
+    if doc is not None:
+        pages |= set(range(len(doc)))
     ledger = []
-    for pi in sorted(out.get("pages", {})):
-        sc = out["pages"][pi] or {}
-        ledger.append({"page": pi, "roles": sorted(roles.get(pi, [])),
-                       "ppf": sc.get("ppf"), "scale_method": sc.get("method"),
-                       "scale_confidence": sc.get("confidence")})
+    for pi in sorted(pages):
+        sc = out.get("pages", {}).get(pi) or {}
+        entry = {"page": pi, "roles": sorted(roles.get(pi, [])),
+                 "ppf": sc.get("ppf"), "scale_method": sc.get("method"),
+                 "scale_confidence": sc.get("confidence")}
+        if doc is not None:
+            try:
+                det = detect_scale(doc[pi])
+                entry["detect"] = {k: det.get(k) for k in
+                                   ("ppf", "scale", "confidence", "votes",
+                                    "err_pct")}
+            except Exception:
+                entry["detect"] = None
+        ledger.append(entry)
     declared = {}
     for k, v in (sheet_map or {}).items():
         if isinstance(v, (int, float, str)) or v is None:
@@ -4550,11 +4618,11 @@ def write_takeoff_evidence(out, plan_pdf, sheet_map, evidence_dir):
                 declared[k] = [round(float(x), 2) for x in v]
             except (TypeError, ValueError):
                 declared[k] = str(v)
-    doc = {
+    record = {
         "schema": TAKEOFF_EVIDENCE_SCHEMA,
         "coordinate_frame": COORDINATE_FRAME,
         "plan": str(plan_pdf),
-        "plan_sha256": h.hexdigest().upper(),
+        "plan_sha256": sha256_file(plan_pdf),
         "generated": datetime.now().isoformat(timespec="seconds"),
         "status": out.get("status"),
         "sheet_map": declared,
@@ -4568,9 +4636,9 @@ def write_takeoff_evidence(out, plan_pdf, sheet_map, evidence_dir):
     }
     path = _os.path.join(evidence_dir, "takeoff_evidence.json")
     with open(path, "w", encoding="utf-8") as fh:
-        json.dump(doc, fh, indent=1)
+        json.dump(record, fh, indent=1)
     out["evidence_json"] = path
-    out["plan_sha256"] = doc["plan_sha256"]
+    out["plan_sha256"] = record["plan_sha256"]
     return path
 
 
@@ -4603,10 +4671,26 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
         line = {"trade": trade, "qty": round(float(qty), 1), "unit": unit,
                 "source": source, "method": method, "confidence": conf,
                 "page": page, "note": note, "geometry": geometry}
+        if geometry is not None and "gid" not in geometry:
+            # shared-geometry identity is an engine FACT (two lines derived from one
+            # trace carry one gid), not a float-string coincidence for the viewer
+            # to re-guess from serialized vertices.
+            geometry["gid"] = _measurement_id("geom", page, "gid", geometry["points"])
         line["id"] = _measurement_id(
             trade, page, "line",
             (geometry or {}).get("points") or f"{line['qty']}|{unit}|{method}")
         out["lines"].append(line)
+
+    def geom(trade, method, page, ppf, points, area_sf=None, perim_lf=None,
+             clip=None):
+        """Attach-or-flag: geometry that fails its self-check is dropped AND the
+        failure lands in checks — never silently, never shipped wrong."""
+        g, err = _geometry_record(points, ppf, area_sf=area_sf, perim_lf=perim_lf,
+                                  clip=clip)
+        if err:
+            out["checks"].append({"check": "geometry_selfcheck", "page": page,
+                                  "trade": trade, "method": method, "error": err})
+        return g
 
     # --- schedule: comparison only; never emits heated/framed SF ----------------------
     schedule_rows = []
@@ -4688,13 +4772,9 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
                 t = trace_enclosed_region(page, r["clip"], ppf=sc["ppf"],
                                           prefer="largest")
                 if t:
-                    g, gerr = _geometry_record(
-                        t.get("polygon_pts"), sc["ppf"], area_sf=t["area_sf"],
-                        perim_lf=t["perimeter_lf"], clip=r["clip"])
-                    if gerr:
-                        out["checks"].append({"check": "geometry_selfcheck",
-                                              "page": pi, "trade": "foundation",
-                                              "error": gerr})
+                    g = geom("foundation_wall_lf", "enclosed-region", pi, sc["ppf"],
+                             t.get("polygon_pts"), area_sf=t["area_sf"],
+                             perim_lf=t["perimeter_lf"], clip=r["clip"])
                     add("foundation_wall_lf", t["perimeter_lf"], "LF", "MEASURED",
                         "enclosed-region", sc["confidence"], pi,
                         "inside-face; scope (poured vs framed/ledge) needs heights",
@@ -4703,15 +4783,11 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
                         "enclosed-region", sc["confidence"], pi, geometry=g)
                 loops = foundation_wall_loops(page, ppf=sc["ppf"])
                 if loops:
-                    lg, lgerr = _geometry_record(
-                        loops[0].get("polygon_pts"), sc["ppf"],
-                        area_sf=loops[0]["area_sf"], perim_lf=loops[0]["perim_lf"],
-                        clip=loops[0].get("clip_pts"))
-                    if lgerr:
-                        out["checks"].append({"check": "geometry_selfcheck",
-                                              "page": pi,
-                                              "trade": "foundation_main_loop_lf",
-                                              "error": lgerr})
+                    lg = geom("foundation_main_loop_lf", "wall-pairs", pi, sc["ppf"],
+                              loops[0].get("polygon_pts"),
+                              area_sf=loops[0]["area_sf"],
+                              perim_lf=loops[0]["perim_lf"],
+                              clip=loops[0].get("clip_pts"))
                     add("foundation_main_loop_lf", loops[0]["perim_lf"], "LF",
                         "MEASURED", "wall-pairs", sc["confidence"], pi,
                         f"{len(loops)} enclosed loops total", geometry=lg)
@@ -4745,26 +4821,17 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
             t1 = trace_footprint_clean(page, ppf=sc["ppf"])
             if t1:
                 a_clean = t1["area_sf"]
-                g_clean, g1err = _geometry_record(
-                    t1.get("polygon_pts"), sc["ppf"], area_sf=t1["area_sf"],
-                    perim_lf=t1["perim_lf"])
-                if g1err:
-                    out["checks"].append({"check": "geometry_selfcheck", "page": pi,
-                                          "trade": "slab_area_sf (clean)",
-                                          "error": g1err})
+                g_clean = geom("slab_area_sf", "clean-tracer", pi, sc["ppf"],
+                               t1.get("polygon_pts"), area_sf=t1["area_sf"],
+                               perim_lf=t1["perim_lf"])
             r = find_drawing_region(page, ppf=sc["ppf"], pad_ft=8.0)
             if r is not None:
                 t2 = trace_footprint(page, r["clip"], ppf=sc["ppf"])
                 if t2:
                     a_ink = t2["area_sf"]
-                    g_ink, g2err = _geometry_record(
-                        t2.get("polygon_pts"), sc["ppf"], area_sf=t2["area_sf"],
-                        perim_lf=t2["perim_lf"], clip=r["clip"])
-                    if g2err:
-                        out["checks"].append({"check": "geometry_selfcheck",
-                                              "page": pi,
-                                              "trade": "slab_area_sf (all-ink)",
-                                              "error": g2err})
+                    g_ink = geom("slab_area_sf", "all-ink-tracer", pi, sc["ppf"],
+                                 t2.get("polygon_pts"), area_sf=t2["area_sf"],
+                                 perim_lf=t2["perim_lf"], clip=r["clip"])
             both = (f"clean {a_clean:,.0f} / all-ink {a_ink:,.0f}"
                     if a_clean and a_ink else
                     f"clean {a_clean:,.0f}" if a_clean else
@@ -4775,11 +4842,13 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
                                   "declared_boundary": style})
             if a_clean and a_ink and abs(a_clean - a_ink) / max(a_clean, a_ink) <= 0.08:
                 # the tracers agree, so boundary style cannot change the answer.
-                # The polygon shown is the clean trace; the line qty is the average —
-                # the geometry dict carries the polygon's OWN area so the two never lie.
+                # The polygon shown is the clean trace ONLY (never a silent swap to
+                # all-ink); the line qty is the average — the geometry dict carries
+                # the polygon's OWN area so the two never lie, and the viewer shows
+                # the shape's value beside the qty when they differ.
                 add("slab_area_sf", (a_clean + a_ink) / 2, "SF", "MEASURED",
                     "two-tracer-agree", "high", pi, both,
-                    geometry=g_clean or g_ink)
+                    geometry=g_clean)
             elif style == "solid" and a_clean:
                 add("slab_area_sf", a_clean, "SF", "MEASURED", "clean-tracer",
                     "good", pi, f"solid drawn boundary (declared) — cal #46; {both}",
@@ -4803,24 +4872,47 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
     # --- roof: face decomposition (needs verified pitch callouts) -----------------------
     pi = sheet_map.get("roof")
     if pi is not None:
+        # the roof sheet belongs in the run ledger like every other touched sheet
+        out["pages"].setdefault(pi, _page_scale(doc[pi]))
         # Viewer layer: the classified roof segments themselves (already page points —
         # extract_styled_segments reads get_drawings() directly, no clip/zoom).
         # Independent of the pitch/cert gate below: rendering what was SEEN must not
         # depend on whether it could be priced. Never fatal to the takeoff.
+        # A declared roof_clip bounds this layer exactly as it bounds the priced
+        # path — the viewer must never show lines the measurement excluded.
         try:
             rcls = classify_roof_lines(doc[pi])
+            rclip = sheet_map.get("roof_clip")
+            rclip = _f.Rect(rclip) if rclip else None
+
+            def _in_rclip(seg):
+                return rclip is None or (
+                    rclip.x0 <= (seg[0] + seg[2]) / 2 <= rclip.x1
+                    and rclip.y0 <= (seg[1] + seg[3]) / 2 <= rclip.y1)
+            roles = {role: [{"seg": [round(v, 3) for v in s["seg"]],
+                             "len_ft": s.get("len_ft")}
+                            for s in (rcls.get(role) or [])
+                            if _in_rclip(s["seg"])]
+                     for role in ("eave", "rake", "ridge", "hip_valley",
+                                  "transition")}
+            # LF totals recomputed from the (possibly clipped) roles with the same
+            # slope rule classify uses: rake/hip-valley run up the slope.
+            rpf = rcls.get("pitch_factor") or 1.0
+            lf = {role + "_lf": round(sum(s["len_ft"] or 0 for s in segs)
+                                      * (rpf if role in ("rake", "hip_valley")
+                                         else 1.0), 1)
+                  for role, segs in roles.items()}
+            lf["fascia_lf"] = round(lf["eave_lf"] + lf["rake_lf"], 1)
+            lf["gutter_lf"] = lf["eave_lf"]
             out["roof_lines"] = {
                 "page": pi,
                 "pitch_factor": rcls.get("pitch_factor"),
                 "confidence": rcls.get("confidence"),
-                "lf": {k: rcls.get(k) for k in
-                       ("eave_lf", "rake_lf", "ridge_lf", "hip_valley_lf",
-                        "transition_lf", "fascia_lf", "gutter_lf")},
-                "roles": {role: [{"seg": [round(v, 3) for v in s["seg"]],
-                                  "len_ft": s.get("len_ft")}
-                                 for s in (rcls.get(role) or [])]
-                          for role in ("eave", "rake", "ridge", "hip_valley",
-                                       "transition")},
+                "clip": ([round(rclip.x0, 2), round(rclip.y0, 2),
+                          round(rclip.x1, 2), round(rclip.y1, 2)]
+                         if rclip is not None else None),
+                "lf": lf,
+                "roles": roles,
             }
         except Exception as exc:
             out["checks"].append({"check": "roof_lines", "page": pi, "role": "viewer",
@@ -4855,7 +4947,7 @@ def run_takeoff(plan_pdf, sheet_map, pitch_calls=None, underroof_sf=None,
             out["assumptions"].append(
                 "roof not measured: supply pitch callouts from a verified read")
     if evidence_dir:
-        write_takeoff_evidence(out, plan_pdf, sheet_map, evidence_dir)
+        write_takeoff_evidence(out, plan_pdf, sheet_map, evidence_dir, doc=doc)
     doc.close()
     return out
 
@@ -6138,4 +6230,31 @@ if __name__ == "__main__":
           f"{(_vt or {}).get('area_sf', 0):.1f} SF / {(_vt or {}).get('perimeter_lf', 0):.1f} LF "
           f"in page points; fabricated SF and shifted clip both refused")
     _vd.close()
+    # ---- takeoff-evidence writer: hermetic round-trip (no plan PDF needed) — the sha
+    # is recomputed here independently so a drifted sha256_file cannot certify itself.
+    import tempfile as _tf
+    import json as _json
+    import hashlib as _hl
+    _td = _tf.mkdtemp()
+    _plan = _os.path.join(_td, "plan.bin")
+    with open(_plan, "wb") as _fh:
+        _fh.write(b"virtual-takeoff-selftest")
+    _wout = {"status": "more_information_required",
+             "pages": {0: {"ppf": 10.0, "method": "text-dims", "confidence": "high"}},
+             "lines": [{"trade": "t", "qty": 1.0, "unit": "SF", "source": "MEASURED",
+                        "method": "m", "confidence": "high", "page": 0, "note": "",
+                        "geometry": None, "id": "mtest"}],
+             "not_measured": [], "assumptions": [], "checks": []}
+    _wp = write_takeoff_evidence(_wout, _plan, {"foundation": 0}, _td)
+    with open(_wp, encoding="utf-8") as _fh:
+        _wev = _json.load(_fh)
+    _wexp = _hl.sha256(b"virtual-takeoff-selftest").hexdigest().upper()
+    _w_ok = (_wev["schema"] == TAKEOFF_EVIDENCE_SCHEMA
+             and _wev["coordinate_frame"].startswith("pdf-points")
+             and _wev["plan_sha256"] == _wexp == _wout["plan_sha256"]
+             and _wev["sheet_ledger"][0]["roles"] == ["foundation"]
+             and len(_wev["measurements"]) == 1)
+    ok = ok and _w_ok
+    print(f"  {'OK ' if _w_ok else 'FAIL'} takeoff_evidence writer: schema + frame + "
+          f"independently-recomputed sha pinned; ledger roles recorded")
     print("ALL PASS" if ok else "SOME FAILED")

@@ -78,10 +78,33 @@ class AreaCertificationTests(unittest.TestCase):
         self.assertEqual(result["schedule_checks"][0]["role"], "comparison-only")
 
         # The fixtures prove roll-up math, but cannot price because they did not
-        # come from the engine's plan-pixel measurement function.
+        # come from a recognized measurement engine (plan-pixel or printed-dims).
         takeoff = {"area_certification": result, "lines": result["lines"]}
-        with self.assertRaisesRegex(ValueError, "plan-pixel measurement engine"):
+        with self.assertRaisesRegex(ValueError, "recognized measurement engine"):
             eng.estimate_from_takeoff(takeoff)
+
+    def test_relabeled_origin_cannot_self_verify(self):
+        # cal #66 hardening: origins grant "input independence" ONLY when each
+        # side's origin matches what its METHOD implies. A measurement duplicated
+        # verbatim with just the origin string edited must NOT certify as its own
+        # 0.0%-delta verification (this exact bypass was reproduced in review).
+        comp = self._component("Conditioned residence", "heated", 3938, 3938, 9)
+        same_view = comp["primary"]["view"]
+        comp["verification"] = dict(comp["primary"])
+        comp["verification"]["view"] = same_view
+        comp["primary"]["origin"] = eng._AREA_ENGINE_ORIGIN
+        comp["verification"]["origin"] = eng._AREA_DIMS_ORIGIN  # relabel only
+        result = eng.certify_area_measurements([comp])
+        self.assertFalse(result["ok"], result)
+        self.assertTrue(
+            any("not independent" in e for e in result["errors"]), result["errors"])
+        # and the pricing gate independently refuses the origin/method mismatch
+        takeoff = {"area_certification": dict(result, ok=True, status="certified"),
+                   "lines": result["lines"]}
+        certified, errors = eng.certify_takeoff_for_pricing(takeoff)
+        self.assertFalse(certified)
+        self.assertTrue(any("origin does not match its method" in e for e in errors),
+                        errors)
 
     def test_total_or_under_roof_cannot_be_a_component(self):
         components = self._dugger_components()

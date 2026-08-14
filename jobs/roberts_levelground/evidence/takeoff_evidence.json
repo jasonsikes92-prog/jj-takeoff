@@ -3,7 +3,7 @@
  "coordinate_frame": "pdf-points: PyMuPDF page coordinates, origin top-left, y-down, 1 pt = 1/72 in; page = 0-based page index",
  "plan": "C:\\Users\\jason\\JJ-Takeoff\\tools\\tests\\golden\\roberts\\plan.pdf",
  "plan_sha256": "0B5720FC85EC723DB2A64AFF913A2DF6DF39A578EB4B055BC1A80843ECAB4124",
- "generated": "2026-08-14T12:39:57",
+ "generated": "2026-08-14T13:27:54",
  "status": "more_information_required",
  "sheet_map": {
   "sqft_schedule": 2,
@@ -12,13 +12,178 @@
  },
  "sheet_ledger": [
   {
+   "page": 0,
+   "roles": [],
+   "ppf": null,
+   "scale_method": null,
+   "scale_confidence": null,
+   "detect": {
+    "ppf": null,
+    "scale": null,
+    "confidence": "none",
+    "votes": 0,
+    "err_pct": null
+   }
+  },
+  {
+   "page": 1,
+   "roles": [],
+   "ppf": null,
+   "scale_method": null,
+   "scale_confidence": null,
+   "detect": {
+    "ppf": 0.7,
+    "scale": null,
+    "confidence": "review",
+    "votes": 35,
+    "err_pct": 92.2
+   }
+  },
+  {
+   "page": 2,
+   "roles": [
+    "sqft_schedule"
+   ],
+   "ppf": null,
+   "scale_method": null,
+   "scale_confidence": null,
+   "detect": {
+    "ppf": null,
+    "scale": null,
+    "confidence": "none",
+    "votes": 0,
+    "err_pct": null
+   }
+  },
+  {
    "page": 3,
    "roles": [
     "foundation"
    ],
    "ppf": 16.646,
    "scale_method": "text-dims",
-   "scale_confidence": "review"
+   "scale_confidence": "review",
+   "detect": {
+    "ppf": 16.646,
+    "scale": null,
+    "confidence": "review",
+    "votes": 86,
+    "err_pct": 7.5
+   }
+  },
+  {
+   "page": 4,
+   "roles": [],
+   "ppf": null,
+   "scale_method": null,
+   "scale_confidence": null,
+   "detect": {
+    "ppf": 16.714,
+    "scale": null,
+    "confidence": "review",
+    "votes": 187,
+    "err_pct": 7.1
+   }
+  },
+  {
+   "page": 5,
+   "roles": [],
+   "ppf": null,
+   "scale_method": null,
+   "scale_confidence": null,
+   "detect": {
+    "ppf": 12.506,
+    "scale": null,
+    "confidence": "review",
+    "votes": 114,
+    "err_pct": 7.4
+   }
+  },
+  {
+   "page": 6,
+   "roles": [
+    "roof"
+   ],
+   "ppf": 16.549,
+   "scale_method": "text-dims",
+   "scale_confidence": "review",
+   "detect": {
+    "ppf": 16.549,
+    "scale": null,
+    "confidence": "review",
+    "votes": 36,
+    "err_pct": 8.1
+   }
+  },
+  {
+   "page": 7,
+   "roles": [],
+   "ppf": null,
+   "scale_method": null,
+   "scale_confidence": null,
+   "detect": {
+    "ppf": null,
+    "scale": null,
+    "confidence": "none",
+    "votes": 0,
+    "err_pct": null
+   }
+  },
+  {
+   "page": 8,
+   "roles": [],
+   "ppf": null,
+   "scale_method": null,
+   "scale_confidence": null,
+   "detect": {
+    "ppf": 10.389,
+    "scale": null,
+    "confidence": "review",
+    "votes": 16,
+    "err_pct": 15.4
+   }
+  },
+  {
+   "page": 9,
+   "roles": [],
+   "ppf": null,
+   "scale_method": null,
+   "scale_confidence": null,
+   "detect": {
+    "ppf": null,
+    "scale": null,
+    "confidence": "none",
+    "votes": 0,
+    "err_pct": null
+   }
+  },
+  {
+   "page": 10,
+   "roles": [],
+   "ppf": null,
+   "scale_method": null,
+   "scale_confidence": null,
+   "detect": {
+    "ppf": null,
+    "scale": null,
+    "confidence": "none",
+    "votes": 0,
+    "err_pct": null
+   }
+  },
+  {
+   "page": 11,
+   "roles": [],
+   "ppf": null,
+   "scale_method": null,
+   "scale_confidence": null,
+   "detect": {
+    "ppf": null,
+    "scale": null,
+    "confidence": "none",
+    "votes": 0,
+    "err_pct": null
+   }
   }
  ],
  "measurements": [
@@ -157,7 +322,8 @@
     ],
     "closed": true,
     "area_sf": 1884.57,
-    "perim_lf": 250.89
+    "perim_lf": 250.89,
+    "gid": "me048a50514"
    },
    "id": "me75f3bc2f9"
   },
@@ -296,7 +462,8 @@
     ],
     "closed": true,
     "area_sf": 1884.57,
-    "perim_lf": 250.89
+    "perim_lf": 250.89,
+    "gid": "me048a50514"
    },
    "id": "mf85103c867"
   },
@@ -379,7 +546,8 @@
     ],
     "closed": true,
     "area_sf": 1962.0,
-    "perim_lf": 245.8
+    "perim_lf": 245.8,
+    "gid": "m802e9d28b5"
    },
    "id": "m24c4e1c01e"
   }
@@ -415,6 +583,7 @@
     "qty": 2169.92,
     "verification_qty": 2766.26,
     "delta_pct": 21.56,
+    "independence": "same-engine",
     "primary": {
      "qty": 2169.92,
      "unit": "SF",
@@ -644,6 +813,7 @@
     "qty": 732.19,
     "verification_qty": 751.38,
     "delta_pct": 2.55,
+    "independence": "same-engine",
     "primary": {
      "qty": 732.19,
      "unit": "SF",
@@ -865,6 +1035,7 @@
     "qty": 226.65,
     "verification_qty": 245.44,
     "delta_pct": 7.66,
+    "independence": "same-engine",
     "primary": {
      "qty": 226.65,
      "unit": "SF",
@@ -1080,6 +1251,7 @@
   "page": 6,
   "pitch_factor": 1.3413,
   "confidence": "high",
+  "clip": null,
   "lf": {
    "eave_lf": 194.9,
    "rake_lf": 114.8,

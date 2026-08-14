@@ -151,10 +151,18 @@ const DATA = JSON.parse(document.getElementById("takeoff-data").textContent);
 const EV = DATA.evidence, SHEETS = DATA.sheets, ROOF = EV.roof_lines || null;
 const CERT = EV.area_certification || null;
 const SVGNS = "http://www.w3.org/2000/svg";
-const esc = s => String(s ?? "").replace(/[&<>"']/g,
+// no ES2020+ syntax (??, ??=) anywhere in this file: an older WebView must fail
+// visibly at runtime, never blank-page on a parse error.
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g,
   c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt = (v, d=1) => (v == null || isNaN(v)) ? "—" :
   Number(v).toLocaleString("en-US", {maximumFractionDigits:d});
+// Print-rescale doctrine (~1 set in 6): warn when the measured ppf sits >2% off
+// EVERY standard print scale. Basis = the run's solved ppf when it exists (OCR
+// sheets have no detect result but a perfectly verified run scale), else detect.
+const STD_PPF = [6.75, 9, 13.5, 18, 27, 36, 72];
+const ppfBasis = entry => entry.ppf || (entry.detect && entry.detect.ppf) || null;
+const offStd = p => !p || STD_PPF.every(s => Math.abs(p - s) / s > 0.02);
 
 /* ---------------- data shaping ---------------- */
 // dedupe identical polygons (foundation LF + basement SF share one trace):
@@ -163,9 +171,13 @@ const polyGroups = {};          // key -> {page, points, mids:[], source, trades
 for (const m of EV.measurements || []) {
   const g = m.geometry;
   if (!g || !g.points || !Number.isInteger(m.page)) continue;
-  const key = m.page + "|" + JSON.stringify(g.points);
-  (polyGroups[key] ??= {page:m.page, points:g.points, mids:[], source:m.source,
-                        trades:[], geo:g}).mids.push(m.id);
+  // the engine stamps shared traces with one gid — identity is its FACT, not a
+  // float-string coincidence; the JSON key is only a fallback for old evidence.
+  const key = g.gid || (m.page + "|" + JSON.stringify(g.points));
+  if (!polyGroups[key])
+    polyGroups[key] = {page:m.page, points:g.points, mids:[], source:m.source,
+                       trades:[], geo:g};
+  polyGroups[key].mids.push(m.id);
   polyGroups[key].trades.push(m.trade);
 }
 const compShapes = [];          // {cid, side, page, points, comp}
@@ -179,7 +191,8 @@ if (CERT) for (const c of CERT.components || [])
 const measByPage = {};          // page -> count (rail badges)
 for (const m of EV.measurements || [])
   if (Number.isInteger(m.page)) measByPage[m.page] = (measByPage[m.page] || 0) + 1;
-for (const s of compShapes) measByPage[s.page] = (measByPage[s.page] || 0) + 0;
+const hasContent = p => !!measByPage[p] || compShapes.some(s => s.page === p)
+  || !!(ROOF && ROOF.page === p);
 
 const state = {
   page: null,
@@ -206,9 +219,9 @@ for (const entry of DATA.ledger) {
   const d = document.createElement("div");
   d.className = "thumb" + (sh.png ? "" : " norender");
   d.dataset.page = pi;
-  const det = entry.detect || {};
-  const scWarn = !det.ppf || (!det.scale || (det.err_pct != null && det.err_pct > 2));
-  const scTxt = det.ppf ? `${fmt(entry.ppf || det.ppf, 2)}` : "no scale";
+  const basis = ppfBasis(entry);
+  const scWarn = offStd(basis);
+  const scTxt = basis ? `${fmt(basis, 2)}` : "no scale";
   d.innerHTML = `<img src="${sh.thumb}" loading="lazy">
     <span class="pg">p${pi + 1}</span>
     ${measByPage[pi] ? `<span class="n">${measByPage[pi]}</span>` : ""}
@@ -222,7 +235,7 @@ function scaleTitle(entry) {
   if (entry.ppf) bits.push(`run: ${entry.ppf} pt/ft · ${entry.scale_method} · ${entry.scale_confidence}`);
   if (det.ppf) bits.push(`detect: ${det.ppf} pt/ft · ${det.scale || "NONSTANDARD"} · ` +
                          `${det.confidence} · ${det.votes} votes · ±${det.err_pct}%`);
-  if (!det.scale || (det.err_pct != null && det.err_pct > 2))
+  if (offStd(ppfBasis(entry)))
     bits.push("⚠ off standard scale — print-rescale suspected (1 in 6 sets)");
   return bits.join("\n") || "no scale solved";
 }
@@ -242,22 +255,20 @@ function showPage(pi) {
   svg.appendChild(img);
   document.getElementById("norender-note").style.display = sh.png ? "none" : "block";
 
-  if (state.layers.meas)
-    for (const [key, gp] of Object.entries(polyGroups)) {
-      if (gp.page !== pi) continue;
-      svg.appendChild(shape("polygon", gp.points,
-        `ov src-${gp.source}`, {kind:"m", key},
-        `${gp.trades.join(" + ")}\n${gp.geo.area_sf ? fmt(gp.geo.area_sf) + " SF" : ""}` +
-        `${gp.geo.perim_lf ? " · " + fmt(gp.geo.perim_lf) + " LF" : ""}`));
-    }
+  for (const [key, gp] of Object.entries(polyGroups)) {
+    if (gp.page !== pi) continue;
+    svg.appendChild(shape("polygon", gp.points,
+      `ov src-${gp.source}`, {kind:"m", key},
+      `${gp.trades.join(" + ")}\n${gp.geo.area_sf ? fmt(gp.geo.area_sf) + " SF" : ""}` +
+      `${gp.geo.perim_lf ? " · " + fmt(gp.geo.perim_lf) + " LF" : ""}`));
+  }
   for (const s of compShapes) {
-    if (s.page !== pi || !state.layers[s.side]) continue;
+    if (s.page !== pi) continue;
     svg.appendChild(shape("polygon", s.points, `ov side-${s.side}`, {kind:"c", cid:s.cid},
       `${s.comp.name} — ${s.side}\n${fmt(s.ev.qty)} SF · ${s.ev.method}`));
   }
   if (ROOF && ROOF.page === pi)
     for (const [role, segs] of Object.entries(ROOF.roles || {})) {
-      if (!state.layers.roof[role]) continue;
       for (const s of segs) {
         const el = document.createElementNS(SVGNS, "g");
         el.setAttribute("class", "ov roof-" + role);
@@ -273,8 +284,22 @@ function showPage(pi) {
       }
     }
   vb = [0, 0, W, H]; applyVB();
+  applyLayers();
   applySel();
   updateScaleBadge();
+}
+function applyLayers() {
+  // visibility only — never rebuild the DOM or touch the viewBox for a toggle
+  // (a toggle used to re-decode the sheet PNG and snap the user's zoom away).
+  for (const g of svg.querySelectorAll("g.ov")) {
+    let vis = true;
+    if (g.dataset.kind === "m") vis = state.layers.meas;
+    else if (g.dataset.kind === "c")
+      vis = state.layers[g.classList.contains("side-primary") ? "primary"
+                                                              : "verification"];
+    else if (g.dataset.kind === "roof") vis = !!state.layers.roof[g.dataset.role];
+    g.style.display = vis ? "" : "none";
+  }
 }
 function shape(tag, points, cls, ds, title) {
   const g = document.createElementNS(SVGNS, "g");
@@ -291,7 +316,7 @@ function updateScaleBadge() {
   const entry = DATA.ledger[state.page] || {};
   const det = entry.detect || {};
   const b = document.getElementById("scalebadge");
-  const warn = !det.ppf || !det.scale || (det.err_pct != null && det.err_pct > 2);
+  const warn = offStd(ppfBasis(entry));
   const src = entry.ppf ? `${entry.ppf} pt/ft · ${entry.scale_method} · ${entry.scale_confidence}`
             : det.ppf ? `${det.ppf} pt/ft · detect · ${det.confidence} · ${det.votes}✓`
             : "no scale solved";
@@ -320,7 +345,11 @@ svg.addEventListener("wheel", e => {
 }, {passive:false});
 let pan = null;
 svg.addEventListener("pointerdown", e => {
-  pan = {x:e.clientX, y:e.clientY, vb:[...vb], s:scaleOf().s, moved:false};
+  // remember the element actually pressed: setPointerCapture retargets every
+  // subsequent event (including pointerup) to the svg, so e.target up there
+  // can never be the shape the user clicked.
+  pan = {x:e.clientX, y:e.clientY, vb:[...vb], s:scaleOf().s, moved:false,
+         target:e.target};
   svg.setPointerCapture(e.pointerId); svg.classList.add("panning");
 });
 svg.addEventListener("pointermove", e => {
@@ -331,9 +360,11 @@ svg.addEventListener("pointermove", e => {
 });
 svg.addEventListener("pointerup", e => {
   svg.classList.remove("panning");
-  const wasClick = pan && !pan.moved; pan = null;
+  const wasClick = pan && !pan.moved;
+  const pressed = pan && pan.target;
+  pan = null;
   if (!wasClick) return;
-  const g = e.target.closest("g.ov");
+  const g = pressed && pressed.closest ? pressed.closest("g.ov") : null;
   if (!g) { setSel(null); return; }
   if (g.dataset.kind === "m") setSel({type:"m", ids:polyGroups[g.dataset.key].mids});
   else if (g.dataset.kind === "c") setSel({type:"c", cid:g.dataset.cid});
@@ -358,7 +389,7 @@ addEventListener("keydown", e => { if (e.key === "Escape") setSel(null); });
 function setSel(sel) { state.sel = sel; applySel(); }
 function applySel() {
   const sel = state.sel;
-  svg.classList.toggle("has-sel", !!sel);
+  let anyShape = false;
   for (const g of svg.querySelectorAll("g.ov")) {
     let on = false;
     if (sel) {
@@ -367,8 +398,12 @@ function applySel() {
       else if (sel.type === "c") on = g.dataset.cid === sel.cid;
       else if (sel.type === "roof") on = g.dataset.role === sel.role;
     }
+    if (on) anyShape = true;
     g.classList.toggle("sel", on);
   }
+  // dim the canvas ONLY when something on it is actually highlighted — selecting
+  // a no-geometry row must not fade every overlay with nothing to point at.
+  svg.classList.toggle("has-sel", !!sel && anyShape);
   for (const el of document.querySelectorAll(".mrow, .card")) {
     let on = false;
     if (sel) {
@@ -403,7 +438,7 @@ function h2(txt, toggle) {
 function layerBox(checked, fn) {
   const c = document.createElement("input");
   c.type = "checkbox"; c.checked = checked; c.title = "show layer";
-  c.onclick = e => { fn(c.checked); showPage(state.page); };
+  c.onclick = e => { fn(c.checked); applyLayers(); };
   return c;
 }
 
@@ -469,9 +504,17 @@ function mrow(m, locatable) {
   d.className = "mrow"; d.dataset.mid = m.id;
   const pg = Array.isArray(m.page) ? m.page.join(", ")
            : Number.isInteger(m.page) ? "p" + (m.page + 1) : "";
+  // when the line qty is DERIVED (e.g. a two-tracer average) the drawn polygon
+  // carries its own value — show both so the shape and the number never seem to lie
+  const gval = m.geometry
+    ? (m.unit === "LF" ? m.geometry.perim_lf : m.geometry.area_sf) : null;
+  const hint = (gval != null && m.qty && Math.abs(gval - m.qty) / m.qty > 0.005)
+    ? `<span class="nog" title="the drawn polygon's own measure; the line qty is derived — see note">shape ${fmt(gval)}</span>`
+    : "";
   d.innerHTML = `<span class="badge ${esc(m.source)}">${esc(m.source)}</span>
     <span class="trade">${esc(m.trade)}</span>
     <span class="conf ${esc(m.confidence)}">${esc(m.confidence)}</span>
+    ${hint}
     ${locatable ? "" : `<span class="nog">not locatable — ${esc(m.method)}</span>`}
     <span class="qty">${fmt(m.qty)}</span><span class="unit">${esc(m.unit)}</span>
     <span class="pg">${esc(pg)}</span>`;
@@ -553,11 +596,12 @@ function mrow(m, locatable) {
   panel.appendChild(f);
 })();
 
-/* start on the first rendered page with measurements, else first rendered */
+/* start on the first rendered page carrying ANY overlay content (measurements,
+   certification component polygons, or roof lines), else first rendered */
 (function start() {
   const rendered = Object.keys(SHEETS).filter(k => SHEETS[k].png).map(Number);
-  const withMeas = rendered.filter(p => measByPage[p]);
-  showPage((withMeas.length ? withMeas : rendered.length ? rendered : [0])[0]);
+  const withContent = rendered.filter(hasContent);
+  showPage((withContent.length ? withContent : rendered.length ? rendered : [0])[0]);
 })();
 
 /* legend */

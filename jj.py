@@ -99,6 +99,17 @@ def cmd_verify():
     good &= ok('engine self-test', rc == 0 and 'ALL PASS' in out,
                'ALL PASS' if 'ALL PASS' in out else out[-160:])
 
+    # Unit tests were once wired to NO runner: test_area_certification went red on a
+    # reworded message while every gate above stayed green. Never again -- every
+    # tools/tests/test_*.py runs here (unittest-style files exit non-zero the same way).
+    tests_dir = os.path.join(SKILL, 'tools', 'tests')
+    for t in sorted(f for f in os.listdir(tests_dir)
+                    if f.startswith('test_') and f.endswith('.py')):
+        rc, out = run([sys.executable, os.path.join(tests_dir, t)], cwd=SKILL,
+                      timeout=900)
+        tail = next((l.strip() for l in reversed(out.splitlines()) if l.strip()), '')
+        good &= ok(f'unit {t}', rc == 0, tail[:110])
+
     rc, out = run([sys.executable,
                    os.path.join(WORKSPACE, 'estimator_accuracy',
                                 'refresh_golden_fixture_certification.py')], cwd=WORKSPACE)

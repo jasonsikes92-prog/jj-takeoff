@@ -85,11 +85,30 @@ def main():
     # allow-lists admit the method + origin (certification can accept dims evidence)
     assert "printed-dimension-chains" in eng._AREA_ENGINE_METHODS
     assert eng._AREA_DIMS_ORIGIN == "jnj_takeoff.plan-printed-dims.v1"
+    assert eng._AREA_METHOD_ORIGINS["printed-dimension-chains"] == eng._AREA_DIMS_ORIGIN
+
+    # --- the DISPATCH path (the production route, not the direct call): Roberts'
+    # review-confidence scale must be ACCEPTED (leg verification is the scale
+    # proof), no clip machinery may run, and the origin comes from the method map.
+    # Regression: the pixel-grade scale gate + find_drawing_region once made this
+    # path refuse the method on its own motivating fixture.
+    import tempfile
+    tmp = tempfile.mkdtemp(prefix="dims-dispatch-")
+    ev = eng._measure_area_evidence(
+        doc, {"page": PAGE, "method": "printed-dims", "walk": walk,
+              "origin_pt": origin}, tmp, "dims-dispatch-check")
+    assert ev["method"] == "printed-dimension-chains"
+    assert ev["origin"] == eng._AREA_DIMS_ORIGIN
+    assert ev["clip"] is None, "dims evidence must not carry a pixel clip"
+    assert ev["geometry"] and ev["geometry"]["points"], ev.get("geometry_note")
+    assert abs(ev["qty"] - r["area_sf"]) < 0.01
+    assert os.path.exists(ev["view"]), "dims overlay PNG must exist (gate requires it)"
 
     doc.close()
     print(f"PASS: printed-dims outline on Roberts p{PAGE + 1} — walk {W} x {D} ft from "
           f"the sheet's own chains -> {r['area_sf']} SF anchored in page points; "
-          f"fabricated leg refused, open walk refused, allow-lists admit cal #66")
+          f"axis-checked legs; fabricated leg refused, open walk refused; dispatch "
+          f"path accepts review-confidence scale with no clip machinery")
 
 
 if __name__ == "__main__":
