@@ -1,265 +1,216 @@
-# J&J Takeoff — Session Handoff
+# J&J Takeoff — Engineering Handoff (Virtual Takeoff era)
 
-**Written 2026-08-04.** This is the single entry point. Read it before touching source, running a plan, or authorizing any paid API call.
-
-It replaces the old `START_HERE.md` and supersedes `docs/HANDOFF-2026-08-03.md` and `docs/ROADMAP.md` on **state and next actions** — those two remain the best source for deep method detail and the autonomous engine's phase breakdown, and are accurate through 2026-08-03.
-
----
-
-## 1. Where everything is
-
-```
-C:\Users\jason\JJ-Takeoff\          THE program. git repo, 583 MB, 11 commits.
-├── tools\jnj_takeoff.py            the measurement authority (~5,700 lines)
-├── tools\tests\                    golden suite — 6 houses with real ground truth
-├── reference\calibration.md        1,671 lines, 64 data points — the durable memory
-├── reference\rate_book.json        603 template lines + a Jason-approved overrides list
-├── templates\                      18-division estimate + measurement sheets
-├── eval\coverage.py                answered fraction at zero false positives
-├── eval\scale_sweep.py             ⭐ run at intake — catches print-rescaled sets
-├── eval\verify_backup.py           proves the OneDrive mirror is byte-faithful
-├── eval\push_to_github.ps1         private remote, waits on `gh auth login`
-├── eval\truth\ + eval\corpus\      690 positive truths / 1,167 zeros; 10-job corpus
-├── levelground\                    report + market pricing + bid-gap engine + live site
-├── jobs\                           L J Show, Guarino, Dugger takeoffs
-├── docs\                           evaluation, lessons, fork plan, consolidation
-└── jj.py                           verify · backup · status · estimate · save
-```
-
-`~\.claude\skills\jnj-estimate-takeoff` is a **junction** to this repo, so the
-`jnj-estimate-takeoff` skill resolves unchanged. Pre-consolidation copy parked at
-`~\.claude\_pre-consolidation-2026-08-04\`.
-
-**Not here:** `C:\Users\jason\_ARCHIVE\estimating-exhaust-2026-08-04\` holds 10.9 GB of
-autonomous-engine run artifacts plus 2 MB of pre-git engine history. Recoverable, out of the way.
-`Desktop\Claude\estimator_accuracy\` (717 MB) still holds the autonomous engine's **source** —
-kept for later harvest, not being developed.
+**Written:** 2026-08-14 14:24 EDT · **Repo:** `C:\Users\jason\JJ-Takeoff` · **Branch:** `virtual-takeoff` @ `9d1b2a0`
+**Prior handoff:** `HANDOFF-archive-2026-08-14-1424.md` (still the best source for repo layout, the `jj.py verify` gate meanings, and the 2026-08-04 consolidation history)
 
 ---
 
-## 2. Prove it before trusting it
+## 1. Mission
 
-```bash
-cd C:\Users\jason\JJ-Takeoff
-```
-```bash
-python jj.py verify
-```
+Turn the takeoff engine into a **virtual takeoff**: every measured quantity is clickable
+geometry drawn on the plan sheet, Jason reviews and *teaches* by drawing colored markup
+(never forms), and the area gate certifies honestly from two independent inputs. This is
+our answer to Handoff.ai's pitch — same glass cockpit, but on our locked rate book, our
+fail-closed gates, our calibration. Doctrine stands: supervised v1 ships; autonomous
+stays defunded.
 
-**Expected right now — `VERIFY: NOT GREEN`, and that is the correct baseline:**
+## 2. Current State
 
-| Gate | State |
-|---|---|
-| golden measurement suite | ✅ 6/6 houses green, 22/22 asserts, 13/13 comparisons |
-| engine self-test | ✅ ALL PASS |
-| fixture certification | ✅ no drift *(re-certified 2026-08-05 after the engine change)* |
-| offline system test | ❌ red — pre-existing |
-| readiness (expects not_ready) | ⚠ **16 passed / 13 failed** vs an 18/11 baseline |
-| coverage | ✅ 8 of 2,880 (0.3%), **0 false positives** |
+**Verified right now (all run 2026-08-14 ~14:30 EDT, this exact tree):**
+- Engine self-test: **ALL PASS** (43 OK lines, incl. geometry round-trip, evidence
+  writer, Unicode-fraction parse). Unit battery: **7/7 PASS** (`test_area_certification,
+  area_measurement_integration, build_viewer, dims_outline, dugger_fail_closed,
+  slab_boundary_style, takeoff_evidence`). Golden suite after the last engine change:
+  **6/6 houses, 22/22 asserts, 13/13 comparisons, exit 0, deltas unchanged.** Fixture
+  certification RE-CERTIFIED 2026-08-14T17:54:32Z (engine untouched since).
+- **Evidence layer** (Phase A): every `run_takeoff` line carries a content-stable `id`
+  and, where a tracer produced one, its polygon in PDF points, self-checked two ways
+  (shoelace reproduces the qty; vertices inside the trace clip). Per-job
+  `evidence/takeoff_evidence.json` pins the plan by sha256; ledger enumerates every
+  sheet with frozen `detect_scale` verdicts.
+- **Viewer** (Phase B): `jobs\roberts_levelground\viewer\index.html` — SVG viewBox in
+  PDF points over sheet PNGs, bidirectional click sync, roof roles in engine colors,
+  per-sheet print-rescale badges, honest uncertified banner. No frameworks; works from
+  `file://`.
+- **Printed-dims verification** (Phase D, cal #66): `dims_outline_evidence()` — declared
+  walk, every leg must exist in the sheet's own chains ON ITS AXIS, closure ≤ 0.5 ft;
+  origin/method coupled via `_AREA_METHOD_ORIGINS` so relabeled evidence can never
+  self-verify (bypass was reproduced in review, now refused + regression-tested).
+- **Teach loop**: `TEACH-ROBERTS.bat` (one click) or
+  `python tools\viewer\build_viewer.py --job jobs\roberts_levelground --serve` →
+  localhost:5810, teach cards, Save → `apply_walks.py` → re-run → auto-reload.
+- **Jason's first drawn teaching is consumed**: his magenta footprint (screenshot
+  `Screenshot 2026-08-14 140952.png` in `OneDrive\Pictures\Screenshots`) →
+  `ingest_pink_markup.py` → **declared walk, 12 printed legs, 2,129.4 SF, closure
+  0.48 ft** (1.9% from the pixel trace, 1.5% from the plan's heated figure), parked in
+  `declared_walks.json` as **"crawlspace envelope (foundation footprint)"**.
 
-**All the red is in `estimator_accuracy\` — the stopped autonomous track. None of it blocks
-anything in §5.** Three distinct causes, in order of how much they matter (not much):
+**Half-built / superseded:**
+- The dropdown teach cards work but are the WRONG interface (Jason: "not sure how to
+  make your teach function work", then drew the answer). Markup-first is the design
+  now; the cards stay as verification detail only.
+- Edit mode (vertex drag / redraw / `apply_takeoff_review`) **not built** — Phase C's
+  remaining half.
+- Garage + porch walks undeclared (Jason will pink them the same way).
 
-1. **Two blockers predate the consolidation**, confirmed by running the original `jj.py` from the
-   old tree and getting an identical result. Both trace to the 2026-08-03 vision-client landing:
-   the production-engine snapshot rejects a new dependency edge
-   (`run_phase1_measurement_observations.mjs -> anthropic_structured_vision_client.mjs`), and
-   readiness gained `all_fields_implementation_paths_wired`.
-   **Owed: is that edge intended?** A ruling, not a patch.
-2. **`historical_golden_regression_guard_certified` appeared 2026-08-04**, after the framing-layer
-   engine change and the re-certification that followed it. **The underlying golden data is
-   healthy** — the certification records `exitCode 0`, 22/22 measurement assertions, 13/13
-   comparison checks, 0 known gaps, 0 skipped, 0 errors. The gate reads
-   `summary.unwiredProbes / skippedOrNeedsPlan / errors`, and the certification file writes those
-   under `result`, not `summary`. It looks like certification *plumbing*, not a quality signal —
-   but that was not run to ground, deliberately.
-3. ⚠ **If you change `tools/jnj_takeoff.py` or `run_golden.py`, fixture certification WILL drift**
-   and cascade into readiness. Fix:
-   ```bash
-   python C:\Users\jason\OneDrive\Desktop\Claude\estimator_accuracy\refresh_golden_fixture_certification.py --write
-   ```
-   It refuses to certify unless the golden suite is green at that moment, which is the point.
+**Blocked, honestly:** Roberts certification. `run_prebid.py` still certifies against
+the old component model; per **cal #67 (Jason's ruling): a crawlspace is NOT heated** —
+the "heated crawlspace envelope" component certified heated_sf from a foundation scope.
+The declared pink walk deliberately does NOT wire in under the old name. Heated must be
+measured from the **floor plan (page index 4)** before the heated line certifies.
 
-**Do not spend a session chasing these.** Jason, 2026-08-04: *"don't waste tokens chasing a
-ghost."* They guard a track that is not being developed.
+**Exact next action — DONE 2026-08-14 ~18:50 EDT (same day, follow-on session):**
+run_prebid.py restructured per cal #67. Crawlspace component renamed to the declared
+walk's exact name, class `foundation` (new engine class, feeds neither rollup); pink
+walk wired as its verification — **first input-independent certified component:
+pixel 2,169.9 vs printed-dims 2,129.4 = 1.9% delta, inside the gate.** Second engine
+one-liner: certify-side `_area_evidence_errors` was refusing "review"-tier scale even
+for printed-dims, contradicting cal #66 on its motivating case — now admits review for
+dims-method evidence only (keyed via `_AREA_METHOD_ORIGINS`; regression-tested, 7
+tests in test_area_certification.py). `proposed_walks.json` regenerated (stale
+"heated crawlspace envelope" teach cards); viewer rebuilt + verified live: banner
+fails on exactly garage 2.6% / porch 7.7% / no heated component. Gates green
+(golden 6/6, self-test, battery, cert re-pinned 18:47Z). **Next:** Jason's garage +
+porch magenta → generalize `ingest_pink_markup.py`; heated awaits the Buildern watch
+session (open question 1). BOTH engine one-liners + this restructure are UNCOMMITTED
+awaiting Jason's ratify (`todo_takeoff_engine_ratify_0814` on Waiting-on-You).
 
-**Before shutting the laptop:** `python jj.py save` (mirror + commit). This repo is outside
-OneDrive; the `_backup\` mirror is its only backup until the GitHub remote is live.
+## 3. Decisions Made (and Why)
 
----
+| Decision | Alternatives | Reason | Reversibility |
+|---|---|---|---|
+| **PDF points + 0-based page index** for ALL persisted geometry | normalized coords (v3 corpus), pixels | identical to SVG's model → zero math in the browser; the roof review already chose it | load-bearing |
+| **cal #66:** printed dimension chains admitted as area-gate verification; walks are DECLARED inputs | auto-classified walks; widening the 2% tolerance | the three pixel methods measure different envelopes and can never agree; classifiers overfit (see #65); printed-vs-pixels is what a human checks | Jason's ruling — settled |
+| **cal #67:** crawlspace ≠ heated; heated is a floor-plan scope | keep the foundation-trace proxy (numbers nearly matched) | right number, wrong SCOPE is the proxy variant of right-number-wrong-shape | Jason's ruling — settled |
+| **Markup-first teaching** — ingest colored marker on screenshots; forms demoted | dropdown teach cards (built first, rejected same day) | Jason answers geometry by drawing (roof review precedent; pink footprint) | settled by direct feedback |
+| `_AREA_METHOD_ORIGINS` single map drives evidence stamp + independence + pricing cross-check | separate allow-lists | one place a new method must declare its origin; relabeled dicts can't self-verify (reproduced exploit) | load-bearing |
+| Viewer = vanilla HTML/SVG, `file://`-safe, no build step | React/pdf.js | repo has no JS toolchain; sha-pinned static artifact | easy to change later |
+| Geometry that fails self-check ships as `null` + flagged check, never wrong | ship best-effort geometry | a wrong overlay invites wrong corrections | load-bearing |
+| Handoff-H1 benchmark **parked** until after the viewer; then load their output into OUR viewer vs golden truth | trial immediately | viewer is source-agnostic; better tooling to judge them with | revisit any time |
+| Full renders only for role-mapped sheets; thumbs for the rest | render all 12 | teach-save reruns the build; render cost ×4 otherwise | trivial |
 
-## 3. What changed on 2026-08-04
+## 4. Architecture & Key Files
 
-### The program was consolidated out of eleven locations
-13.2 GB of estimating material across the workspace, `~\.claude\`, and Desktop became one 583 MB
-git repo. 1,097 MB deleted, 10.9 GB archived, nothing lost — every deletion was verified against
-the repo **and** the backup mirror by sha256 first.
+**Created this session:**
+- `tools\viewer\build_viewer.py` — evidence → viewer builder; sha gate; `--serve` =
+  localhost:5810 teach loop (POST `/teach` → save answers → `apply_walks.py` → rebuild).
+- `tools\viewer\viewer_template.html` — the whole UI (CSS+JS, one file): canvas,
+  panel, teach cards, `__TAKEOFF_DATA__` placeholder filled by str.replace.
+- `tools\tests\test_takeoff_evidence.py · test_build_viewer.py · test_dims_outline.py`
+- `jobs\roberts_levelground\`: `propose_walks.py` (trace topology + chain snapping →
+  `proposed_walks.json` incl. per-axis printed pools), `apply_walks.py` (answers →
+  `declared_walks.json` → rerun), `ingest_pink_markup.py` (Jason's marker → registered,
+  chain-verified walk), `TEACH-ROBERTS.bat`, `declared_walks.json` (the pink walk).
 
-⛔ **`.estimate_deps` was not dead weight — it was actively harmful.** It sat at `sys.path[0]` in
-two tests and its stale numpy shadowed the working system copy, which is why
-`test_area_measurement_integration.py` was dying on `No module named
-numpy._core._multiarray_umath`. **Deleting it fixed the test.** Don't re-vendor packages.
+**Modified significantly:**
+- `tools\jnj_takeoff.py` (+~700 lines, all additive): `parse_dim` reads CAD fraction
+  artifacts; `_px_poly_to_page_pts/_poly_area_perim_pts/_geometry_record/_measurement_id`;
+  tracers return `polygon_pts`; `dims_outline_evidence`; `_measure_area_evidence`
+  per-method scale/clip policy; `sha256_file`; `write_takeoff_evidence`; `run_takeoff`
+  geometry attachment + `roof_lines` block (honors `roof_clip`); rollup
+  `component_ids`; self-tests.
+- `jj.py` — `verify` now runs every `tools\tests\test_*.py` as a gate.
+- `reference\calibration.md` — #65 (slab boundary declared), #66, #67. **Next is #68.**
+- `jobs\roberts_levelground\run_prebid.py` — consumes `declared_walks.json` for
+  verification sides.
+- Outside this repo: `Desktop\Claude\.claude\launch.json` gained `takeoff-viewer`
+  (static :5800) and `takeoff-teach` (:5810) entries — session preview only; the
+  durable path is the `.bat`.
 
-### Five live rates loaded (Jason, 2026-08-04)
+**Looks touchable, isn't:** `Desktop\Claude\estimator_accuracy\` (stopped autonomous
+track — harvest-only); `tools\tests\golden\*\expected.yaml` asserted values and
+tolerances (add keys only, never edit values; every fixture edit forces cert refresh).
 
-| Line | Was | Now |
-|---|---|---|
-| Framing Lumber | $14.00 | **$10.00** /SF under-roof |
-| Framing Labor | $6.50 | **$6.00** /SF **per framed layer** |
-| Electrical | $7.00 | **$6.00** /SF heated + garage, **porches excluded** |
-| Siding — Vertical B&B | $4.50 | **$4.40** /SF wall |
-| Siding — Horizontal Lap Hardi | — | **$3.30** /SF wall (confirmed) |
-| Drywall Level 4 | — | **$1.44** /SF (confirmed) |
+## 5. Gotchas & Hard-Won Knowledge
 
-Written into **both** `rate_book.json["lines"]` (what `price_lines()` actually reads) and
-`["overrides"]` (the audit trail with evidence + approval date). ⚠ **`price_lines()` does not read
-`overrides` — a new rate must go in both or it won't price.**
+- **CAD dimension text lies twice:** Unicode vulgar fractions (`60'-10¼"` as one
+  codepoint) AND dropped slashes (`13'-6 1 4"`). `parse_dim` now normalizes both;
+  before the fix the Roberts foundation sheet showed 9 chains, after: 25. Any "the
+  sheet doesn't print that dim" claim must survive this check first.
+- **Registering Jason's screenshots:** grayscale/desaturation both fail (the plan's own
+  linework is BLUE). Use the **inverted red channel** (blue ink dark in R; his magenta
+  and the plan's red scribbles self-erase at R≈255), then verify with the **landmark
+  oracle** — dimension-label positions must land on ink (100% of 50 vs 22% shifted
+  control). Correlation score alone is blur-limited garbage on an 800px upload.
+- **His marker is pure magenta (255,128,255)**, not pastel pink — sample the file, don't
+  guess colors.
+- **Area is translation-invariant:** a shoelace self-check can't catch a missed clip
+  offset — that's why `_geometry_record` also enforces vertex-in-clip containment.
+- **pt vs ft units bite:** the dims closing-vertex dedup once compared 0.5 *points*
+  against a 0.5 *foot* gate and silently stripped geometry from legal walks.
+- `setPointerCapture` retargets `pointerup` to the svg — canvas clicks must use the
+  element captured at `pointerdown`.
+- `npx serve` clean-URLs strip the trailing slash and break relative paths — always
+  open `/viewer/`, not `/viewer/index.html`.
+- **`_page_scale` "review" on Roberts is CORRECT** (print-rescaled ~7.5% off standard,
+  86–187 votes). The dims path accepts it because leg verification IS the scale proof;
+  the pixel path still demands high/good or explicit checks.
+- `jj.py save` commits the **Desktop\Claude** workspace repo (`WORKSPACE`), not this
+  one — commit here explicitly.
+- Preview servers (:5800/:5810) die with the Claude session; `TEACH-ROBERTS.bat` is
+  the durable launcher.
+- After ANY `tools\jnj_takeoff.py` edit:
+  `python Desktop\Claude\estimator_accuracy\refresh_golden_fixture_certification.py --write`
+  (refuses unless golden is green — that's the point).
 
-The template's $14 lumber was the outlier that cost $33k on L J Show; three completed jobs came in
-at $9.35, $9.24, $9.20.
+## 6. Conventions In Play
 
-### ⭐ Framing labor is per framed LAYER, not per footprint (calibration #64)
+- Gates after every engine change: golden 6/6 + self-test ALL PASS + unit battery +
+  cert refresh. `jj.py verify` runs all of it now.
+- Additive keys only in engine dicts — no signature breaks; consumers read by key.
+- Fail-closed everywhere: refuse loudly, never guess, never silently price
+  (`estimate_from_takeoff` `unpriced`, gate errors verbatim in the viewer).
+- **Declared inputs over inference** for anything a human reads in seconds
+  (`slab_boundary`, `pitch_calls`, walks — cal #43/#65/#66).
+- Function-local imports in the engine; comments say WHY, never WHAT.
+- Calibration entries are numbered and append-only (`## Data point #NN — TITLE (date)`).
+- Commits: descriptive first line, body of consequences, end with
+  `Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>`.
+- `jobs\**\viewer\` and `graphify-out\` are generated → gitignored. Job PNGs/PDFs stay
+  out of git by doctrine (see `.gitignore` header).
+- Governing rules: `~\.claude\CLAUDE.md` (simplicity/surgical/verified),
+  `Desktop\Claude\CLAUDE.md` (working map), this file.
 
-**The biggest finding of the session.** $6.00/SF buys **one framed system** over an area:
+## 7. Open Questions
 
-| What | Layers | $/SF |
-|---|---|---|
-| Basement / 1st / 2nd / 3rd / garage, **including the roof over them** | 1 | $6 |
-| Covered porch, or any roofed area outside the house | 1 | $6 |
-| Deck — framing and posts only, no roof | 1 | $6 |
-| **Covered deck** — the deck **and** its roof | **2** | **$12** |
-| **Covered concrete patio** — roof only; a slab isn't framed | **1** | **$6** |
+1. **How does Jason derive heated SF on the floor plan?** Which boundary/face, which
+   exclusions? Best answered in the planned Buildern watch session — do NOT guess a
+   proxy again (cal #67).
+2. **Garage + porch walks** — awaiting Jason's magenta on viewer screenshots; then
+   generalize `ingest_pink_markup.py` (it currently declares one hardcoded component).
+3. Does certification for Roberts ultimately pair pink-walk (markup) verifications with
+   pixel primaries per component, or printed-dims? Both are input-independent of
+   pixels; markup is Jason-authoritative. Likely: markup confirms shape, chains confirm
+   lengths (already how ingest works) — formalize as the standard verification.
+4. `opentakeoff_eval\` — 3 stray source files flagged by `jj.py save` lint since before
+   this session: track, ignore-with-reason, or delete? (Jason's call, low stakes.)
+5. `roof_surface_sq` still has no geometry (face decomposition emits zones, not
+   polygons) — worth persisting zone outlines for the viewer later.
+6. Phase E (wire `slab_area_sf` → `slab_concrete` in `RATE_BOOK`) waits until an area
+   certification actually passes.
 
-Reconciles two clean jobs at Jason's $6.00: **Peterson +0.2%, Wilson +1.4%.** Flat $6.00 without
-the rule reads −7% to −9%.
+## 8. Do Not Touch
 
-**This supersedes calibration #33's "$6.50 blended, DEFINITIVELY FLAT."** That was a fudge factor —
-the missing second layers averaged ~8% of framing labor, a flat rate absorbed them as a fake
-premium, and the residual got explained away as "complexity/site." It fit three actuals to ~2%
-while being structurally wrong, the same failure as the two earlier `footer_lf` formulas that hit
-Jason's number through cancelling errors.
+- Golden `expected.yaml` asserted values/tolerances; the 2% reconciliation; the
+  fail-closed refusals (undeclared slab boundary, unverified scale, unprinted legs).
+- `_AREA_METHOD_ORIGINS` coupling — adding a method WITHOUT declaring its origin must
+  stay impossible.
+- The declared pink walk's name **"crawlspace envelope (foundation footprint)"** — do
+  not rewire it under "heated" to make certification pass (that's the exact wrong-scope
+  disease cal #67 forbids).
+- `HANDOFF-archive-*.md`, `docs\HANDOFF-2026-08-03.md` — history, not litter.
+- `estimator_accuracy\` source — harvest-only.
+- The dropdown teach cards: leave them as verification detail; don't "finish" them into
+  the primary interface — markup-first is settled.
 
-**How it was found, and why it matters procedurally:** Jason stated $6.00; the assertion graded it
-−7.6% against actuals; the disagreement was surfaced rather than tuned away; Jason explained the
-formula. **Widening the tolerance to make $6.00 pass would have buried the rule and left every
-deck house under-bid.** Never tune a test to match an unverified rate.
+## 9. Resume Command
 
-Two deck paths, same arithmetic, different meaning — a `deck paths` self-test pins them apart:
-- `covered_deck_sf` — a roofed deck, already inside under-roof SF → buys a **second** layer
-- `open_deck_sf` — uncovered deck / balcony / rooftop deck, **not under roof at all** → buys its
-  **one** layer as an addition
-
-⛔ **Watkins is not evidence — do not re-open it.** Its master-bedroom deck + rooftop balcony was a
-special case settled with a **blanket allowance**, isn't drawn on the only plan set on this machine,
-and its 292 SF was solved backward from the actual (circular). Jason: *"don't waste tokens chasing
-a ghost."* The rule stands on Wilson + Peterson.
-
----
-
-## 4. Two rules that cost real money
-
-**1. Never take the scale from the title-block note.** Roughly **1 set in 6** is printed
-off-nominal. Roberts says `1/4" = 1'-0"` (18.000 pt/ft) and actually measures **16.714** on 187
-dimension votes — trusting the note understates **every area by 14.5%**, and nothing on the sheet
-discloses it.
-
-```bash
-python eval/scale_sweep.py
-```
-Flags `WHOLE-SET RESCALED` with the area-error figure, versus isolated mixed-scale detail sheets.
-**Run it at intake on every plan set.**
-
-**2. Never wrong beats always answers.** All ten graded jobs terminate
-`more_information_required` with **zero false positives**. A wrong quantity that looks right gets
-bid. That property is the product — grow what it answers without ever losing it.
-
----
-
-## 5. What to do next
-
-### Level Ground — the measurement problem is already solved
-A pre-bid report needs **six numbers**, not the estimate's 230 rows: `heated_sf`, `framing_sf`,
-`roof_surface_sq`, `foundation_wall_lf`, `slab_area_sf`, `basement_area_sf`. Everything else is
-static advocacy content — the 8-item `PRE_BID_SCOPE_CHECKLIST` and 4 `STANDARD_UNKNOWNS`. The
-golden suite already proves those six at 0.0–1.7% on real plan sets.
-
-1. **End-to-end dry run — the only untested link.** `gen_reports.py` injects a **hardcoded sample**
-   takeoff, so `run_takeoff → report_from_takeoff` has never run on a real set. Use roberts: a real
-   12-sheet set that is *also* the print-rescaled one, so it exercises the scale guard in the same
-   pass. **Time it — that's the unit cost per sale, and it tells you whether $99 works.**
-2. **Stripe live activation** — per `levelground\TODO.md` the buy button is still in **test mode**;
-   a real customer cannot pay. LLC and EIN are done. This is the actual launch blocker.
-3. **Then the bid-gap half** — `ingest_bid()` / `findings_from_bid()` are built and self-tested.
-   Reading and reconciliation, an AI strength. Second sale to the same customer.
-
-### J&J takeoff — ordered by dollars
-1. **Make the plan side agree with itself.** On L J Show p5, `window_count()` returns **22** while
-   the reconcile's own parser returns **30 windows / 40 doors** — same page, two parsers. And 40
-   doors on a floor plan is wrong; the "suffix-less tag ≥6'6" is a door" rule over-fires. Fix this
-   *before* elevation reconciliation, or the alerts name numbers nobody can act on.
-2. **Then openings reconciliation.** Jason's ruling: *match = reconciled; mismatch = alert me, never
-   auto-resolve; mulls are the first hypothesis (double = 2 windows, triple = 3).* Measured:
-   elevations **48**, Jason's hand takeoff **46**, plan tags **22**. ⚠ On L J Show every plan tag
-   came back `basis: single` — that set carries no mull markers at all, and the two sides read mulls
-   from different notations (plan wants a nearby DOUBLE/TRIPLE word, elevation wants a `(2)` prefix).
-3. **Apply fixes already built but never shipped** — `elevation_opening_count()` returns 43 while
-   the shipped L J Show estimate still carries 22; `beam_wrap_lf()` returns 289 vs Jason's 291.
-4. **Register a real holdout.** The prospective registry is empty, 0 of 10. Everything to date is
-   historical replay and the golden fixtures say so in their own comments. **Until then, "trust" is
-   unmeasured** — 6/6 green is regression protection, not accuracy evidence.
-
----
-
-## 6. Owed by Jason
-
-| # | Item | Blocks |
-|---|---|---|
-| 1 | `gh auth login`, then `eval\push_to_github.ps1` | off-machine backup. ⚠ what would go up is confidential — `calibration.md` (real client names, job costs, margins), the truth file, the rate book. No live secrets (verified; `.env.local` untracked). The script hard-gates on visibility=PRIVATE before anything leaves the machine |
-| 2 | **A learning price log** (his ask) — prices move a lot and nothing currently ages a rate or prompts re-confirmation. `rate_candidates.json` + `propose_rate()` + `overrides` exist; the aging/prompting layer does not. Needs scoping | rate freshness |
-| 3 | **National-average × regional multiplier fallback** (his ask) — `MARKET_RATE_BOOK` has a US cost index and correctly *refuses* to price an uncalibrated market, but works at whole-house $/SF, not per line item. Decide the altitude before extending | Level Ground pricing away from Middle GA |
-| 4 | Is the 8/3 `anthropic_structured_vision_client` dependency edge intended? | the two red verify gates |
-| 5 | Selections — short form, infer from finish schedule, or flag? | full sheet population |
-| 6 | The other ~18 Buildern measurement sheets | grader ceiling, stuck at 42.85% |
-| 7 | Is $3.30 lap Hardi flat regardless of exposure? | `SIDING_RATE_BOOK` splits lap by exposure (7" vs 5"); Jason gave one flat number. `rate_book.json` is correct today, the code book's lap entries are flagged OPEN |
-| 8 | Engineered floor rate — used for basement/2nd/3rd floors **and** as garage ceiling joists to span the long direction. Calibration has ~$9/SF | framing material completeness |
-
----
-
-## 7. Conventions that are not optional
-
-- **Address Jason by name at the start of every response** (`~\.claude\CLAUDE.md` §10).
-- **`calibration.md` is the durable memory.** Every method ruling and cold-test result goes there as
-  a numbered data point. **Now at #64 — check the max before appending** (a #55 collision has
-  happened).
-- **Every new engine function ships with a self-test line** asserting against a real Jason number.
-  `python tools/jnj_takeoff.py` must print `ALL PASS`.
-- **A tolerance wide enough to never fail is worse than no assertion.** Never widen a tolerance to
-  make a number pass — §3 is what that discipline bought.
-- **Matching the number is not the same as being right.** `footer_lf` and the $6.50 framing rate
-  both hit Jason's numbers while structurally wrong.
-- **Conflicts are flagged, never auto-resolved.**
-- **Client-facing Descriptions carry no takeoff math or internal tags** — `lint_buildern_descriptions()`
-  must return 0 before shipping.
-- Per-line markup 15/7/7/7/8/15; **no O&P or contingency lines** (Buildern's summary handles those).
-- **Verify provenance before claiming work.** ChatGPT ("Sol") also works on these systems.
-- Zero paid API calls without an explicit call cap **and** USD cap quoted to Jason first.
-
-## 8. Do not touch
-
-- **Roof footprint 6,159 SF and the shingle/metal split on L J Show** — settled on physical evidence.
-- **`footer_lf()`'s formula** — two earlier versions hit Jason's number by accident and were
-  structurally wrong. The current one is deliberately 6.1% off his raw and correct.
-- **Drywall $1.44/SF** — Jason re-confirmed 8/4 ("gives us some cushion").
-- **`estimator_accuracy\production_runs\`** (now archived) — immutable, never edit in place.
-- **Do not re-open Watkins** as framing evidence.
-- **Do not claim 98% accuracy** or call historical plans holdouts.
-
----
-
-## 9. Resume command
-
-> Read `C:\Users\jason\JJ-Takeoff\HANDOFF.md`. Then `cd C:\Users\jason\JJ-Takeoff && python jj.py verify` — expect **`VERIFY: NOT GREEN`**: golden suite 6/6, self-test ALL PASS, certification clean, coverage 0.3% at 0 false positives, and red on the offline system test + readiness **16/13**. That is the correct baseline, not a regression, and all of it lives in the stopped autonomous track.
->
-> Highest-value next action is the **Level Ground end-to-end dry run on roberts** — it is the one untested link and it produces the unit-cost number that decides the $99 price. Time it.
->
-> Do not widen a test tolerance to make a number pass. Do not re-open Watkins. Run `python jj.py save` before the laptop is shut down or moved.
+> Read `HANDOFF.md`. Then restructure `jobs\roberts_levelground\run_prebid.py`'s
+> component model per cal #67 (crawlspace envelope = foundation scope; heated components
+> measured from floor plan index 4) and wire `declared_walks.json` as the crawlspace
+> verification; re-run `python jobs\roberts_levelground\run_prebid.py` and rebuild the
+> viewer. Run the full gates before and after any engine edit. Do not relabel the pink
+> walk as "heated", do not edit golden fixture values, and confirm with Jason before
+> changing anything outside `jobs\roberts_levelground\` + `tools\viewer\`. When his
+> garage/porch magenta screenshots appear in `OneDrive\Pictures\Screenshots`,
+> generalize `ingest_pink_markup.py` and ingest them the same way.
