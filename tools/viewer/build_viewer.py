@@ -199,6 +199,11 @@ def serve(job, port=5810):
 
     httpd = http.server.ThreadingHTTPServer(("127.0.0.1", port), Handler)
     print(f"teach loop live: http://localhost:{port}/  (Ctrl+C to stop)")
+    try:
+        import webbrowser
+        webbrowser.open(f"http://localhost:{port}/")
+    except Exception:
+        pass
     httpd.serve_forever()
 
 
