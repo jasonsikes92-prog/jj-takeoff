@@ -54,7 +54,10 @@ def _referenced_pages(ev):
             if isinstance(e.get("page"), int):
                 pages.add(e["page"])
     for entry in ev.get("sheet_ledger", []):
-        if isinstance(entry.get("page"), int):
+        # the ledger enumerates EVERY sheet (doctrine) — only role-mapped pages
+        # earn a full-size render; the rest keep thumbnails (PNG-bloat guard,
+        # and the serve-mode teach loop rebuilds on every save).
+        if entry.get("roles") and isinstance(entry.get("page"), int):
             pages.add(entry["page"])
     return sorted(pages)
 
