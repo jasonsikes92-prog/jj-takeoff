@@ -1760,3 +1760,36 @@ closure 0.48 ft -> declared: 12 printed legs, 2,129.4 SF crawlspace envelope,
 1.9% from the pixel trace, 1.5% from the plan's heated figure — the walk his pink
 drew is provably the sheet's own numbers. Build markup ingestion INTO the teach loop;
 demote per-leg forms to verification detail.
+
+## Data point #68 — CLOSURE-DERIVED WALK LEGS ADMITTED, ONE PER AXIS (Jason's ruling, 2026-08-14)
+
+**Ruling:** when a walk leg is not printed as a single dimension on the sheet, the
+gate may accept the value FORCED BY CLOSURE — computed from the other legs, which
+must ALL chain-verify. At most one derived leg per axis; the drawn stroke must agree
+with the forced value within the drawing tolerance (1.2 ft); the leg is marked
+`derived-by-closure` in the walk and in the evidence, never claimed as printed.
+
+**Why it adds no fabrication freedom:** with every other leg printed and closure
+required ≤ 0.5 ft, the missing leg is DETERMINED, not declared — the engine
+re-derives it and refuses any marked leg that differs from the forced value by more
+than 0.05 ft. You cannot "derive" a number the sheet's own dimensions do not already
+force. Exhibit: the Roberts garage's right side is 24'-5¼" (26'-8" minus the 2'-2¾"
+notch); the sheet never prints it, no real sheet prints every leg of every walk.
+
+**Same math, second use — closure rescue:** when every leg snapped to a printed
+value but the walk cannot close, exactly one leg is mis-snapped; un-snap each
+candidate in turn, let closure force it, accept a UNIQUE winner (re-snapped to a
+printed value at the forced position, or derived within stroke tolerance), refuse on
+ambiguity. Reproduced live on Jason's 8/14 markups: porch left side 10.4 → forced
+8.75; heated first leg closure-assisted to the printed 33'-7" its stroke had missed
+by 1.7 ft.
+
+**Enforced in** `dims_outline_evidence` (marker vocabulary strict, cap per axis,
+forced-match ±0.05), pinned in `test_dims_outline.py`; resolution lives in
+`jobs/roberts_levelground/ingest_pink_markup.py::resolve_walk`.
+
+⚠ **Open (next ruling needed):** with Jason's garage/porch/heated walks declared,
+the components now fail the 2% gate against their PIXEL primaries (6.0% / 32.5% /
+15.6%) — the tracers measure the footing/ink outline while the dims measure the
+dimensioned wall face, and on small components the face offset alone exceeds 2%.
+What is the pixel-side instrument for a declared-walk component? (cal #69)

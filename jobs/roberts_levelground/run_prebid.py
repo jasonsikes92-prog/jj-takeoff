@@ -328,7 +328,8 @@ def main():
         fp_checks = scale_checks(doc[fp_idx], fp_ppf)
         x, y = w["origin_pt"]
         xs, ys = [x], [y]
-        for L, d in w["walk"]:
+        for leg in w["walk"]:  # legs may carry a cal #68 marker as a 3rd element
+            L, d = leg[0], leg[1]
             dx, dy = {"R": (1, 0), "L": (-1, 0), "D": (0, 1), "U": (0, -1)}[d]
             x += dx * L * fp_ppf
             y += dy * L * fp_ppf

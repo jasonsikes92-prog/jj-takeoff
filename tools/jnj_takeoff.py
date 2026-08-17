@@ -1010,15 +1010,29 @@ def dims_outline_evidence(page, ppf, walk, origin_pt, overlay_path=None,
     every declared leg against the sheet itself: each length must appear in
     read_dimension_chains (as a chain run or total) within chain_tol_pct; the walk
     must close within closure_tol_ft; a leg the sheet does not print is a hard error
-    — a fabricated walk cannot certify. origin_pt (page points, the walk's start
-    corner) anchors the polygon for display; polygon_outline's y-down 'D' matches PDF
-    page coordinates."""
+    — a fabricated walk cannot certify.
+
+    cal #68 (Jason's ruling 2026-08-14): a leg may instead be marked
+    [len_ft, dir, "derived-by-closure"] when the sheet does not print it as a single
+    dimension. At most ONE derived leg per axis; every other leg must chain-verify;
+    and the derived value must EQUAL the value the other legs force through closure
+    (±0.05 ft) — so the marker carries zero declarative freedom: you cannot "derive"
+    a number the rest of the sheet's own dimensions do not already determine.
+    origin_pt (page points, the walk's start corner) anchors the polygon for
+    display; polygon_outline's y-down 'D' matches PDF page coordinates."""
     if not walk or len(walk) < 3:
         raise ValueError("printed-dims verification requires a declared walk of "
                          "at least 3 legs")
     if not origin_pt or len(tuple(origin_pt)) != 2:
         raise ValueError("printed-dims verification requires origin_pt (page points)")
-    walk = [(float(l), str(d).upper()) for l, d in walk]
+    parsed = []
+    for leg in walk:
+        length, d = float(leg[0]), str(leg[1]).upper()
+        marker = str(leg[2]) if len(leg) > 2 else None
+        if marker is not None and marker != "derived-by-closure":
+            raise ValueError(f"unknown walk-leg marker {marker!r} on {length} ft {d}")
+        parsed.append((length, d, marker))
+    walk = [(length, d) for length, d, _ in parsed]
     po = polygon_outline(walk)
     if po["closure_err_ft"] > closure_tol_ft:
         raise ValueError(
@@ -1033,8 +1047,30 @@ def dims_outline_evidence(page, ppf, walk, origin_pt, overlay_path=None,
         printed[c["orient"]].update(c["runs"])
         printed[c["orient"]].add(c["total"])
     axis = {"R": "H", "L": "H", "U": "V", "D": "V"}
+    sign = {"R": 1, "L": -1, "D": 1, "U": -1}
+    derived_per_axis = {"H": 0, "V": 0}
     checks, missing = [], []
-    for length, d in walk:
+    for i, (length, d, marker) in enumerate(parsed):
+        if marker == "derived-by-closure":
+            ax = axis[d]
+            derived_per_axis[ax] += 1
+            if derived_per_axis[ax] > 1:
+                raise ValueError(
+                    f"cal #68 allows at most one derived-by-closure leg per axis; "
+                    f"axis {ax} has more")
+            # the forced value: what the OTHER legs on this axis leave for this one
+            others = sum(sign[d2] * l2 for i2, (l2, d2, _m2) in enumerate(parsed)
+                         if axis[d2] == ax and i2 != i)
+            forced = -others * sign[d]
+            if forced <= 0 or abs(forced - length) > 0.05:
+                raise ValueError(
+                    f"derived-by-closure leg {length} ft {d} does not match the "
+                    f"closure-forced value {forced:.2f} ft — a derived leg has no "
+                    f"freedom (cal #68)")
+            checks.append({"leg_ft": length, "dir": d, "axis": ax,
+                           "printed_ft": None, "derived_by_closure": True,
+                           "ok": True})
+            continue
         pool = printed[axis[d]]
         best = min(pool, key=lambda v: abs(v - length)) if pool else None
         ok = (best is not None
@@ -1048,7 +1084,7 @@ def dims_outline_evidence(page, ppf, walk, origin_pt, overlay_path=None,
             "printed-dims walk declares lengths the sheet does not print: "
             + ", ".join(missing)
             + " — every leg must appear in the page's own dimension chains "
-            "on its axis")
+            "on its axis (or be marked derived-by-closure, cal #68)")
     ox, oy = float(origin_pt[0]), float(origin_pt[1])
     pts = [[round(ox + x * ppf, 3), round(oy + y * ppf, 3)] for x, y in po["pts_ft"]]
     # polygon_outline appends one vertex per leg after the origin, so a gated walk
@@ -4005,6 +4041,11 @@ def _measure_area_evidence(doc, spec, evidence_dir, label):
                  if clip is not None else None),
         "geometry": geometry,
         "geometry_note": geometry_note,
+        # cal #68's contract: a derived-by-closure leg is MARKED in the evidence.
+        # The per-leg chain verdicts are the dims method's proof trail — persisting
+        # them is what lets the viewer and any auditor see which legs the sheet
+        # printed and which one closure forced. Pixel methods have no equivalent.
+        **({"chain_checks": result.get("chain_checks")} if is_dims else {}),
     }
 
 

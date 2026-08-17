@@ -59,6 +59,139 @@
     209.58
    ],
    "confirmed_by": "jason-pink-markup Screenshot 2026-08-14 140952.png"
+  },
+  {
+   "name": "garage slab",
+   "page": 3,
+   "walk": [
+    [
+     26.67,
+     "D"
+    ],
+    [
+     13.52,
+     "R"
+    ],
+    [
+     2.23,
+     "U"
+    ],
+    [
+     13.52,
+     "R"
+    ],
+    [
+     24.44,
+     "U",
+     "derived-by-closure"
+    ],
+    [
+     27.04,
+     "L",
+     "derived-by-closure"
+    ]
+   ],
+   "origin_pt": [
+    739.27,
+    769.12
+   ],
+   "confirmed_by": "jason-pink-markup Screenshot 2026-08-14 154056.png"
+  },
+  {
+   "name": "front porch slab",
+   "page": 3,
+   "walk": [
+    [
+     8.75,
+     "D",
+     "derived-by-closure"
+    ],
+    [
+     6.9,
+     "R"
+    ],
+    [
+     2.08,
+     "U"
+    ],
+    [
+     16.6,
+     "R"
+    ],
+    [
+     6.67,
+     "U"
+    ],
+    [
+     23.48,
+     "L"
+    ]
+   ],
+   "origin_pt": [
+    1210.13,
+    1053.75
+   ],
+   "confirmed_by": "jason-pink-markup Screenshot 2026-08-14 154056.png"
+  },
+  {
+   "name": "heated envelope (floor plan)",
+   "page": 4,
+   "walk": [
+    [
+     33.58,
+     "D"
+    ],
+    [
+     26.38,
+     "R"
+    ],
+    [
+     17.08,
+     "D"
+    ],
+    [
+     23.19,
+     "R"
+    ],
+    [
+     6.92,
+     "D"
+    ],
+    [
+     12.17,
+     "R"
+    ],
+    [
+     40.06,
+     "U"
+    ],
+    [
+     36.02,
+     "L"
+    ],
+    [
+     15.38,
+     "U"
+    ],
+    [
+     15.04,
+     "L"
+    ],
+    [
+     2.38,
+     "U"
+    ],
+    [
+     10.68,
+     "L",
+     "derived-by-closure"
+    ]
+   ],
+   "origin_pt": [
+    957.66,
+    285.77
+   ],
+   "confirmed_by": "jason-pink-markup Screenshot 2026-08-14 153901.png"
   }
  ]
 }

@@ -82,6 +82,47 @@ def main():
     except ValueError as exc:
         assert "does not close" in str(exc), exc
 
+    # --- cal #68 (Jason's ruling 2026-08-14): a leg the sheet does not print may be
+    # marked derived-by-closure. The marker carries ZERO declarative freedom: the
+    # value must equal what the other (all chain-verified) legs force through
+    # closure (+/-0.05 ft), at most one per axis. ---------------------------------
+    r68 = eng.dims_outline_evidence(
+        page, ppf, [[W, "R"], [D, "D"], [W, "L"], [D, "U", "derived-by-closure"]],
+        origin)
+    assert abs(r68["area_sf"] - r["area_sf"]) <= 0.01
+    d_checks = [c for c in r68["chain_checks"] if c.get("derived_by_closure")]
+    assert len(d_checks) == 1 and d_checks[0]["ok"] \
+        and d_checks[0]["printed_ft"] is None, d_checks
+
+    # a derived value that is not the forced one is refused — note the walk still
+    # CLOSES within 0.5 ft here, so this isolates the 0.05-ft forced-match gate
+    try:
+        eng.dims_outline_evidence(
+            page, ppf,
+            [[W, "R"], [D, "D"], [W, "L"], [D - 0.3, "U", "derived-by-closure"]],
+            origin)
+        raise AssertionError("non-forced derived leg was accepted")
+    except ValueError as exc:
+        assert "closure-forced" in str(exc), exc
+
+    # a second derived leg on the same axis is refused
+    try:
+        eng.dims_outline_evidence(
+            page, ppf,
+            [[W, "R"], [D, "D", "derived-by-closure"], [W, "L"],
+             [D, "U", "derived-by-closure"]], origin)
+        raise AssertionError("two derived legs on one axis were accepted")
+    except ValueError as exc:
+        assert "one derived-by-closure leg per axis" in str(exc), exc
+
+    # an unknown marker is refused, never silently ignored
+    try:
+        eng.dims_outline_evidence(
+            page, ppf, [[W, "R"], [D, "D"], [W, "L"], [D, "U", "eyeballed"]], origin)
+        raise AssertionError("unknown marker was accepted")
+    except ValueError as exc:
+        assert "unknown walk-leg marker" in str(exc), exc
+
     # allow-lists admit the method + origin (certification can accept dims evidence)
     assert "printed-dimension-chains" in eng._AREA_ENGINE_METHODS
     assert eng._AREA_DIMS_ORIGIN == "jnj_takeoff.plan-printed-dims.v1"
@@ -107,8 +148,9 @@ def main():
     doc.close()
     print(f"PASS: printed-dims outline on Roberts p{PAGE + 1} — walk {W} x {D} ft from "
           f"the sheet's own chains -> {r['area_sf']} SF anchored in page points; "
-          f"axis-checked legs; fabricated leg refused, open walk refused; dispatch "
-          f"path accepts review-confidence scale with no clip machinery")
+          f"axis-checked legs; fabricated leg refused, open walk refused; cal #68 "
+          f"derived-by-closure admitted only at the forced value, one per axis; "
+          f"dispatch path accepts review-confidence scale with no clip machinery")
 
 
 if __name__ == "__main__":

@@ -122,18 +122,23 @@ def doc_page_width(page):
     return w
 
 
-def magenta_contours(shot, want, np, cv2):
-    """Largest `want` closed magenta loops, eroded to their stroke centerline.
-    Jason's marker is pure magenta (255,128,255 sampled; Paint default 255,0,255).
-    The viewer's verification purple (176,111,216) has r<230 and the plan's red
-    markup has b<100 — both excluded by the mask."""
+def magenta_contours(shot, want, np, cv2, color="magenta"):
+    """Largest `want` closed marker loops, eroded to their stroke centerline.
+    Jason's magenta is pure (255,128,255 sampled; Paint default 255,0,255); his
+    green (porch, 8/14 foundation markup) samples ~(128,255,158) RGB. The
+    viewer's verification purple (176,111,216) has r<230 and the plan's red
+    markup has b<100 — excluded by the magenta mask; the plan's own BLUE
+    linework and green-ish fills fail g-b>60 — excluded by the green mask."""
     b, g, r = (shot[:, :, 0].astype(int), shot[:, :, 1].astype(int),
                shot[:, :, 2].astype(int))
-    mask = ((r > 230) & (b > 230) & (r - g > 60) & (b - g > 60)).astype(np.uint8) * 255
+    if color == "green":
+        mask = ((g > 200) & (g - r > 60) & (g - b > 60)).astype(np.uint8) * 255
+    else:
+        mask = ((r > 230) & (b > 230) & (r - g > 60) & (b - g > 60)).astype(np.uint8) * 255
     n_pink = int(mask.sum() / 255)
-    print(f"magenta pixels: {n_pink}")
+    print(f"{color} pixels: {n_pink}")
     if n_pink < 2000:
-        print("REFUSED: magenta stroke not found at the sampled color")
+        print(f"REFUSED: {color} stroke not found at the sampled color")
         return []
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, np.ones((9, 9), np.uint8))
     cnts, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -157,8 +162,149 @@ def magenta_contours(shot, want, np, cv2):
     return out
 
 
+AXIS = {"R": "H", "L": "H", "U": "V", "D": "V"}
+SIGN = {"R": 1, "L": -1, "D": 1, "U": -1}
+SNAP_TOL = 1.2    # traced stroke -> printed value
+TRACE_TOL = 1.2   # traced stroke -> closure-derived value (cal #68 drawing agreement)
+CLOSE_TOL = 0.5   # ft, the cal #66 closure gate
+
+
+def _leg_val(leg):
+    if leg.get("printed") is not None:
+        return leg["printed"]
+    if leg.get("derived") is not None:
+        return leg["derived"]
+    return leg["traced"]
+
+
+def _axis_err(legs, ax):
+    return sum(SIGN[l["dir"]] * _leg_val(l) for l in legs if AXIS[l["dir"]] == ax)
+
+
+def _closure(legs):
+    return (_axis_err(legs, "H") ** 2 + _axis_err(legs, "V") ** 2) ** 0.5
+
+
+def _forced(legs, i):
+    """What closure forces leg i to be, given every OTHER leg on its axis."""
+    ax = AXIS[legs[i]["dir"]]
+    others = sum(SIGN[l["dir"]] * _leg_val(l)
+                 for j, l in enumerate(legs) if AXIS[l["dir"]] == ax and j != i)
+    return -others * SIGN[legs[i]["dir"]]
+
+
+def resolve_walk(edges, pool):
+    """cal #66/#68 resolution: snap every leg to the sheet's printed chains; when a
+    sheet doesn't print a leg as a single dimension, derive it from closure (cal #68
+    — the value is FORCED by the other, chain-verified legs; the stroke must agree
+    within TRACE_TOL; at most one per axis); when an all-printed walk cannot close,
+    rescue by un-snapping exactly one leg the same closure-forced way, refusing on
+    ambiguity. Returns (walk, log, refusals) — walk legs are [len, dir] or
+    [len, dir, 'derived-by-closure']."""
+    legs = []
+    for e in edges:
+        cand = pool[AXIS[e["dir"]]]
+        best = min(cand, key=lambda v: abs(v - e["len"])) if cand else None
+        legs.append({"traced": e["len"], "dir": e["dir"], "at": e["at"],
+                     "printed": best if best is not None
+                     and abs(best - e["len"]) <= SNAP_TOL else None})
+    log, refusals = [], []
+
+    # cal #68: one unprinted leg per axis is closure-derivable; two are not
+    for ax in ("H", "V"):
+        open_i = [i for i, l in enumerate(legs)
+                  if AXIS[l["dir"]] == ax and l["printed"] is None]
+        if len(open_i) > 1:
+            for i in open_i:
+                l = legs[i]
+                refusals.append(f"{l['dir']} ~{l['traced']:.1f} ft at "
+                                f"({l['at'][0]:.0f},{l['at'][1]:.0f}) unprinted, and "
+                                f"axis {ax} has {len(open_i)} unprinted legs — "
+                                f"closure can only force one (cal #68)")
+            continue
+        if len(open_i) == 1:
+            i = open_i[0]
+            l = legs[i]
+            forced = _forced(legs, i)
+            if forced <= 0:
+                refusals.append(f"{l['dir']} leg at ({l['at'][0]:.0f},{l['at'][1]:.0f}): "
+                                f"closure forces a NEGATIVE length — the drawing's "
+                                f"direction is inconsistent with the printed legs")
+                continue
+            near = min(pool[ax], key=lambda v: abs(v - forced)) if pool[ax] else None
+            if near is not None and abs(near - forced) <= SNAP_TOL \
+                    and abs(near - l["traced"]) <= SNAP_TOL + 1.0:
+                l["printed"] = near
+                log.append(f"closure-assisted snap: {l['dir']} traced "
+                           f"{l['traced']:.2f} -> printed {near} (forced {forced:.2f})")
+            elif abs(forced - l["traced"]) <= TRACE_TOL:
+                l["derived"] = round(forced, 2)
+                log.append(f"cal #68 derived-by-closure: {l['dir']} traced "
+                           f"{l['traced']:.2f} -> forced {forced:.2f} "
+                           f"(sheet prints no single dim for this leg)")
+            else:
+                refusals.append(f"{l['dir']} ~{l['traced']:.1f} ft at "
+                                f"({l['at'][0]:.0f},{l['at'][1]:.0f}): closure forces "
+                                f"{forced:.2f} ft but the stroke disagrees by "
+                                f"{abs(forced - l['traced']):.2f} ft (> {TRACE_TOL})")
+    if refusals:
+        return None, log, refusals
+
+    # closure rescue: all legs printed/derived, but the walk does not close —
+    # exactly one leg must be mis-snapped. Un-snap each candidate in turn and let
+    # closure force it (same cal #68 math); a unique winner is taken, ambiguity
+    # refuses. Axes already carrying a derived leg are exempt (one per axis).
+    if _closure(legs) > CLOSE_TOL:
+        derived_axes = {AXIS[l["dir"]] for l in legs if l.get("derived") is not None}
+        candidates = []
+        for i, l in enumerate(legs):
+            ax = AXIS[l["dir"]]
+            if ax in derived_axes or l["printed"] is None:
+                continue
+            trial = [dict(t) for t in legs]
+            trial[i]["printed"] = None
+            if any(t["printed"] is None and j != i for j, t in enumerate(trial)
+                   if AXIS[t["dir"]] == ax):
+                continue
+            forced = _forced(trial, i)
+            if forced <= 0:
+                continue
+            near = min(pool[ax], key=lambda v: abs(v - forced)) if pool[ax] else None
+            if near is not None and abs(near - forced) <= 0.06 and near != l["printed"]:
+                trial[i]["printed"] = near
+                kind = f"re-snapped {l['dir']} {l['printed']} -> printed {near}"
+            elif abs(forced - l["traced"]) <= TRACE_TOL:
+                trial[i]["printed"] = None
+                trial[i]["derived"] = round(forced, 2)
+                kind = (f"un-snapped {l['dir']} {l['printed']} -> derived-by-closure "
+                        f"{forced:.2f}")
+            else:
+                continue
+            if _closure(trial) <= CLOSE_TOL:
+                deviation = sum(abs(_leg_val(t) - t["traced"]) for t in trial)
+                candidates.append((round(deviation, 3), i, trial, kind))
+        candidates.sort(key=lambda c: c[0])
+        if not candidates:
+            return None, log, [f"printed legs do not close ({_closure(legs):.2f} ft) "
+                               f"and no single-leg closure rescue resolves it"]
+        if len(candidates) > 1 and candidates[1][0] - candidates[0][0] < 0.3:
+            return None, log, [
+                "closure rescue is AMBIGUOUS — multiple single-leg readings close "
+                "the walk: " + "; ".join(c[3] for c in candidates[:3])]
+        _, i, legs, kind = candidates[0]
+        log.append(f"closure rescue: {kind}")
+
+    walk = []
+    for l in legs:
+        if l.get("derived") is not None:
+            walk.append([l["derived"], l["dir"], "derived-by-closure"])
+        else:
+            walk.append([l["printed"], l["dir"]])
+    return walk, log, []
+
+
 def contour_to_walk(ap, transform, page, pool, ppf):
-    """Contour px -> page points -> rectilinear legs snapped to printed chains."""
+    """Contour px -> page points -> rectilinear traced legs + walk origin."""
     s, ox, oy, render_zoom = transform
     pts = [[(p[0][0] * s + ox) / render_zoom, (p[0][1] * s + oy) / render_zoom]
            for p in ap]
@@ -178,19 +324,8 @@ def contour_to_walk(ap, transform, page, pool, ppf):
             edges.append({"dir": d, "len": L, "at": (x0, y0)})
     if len(edges) > 1 and edges[0]["dir"] == edges[-1]["dir"]:
         edges[0]["len"] += edges.pop()["len"]
-    axis = {"R": "H", "L": "H", "U": "V", "D": "V"}
-    walk, misses = [], []
-    for e in edges:
-        cand = pool[axis[e["dir"]]]
-        best_v = min(cand, key=lambda v: abs(v - e["len"])) if cand else None
-        if best_v is None or abs(best_v - e["len"]) > 1.2:
-            misses.append(f"{e['dir']} ~{e['len']:.1f} ft at "
-                          f"({e['at'][0]:.0f},{e['at'][1]:.0f}) nearest printed {best_v}")
-            walk.append([round(e["len"], 2), e["dir"], "UNPRINTED"])
-        else:
-            walk.append([best_v, e["dir"]])
     origin = min(pts, key=lambda p: (p[1], p[0]))
-    return walk, misses, origin
+    return edges, origin
 
 
 def traced_primary_sf(component):
@@ -219,6 +354,8 @@ def main():
                          "map to components by DESCENDING AREA")
     ap.add_argument("--page", type=int, default=None,
                     help="0-based sheet index (default: 3, or the component's own)")
+    ap.add_argument("--color", default="magenta", choices=("magenta", "green"),
+                    help="marker color to extract (Jason color-codes components)")
     args = ap.parse_args()
     components = args.component or [LEGACY_COMPONENT]
     page = args.page
@@ -254,7 +391,7 @@ def main():
         pool[ch["orient"]].add(ch["total"])
     doc.close()
 
-    loops = magenta_contours(shot, len(components), np, cv2)
+    loops = magenta_contours(shot, len(components), np, cv2, color=args.color)
     if len(loops) < len(components):
         print(f"REFUSED: {len(components)} component(s) requested but only "
               f"{len(loops)} magenta loop(s) found")
@@ -263,15 +400,18 @@ def main():
     declared, failures = [], []
     for component, ap_loop in zip(components, loops):
         print(f"\n-- {component} --")
-        walk, misses, origin = contour_to_walk(ap_loop, transform, page, pool, ppf)
-        for w in walk:
-            print("  ", w)
-        if misses:
+        edges, origin = contour_to_walk(ap_loop, transform, page, pool, ppf)
+        walk, log, refusals = resolve_walk(edges, pool)
+        for line in log:
+            print("  *", line)
+        if refusals:
             failures.append(component)
-            print("REFUSED to declare — legs with no printed value:")
-            for m in misses:
+            print("REFUSED to declare:")
+            for m in refusals:
                 print("  ?", m)
             continue
+        for w in walk:
+            print("  ", w)
         po = eng.polygon_outline([(w[0], w[1]) for w in walk])
         print(f"walk: {po['area_sf']} SF, perim {po['perimeter_lf']} LF, "
               f"closure {po['closure_err_ft']} ft")
@@ -291,7 +431,7 @@ def main():
                       f"mapping is not trustworthy")
                 continue
         declared.append({"name": component, "page": page,
-                         "walk": [[w[0], w[1]] for w in walk],
+                         "walk": walk,  # legs keep their cal #68 marker if present
                          "origin_pt": [round(origin[0], 2), round(origin[1], 2)],
                          "confirmed_by": f"jason-pink-markup {os.path.basename(args.image)}"})
 
