@@ -149,6 +149,17 @@ def magenta_contours(shot, want, np, cv2, color="magenta"):
         # (r>>b) out.
         mask = ((np.abs(r - 163) < 45) & (np.abs(g - 73) < 45)
                 & (np.abs(b - 164) < 45)).astype(np.uint8) * 255
+    elif color == "brown":
+        # Paint's "Brown" (~185,122,87 -> renders 168,120,75), sampled off the
+        # 8/17 floor-plan canvas. Nothing in the plan palette competes.
+        mask = ((np.abs(r - 168) < 45) & (np.abs(g - 120) < 40)
+                & (np.abs(b - 75) < 45) & (r - b > 60)).astype(np.uint8) * 255
+    elif color == "pink":
+        # Paint's "Pink" (~240,192,208 sampled). The discriminator vs the RED
+        # handwriting's anti-alias halos (which read ~240,176,176): true pink
+        # carries BLUE over green (b-g ~ +16); red halos are gray-toned (g==b).
+        mask = ((r > 215) & (g > 140) & (b > 160) & (b - g > 5)
+                & (b - g < 45) & (r - b > 20)).astype(np.uint8) * 255
     else:
         mask = ((r > 230) & (b > 230) & (r - g > 60) & (b - g > 60)).astype(np.uint8) * 255
     n_pink = int(mask.sum() / 255)
@@ -409,7 +420,7 @@ def main():
     ap.add_argument("--page", type=int, default=None,
                     help="0-based sheet index (default: 3, or the component's own)")
     ap.add_argument("--color", default="magenta",
-                    choices=("magenta", "green", "purple"),
+                    choices=("magenta", "green", "purple", "brown", "pink"),
                     help="marker color to extract (Jason color-codes components)")
     args = ap.parse_args()
     components = args.component or [LEGACY_COMPONENT]

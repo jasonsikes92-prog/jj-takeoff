@@ -124,78 +124,78 @@
   },
   {
    "name": "garage slab",
-   "page": 3,
+   "page": 4,
    "walk": [
     [
      26.67,
      "D"
     ],
     [
-     13.52,
+     14.17,
      "R"
     ],
     [
-     2.23,
+     2.38,
      "U"
     ],
     [
-     13.52,
-     "R"
+     13.43,
+     "R",
+     "derived-by-closure"
     ],
     [
-     24.44,
+     24.29,
      "U",
      "derived-by-closure"
     ],
     [
-     27.04,
-     "L",
-     "derived-by-closure"
+     27.6,
+     "L"
     ]
    ],
    "origin_pt": [
-    739.27,
-    769.12
+    738.91,
+    833.9
    ],
    "markup_polygon_pts": [
     [
-     734.73,
-     773.66
+     738.91,
+     833.9
     ],
     [
-     736.24,
-     1200.61
+     739.41,
+     1277.35
     ],
     [
-     955.77,
-     1200.61
+     971.89,
+     1277.35
     ],
     [
-     958.8,
-     1162.76
+     972.39,
+     1237.36
     ],
     [
-     1187.42,
-     1162.76
+     1204.36,
+     1237.86
     ],
     [
-     1193.47,
-     769.12
+     1204.36,
+     839.4
     ]
    ],
    "registration": {
-    "scale": 3.0284,
+    "scale": 1.0,
     "offset": [
-     16,
+     0,
      0
     ],
     "landmark_rate": 1.0,
-    "landmark_n": 50,
-    "landmark_control": 0.3,
-    "image": "Screenshot 2026-08-14 154056.png",
-    "image_sha256": "DC8D897CD4B65DC955D28AD8AECA3F57FE06F01A75B573F8198E220C3CCB37A4"
+    "landmark_n": 82,
+    "landmark_control": 0.232,
+    "image": "ROBERTS-floorplan-DRAW-HEATED.png",
+    "image_sha256": "4BC6457E827116B1EE59FEBEE27AE26C969F9F1963305C4F5A55FE7399C1E112"
    },
-   "confirmed_by": "jason-pink-markup Screenshot 2026-08-14 154056.png"
+   "confirmed_by": "jason-brown-markup ROBERTS-floorplan canvas + chat ruling 26ft8in left side, 2026-08-17"
   },
   {
    "name": "front porch slab",

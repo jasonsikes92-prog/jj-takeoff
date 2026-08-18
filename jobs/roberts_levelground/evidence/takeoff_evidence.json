@@ -3,7 +3,7 @@
  "coordinate_frame": "pdf-points: PyMuPDF page coordinates, origin top-left, y-down, 1 pt = 1/72 in; page = 0-based page index",
  "plan": "C:\\Users\\jason\\JJ-Takeoff\\tools\\tests\\golden\\roberts\\plan.pdf",
  "plan_sha256": "0B5720FC85EC723DB2A64AFF913A2DF6DF39A578EB4B055BC1A80843ECAB4124",
- "generated": "2026-08-17T20:36:56",
+ "generated": "2026-08-17T21:00:56",
  "status": "more_information_required",
  "sheet_map": {
   "sqft_schedule": 2,
@@ -559,12 +559,12 @@
   {
    "trade": "heated_sf",
    "page": 4,
-   "why": "garage slab: geometry measures differ by 2.6% (limit 2.0%); front porch slab: geometry measures differ by 11.2% (limit 2.0%)"
+   "why": "front porch slab: geometry measures differ by 11.2% (limit 2.0%)"
   },
   {
    "trade": "framing_sf",
    "page": 4,
-   "why": "garage slab: geometry measures differ by 2.6% (limit 2.0%); front porch slab: geometry measures differ by 11.2% (limit 2.0%)"
+   "why": "front porch slab: geometry measures differ by 11.2% (limit 2.0%)"
   },
   {
    "trade": "roof_surface_sq",
@@ -821,103 +821,103 @@
    {
     "name": "garage slab",
     "classification": "garage",
-    "qty": 672.88,
-    "verification_qty": 691.0,
-    "delta_pct": 2.62,
+    "qty": 700.84,
+    "verification_qty": 704.1,
+    "delta_pct": 0.46,
     "independence": "input-independent",
     "primary": {
-     "qty": 672.88,
+     "qty": 700.84,
      "unit": "SF",
      "source": "MEASURED",
-     "sheet": "idx 3 Jason's registered markup",
-     "page": 3,
+     "sheet": "idx 4 Jason's registered markup",
+     "page": 4,
      "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\garage-slab-primary.png",
      "method": "markup-raster",
      "confidence": "review",
-     "ppf": 16.646,
+     "ppf": 16.714,
      "origin": "jnj_takeoff.jason-markup-raster.v1",
      "scale_method": "text-dims",
      "scale_checks": [],
-     "id": "mdd893bce4e",
+     "id": "madbf8a4070",
      "clip": null,
      "geometry": {
       "kind": "polygon",
       "points": [
        [
-        734.73,
-        773.66
+        738.91,
+        833.9
        ],
        [
-        736.24,
-        1200.61
+        739.41,
+        1277.35
        ],
        [
-        955.77,
-        1200.61
+        971.89,
+        1277.35
        ],
        [
-        958.8,
-        1162.76
+        972.39,
+        1237.36
        ],
        [
-        1187.42,
-        1162.76
+        1204.36,
+        1237.86
        ],
        [
-        1193.47,
-        769.12
+        1204.36,
+        839.4
        ]
       ],
       "closed": true,
-      "area_sf": 672.88
+      "area_sf": 700.84
      },
      "geometry_note": null
     },
     "verification": {
-     "qty": 691.0,
+     "qty": 704.1,
      "unit": "SF",
      "source": "MEASURED",
-     "sheet": "idx 3 printed dimension chains",
-     "page": 3,
+     "sheet": "idx 4 printed dimension chains",
+     "page": 4,
      "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\garage-slab-verification.png",
      "method": "printed-dimension-chains",
      "confidence": "review",
-     "ppf": 16.646,
+     "ppf": 16.714,
      "origin": "jnj_takeoff.plan-printed-dims.v1",
      "scale_method": "text-dims",
      "scale_checks": [],
-     "id": "m5ae60d7a6a",
+     "id": "m322cb4078e",
      "clip": null,
      "geometry": {
       "kind": "polygon",
       "points": [
        [
-        739.27,
-        769.12
+        738.91,
+        833.9
        ],
        [
-        739.27,
-        1213.069
+        738.91,
+        1279.662
        ],
        [
-        964.324,
-        1213.069
+        975.747,
+        1279.662
        ],
        [
-        964.324,
-        1175.948
+        975.747,
+        1239.883
        ],
        [
-        1189.378,
-        1175.948
+        1200.216,
+        1239.883
        ],
        [
-        1189.378,
-        769.12
+        1200.216,
+        833.9
        ]
       ],
       "closed": true,
-      "area_sf": 691.0
+      "area_sf": 704.1
      },
      "geometry_note": null,
      "chain_checks": [
@@ -929,28 +929,29 @@
        "ok": true
       },
       {
-       "leg_ft": 13.52,
+       "leg_ft": 14.17,
        "dir": "R",
        "axis": "H",
-       "printed_ft": 13.52,
+       "printed_ft": 14.17,
        "ok": true
       },
       {
-       "leg_ft": 2.23,
+       "leg_ft": 2.38,
        "dir": "U",
        "axis": "V",
-       "printed_ft": 2.23,
+       "printed_ft": 2.38,
        "ok": true
       },
       {
-       "leg_ft": 13.52,
+       "leg_ft": 13.43,
        "dir": "R",
        "axis": "H",
-       "printed_ft": 13.52,
+       "printed_ft": null,
+       "derived_by_closure": true,
        "ok": true
       },
       {
-       "leg_ft": 24.44,
+       "leg_ft": 24.29,
        "dir": "U",
        "axis": "V",
        "printed_ft": null,
@@ -958,11 +959,10 @@
        "ok": true
       },
       {
-       "leg_ft": 27.04,
+       "leg_ft": 27.6,
        "dir": "L",
        "axis": "H",
-       "printed_ft": null,
-       "derived_by_closure": true,
+       "printed_ft": 27.6,
        "ok": true
       }
      ]
@@ -1369,13 +1369,12 @@
    {
     "trade": "framing_sf",
     "schedule_qty": 3431.0,
-    "measured_qty": 2962.1,
-    "delta_pct": 13.7,
+    "measured_qty": 2990.1,
+    "delta_pct": 12.9,
     "role": "comparison-only"
    }
   ],
   "errors": [
-   "garage slab: geometry measures differ by 2.6% (limit 2.0%)",
    "front porch slab: geometry measures differ by 11.2% (limit 2.0%)"
   ]
  },

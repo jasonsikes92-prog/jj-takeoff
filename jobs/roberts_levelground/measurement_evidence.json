@@ -253,11 +253,10 @@
   ],
   "takeoff_status": "more_information_required",
   "area_certification_errors": [
-    "garage slab: geometry measures differ by 2.6% (limit 2.0%)",
     "front porch slab: geometry measures differ by 11.2% (limit 2.0%)"
   ],
   "seconds": {
-    "takeoff": 21.73,
+    "takeoff": 23.47,
     "report": 0.0
   }
 }

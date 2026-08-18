@@ -139,8 +139,8 @@
     "Your final selections -- a $12 tile and a $40 tile read identically on a floor plan.",
     "Market swings between signing and dry-in -- lumber and labor move.",
     "Permit and utility-connection fees, which vary by county and can't be verified from plans alone.",
-    "We could not measure heated living area from the plans provided (garage slab: geometry measures differ by 2.6% (limit 2.0%); front porch slab: geometry measures differ by 11.2% (limit 2.0%)) -- ask your builder for it.",
-    "We could not measure total area under roof from the plans provided (garage slab: geometry measures differ by 2.6% (limit 2.0%); front porch slab: geometry measures differ by 11.2% (limit 2.0%)) -- ask your builder for it.",
+    "We could not measure heated living area from the plans provided (front porch slab: geometry measures differ by 11.2% (limit 2.0%)) -- ask your builder for it.",
+    "We could not measure total area under roof from the plans provided (front porch slab: geometry measures differ by 11.2% (limit 2.0%)) -- ask your builder for it.",
     "We could not measure roof area from the plans provided (needs eye/VLM-verified pitch_calls + certified measured framing_sf (OCR pitch trap, cal #43 \u2014 never automated away)) -- ask your builder for it."
   ]
 }
