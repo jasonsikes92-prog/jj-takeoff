@@ -46,6 +46,15 @@
    "verdict": "MATCHED"
   },
   {
+   "sheet": "roof",
+   "line": "Shingles (surface, cal #70)",
+   "jason_base": 4695.7,
+   "system": 4700.0,
+   "note": "his flat bands x printed pitch factors vs face-decomposition",
+   "delta_pct": 0.1,
+   "verdict": "MATCHED"
+  },
+  {
    "sheet": "deck_windows",
    "line": "Deck (floor)",
    "jason_base": 364.9,
@@ -61,15 +70,6 @@
    "system": 250.9,
    "note": "candidate mapping only \u2014 his footers include garage/porch turndowns",
    "delta_pct": 24.5,
-   "verdict": "DISCREPANT"
-  },
-  {
-   "sheet": "roof",
-   "line": "Shingles (all pitches)",
-   "jason_base": 3724.2,
-   "system": 5230.0,
-   "note": "his traced planes vs face-decomposition \u2014 KNOWN discrepancy",
-   "delta_pct": 40.4,
    "verdict": "DISCREPANT"
   },
   {
@@ -205,7 +205,7 @@
    "line": "Roof Insulation",
    "jason_base": 3869.5,
    "system": null,
-   "note": "cross-checks his shingle planes (independent trace)",
+   "note": "cross-checks his flat traces (independent, also flat)",
    "verdict": "NOT_PRODUCED"
   },
   {
@@ -250,9 +250,9 @@
   }
  ],
  "counts": {
-  "MATCHED": 5,
+  "MATCHED": 6,
   "CLOSE": 1,
-  "DISCREPANT": 2,
+  "DISCREPANT": 1,
   "NOT_PRODUCED": 22
  }
 }

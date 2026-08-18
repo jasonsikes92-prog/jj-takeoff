@@ -3,7 +3,7 @@
  "coordinate_frame": "pdf-points: PyMuPDF page coordinates, origin top-left, y-down, 1 pt = 1/72 in; page = 0-based page index",
  "plan": "C:\\Users\\jason\\JJ-Takeoff\\tools\\tests\\golden\\roberts\\plan.pdf",
  "plan_sha256": "0B5720FC85EC723DB2A64AFF913A2DF6DF39A578EB4B055BC1A80843ECAB4124",
- "generated": "2026-08-17T21:10:25",
+ "generated": "2026-08-18T00:48:50",
  "status": "certified",
  "sheet_map": {
   "sqft_schedule": 2,
@@ -678,15 +678,15 @@
   },
   {
    "trade": "roof_surface_sq",
-   "qty": 52.3,
+   "qty": 47.0,
    "unit": "sq",
    "source": "MEASURED",
    "method": "face-decomposition",
    "confidence": "high",
    "page": 6,
-   "note": "bounds 51.41-53.19 sq over overhang range; ppf solved 18.631",
+   "note": "bounds 46.23-47.83 sq over overhang range; ppf solved 18.631",
    "geometry": null,
-   "id": "m31838048ce"
+   "id": "m0759e601dc"
   }
  ],
  "not_measured": [],

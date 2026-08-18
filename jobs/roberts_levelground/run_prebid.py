@@ -204,28 +204,29 @@ def evidence_sweep(doc, page_index, ppf, comps):
 
 
 def pitch_calls(doc, page_index):
-    """Roof pitch callouts from the sheet's TEXT layer, with positions, as
-    [(x_pt, y_pt, rise_over_12)]. cal #43 forbids raw OCR here; this set carries real text,
-    and the values were eye-verified against the rendered roof plan (12:12 majority, three
-    8:12, one 3:12 -- note the fixture comment says only '12:12 + 8:12')."""
+    """Roof pitch callouts from the sheet's TEXT LAYER, with positions, as
+    [(x_pt, y_pt, rise_over_12)]. cal #43 forbids raw OCR here; this set carries
+    real text, eye-verified against the rendered roof plan (12:12 majority, three
+    8:12, one 3:12 -- zoom-verified 2026-08-18 against the printed arrows).
+
+    The sloped-plane callouts print ROTATED along their slope arrows ('8 : 12'
+    with line dir (0,-1)), so the old word-pairing by same-line y-alignment saw
+    only the horizontal 12:12s -- the whole chain then billed every zone at
+    1.414 (52.3 sq vs the true ~47, the cal #70 residual). rawdict keeps each
+    callout as ONE span regardless of rotation, so a whole-span match needs no
+    pairing at all -- and dimension fragments can never combine into one."""
+    import re
     page = doc[page_index]
-    calls, pending = [], []
-    for w in page.get_text("words"):
-        pending.append(w)
-    text_items = []
-    for w in pending:
-        t = w[4].strip()
-        if t.isdigit():
-            text_items.append((int(t), (w[0] + w[2]) / 2, (w[1] + w[3]) / 2))
-    # callouts render as three words: rise, ':', 12  -- pair a rise with the '12' to its right
-    for rise, x, y in text_items:
-        if rise == 12 and any(abs(y - y2) < 3 and 0 < x - x2 < 40 and r2 != 12
-                              for r2, x2, y2 in text_items):
-            continue
-        near_run = [(r2, x2, y2) for r2, x2, y2 in text_items
-                    if r2 == 12 and abs(y - y2) < 3 and 0 < x2 - x < 40]
-        if near_run and rise in (3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16):
-            calls.append((round(x, 1), round(y, 1), rise))
+    calls = []
+    for block in page.get_text("rawdict")["blocks"]:
+        for line in block.get("lines", []):
+            for span in line.get("spans", []):
+                text = "".join(ch["c"] for ch in span.get("chars", [])).strip()
+                m = re.match(r"^(\d{1,2})\s*:\s*12$", text)
+                if m and int(m.group(1)) in (3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16):
+                    x0, y0, x1, y1 = span["bbox"]
+                    calls.append((round((x0 + x1) / 2, 1),
+                                  round((y0 + y1) / 2, 1), int(m.group(1))))
     return calls
 
 

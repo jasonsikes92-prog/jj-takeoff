@@ -93,16 +93,21 @@ def main():
         comp_qty("rear deck (floor plan)"),
         "same footprint measured as deck framing — bills separately from cover")
 
+    # cal #70: Jason's Buildern shingle lines are FLAT plan traces (legacy
+    # convention); the system emits pitch-corrected surface. Convert his bands
+    # by the sheet's PRINTED pitch factors before comparing — including the
+    # 3:12 the roof plan actually prints where his band label says "5 pitch".
     r = m["roof"]
-    shingle_base = sum(base(r[k]) for k in
-                      ("Shingle 5 pitch", "Shingles 8 Pitch",
-                       "Shingles 12 Pitch"))
+    factors = {"Shingle 5 pitch": 1.0308,     # printed 3:12, mislabeled 5
+               "Shingles 8 Pitch": 1.2019,
+               "Shingles 12 Pitch": 1.4142}
+    shingle_surface = sum(base(r[k]) * f for k, f in factors.items())
     roof_sq = line_qty("roof_surface_sq")
-    add("roof", "Shingles (all pitches)", shingle_base,
+    add("roof", "Shingles (surface, cal #70)", shingle_surface,
         roof_sq * 100 if roof_sq else None,
-        "his traced planes vs face-decomposition — KNOWN discrepancy")
+        "his flat bands x printed pitch factors vs face-decomposition")
     add("roof", "Roof Insulation", base(r["Roof Insulation"]), None,
-        "cross-checks his shingle planes (independent trace)")
+        "cross-checks his flat traces (independent, also flat)")
 
     f = m["foundation"]
     add("foundation", "Footers", base(f["Footers"]),
