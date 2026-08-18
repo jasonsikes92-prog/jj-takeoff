@@ -3,7 +3,7 @@
  "coordinate_frame": "pdf-points: PyMuPDF page coordinates, origin top-left, y-down, 1 pt = 1/72 in; page = 0-based page index",
  "plan": "C:\\Users\\jason\\JJ-Takeoff\\tools\\tests\\golden\\roberts\\plan.pdf",
  "plan_sha256": "0B5720FC85EC723DB2A64AFF913A2DF6DF39A578EB4B055BC1A80843ECAB4124",
- "generated": "2026-08-18T00:48:50",
+ "generated": "2026-08-18T17:34:01",
  "status": "certified",
  "sheet_map": {
   "sqft_schedule": 2,
@@ -687,6 +687,18 @@
    "note": "bounds 46.23-47.83 sq over overhang range; ppf solved 18.631",
    "geometry": null,
    "id": "m0759e601dc"
+  },
+  {
+   "trade": "footer_lf",
+   "qty": 321.9,
+   "unit": "LF",
+   "source": "MEASURED",
+   "method": "certified-walk-derivation",
+   "confidence": "high",
+   "page": 3,
+   "note": "crawlspace 239.7 + garage turndown 56.6 + porch turndown 25.6; stoop bump-outs not traced yet (~11 LF of the ground truth)",
+   "geometry": null,
+   "id": "m928c40ba67"
   }
  ],
  "not_measured": [],

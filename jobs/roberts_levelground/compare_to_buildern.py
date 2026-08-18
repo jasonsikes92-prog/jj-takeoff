@@ -111,8 +111,8 @@ def main():
 
     f = m["foundation"]
     add("foundation", "Footers", base(f["Footers"]),
-        line_qty("foundation_wall_lf"),
-        "candidate mapping only — his footers include garage/porch turndowns")
+        line_qty("footer_lf"),
+        "crawlspace walk perim + declared-adjacency turndowns; stoops pending")
 
     # everything else: not produced yet — the honest backlog
     consumed = {"SF FIRST FLOOR", "Garage", "Covered Porches", "Deck",

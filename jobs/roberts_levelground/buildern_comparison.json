@@ -67,10 +67,10 @@
    "sheet": "foundation",
    "line": "Footers",
    "jason_base": 332.5,
-   "system": 250.9,
-   "note": "candidate mapping only \u2014 his footers include garage/porch turndowns",
-   "delta_pct": 24.5,
-   "verdict": "DISCREPANT"
+   "system": 321.9,
+   "note": "crawlspace walk perim + declared-adjacency turndowns; stoops pending",
+   "delta_pct": 3.2,
+   "verdict": "CLOSE"
   },
   {
    "sheet": "deck_windows",
@@ -251,8 +251,7 @@
  ],
  "counts": {
   "MATCHED": 6,
-  "CLOSE": 1,
-  "DISCREPANT": 1,
+  "CLOSE": 2,
   "NOT_PRODUCED": 22
  }
 }

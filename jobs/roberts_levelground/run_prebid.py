@@ -380,6 +380,54 @@ def main():
     t_takeoff = time.time() - t0
     print(f"  status: {takeoff['status']}   ({t_takeoff:.1f}s)")
     cert = takeoff["area_certification"]
+
+    # --- footers: derived from CERTIFIED walks + a declared adjacency read -----------
+    # cal #43 pattern: which turndown edges are exposed is a two-second read off the
+    # FOUNDATION WALL PLAN — the garage's top edge lands on the heated footprint;
+    # the porch shares its top (house) AND left (garage) AND right (house step), so
+    # only its front face is new footer. Jason's Buildern ground truth (8/17):
+    # crawlspace 238.14 + garage 64.67 + porch 26.25 + stoop 3.47 = 332.5 base LF.
+    # His garage segment includes the entry-stoop bump-out outlines (~8 LF) that no
+    # walk traces yet, so the derived total runs ~3% shy and the note says so.
+    FOOTER_EXPOSED = {
+        "garage slab": (0, 1, 2, 3),          # left + notched bottom
+        "front porch slab": (1, 2, 3),        # the stepped front face only
+    }
+    if cert["ok"]:
+        def walk_legs(name):
+            w = declared.get(name)
+            return [float(l[0]) for l in w["walk"]] if w else None
+        crawl = walk_legs("crawlspace envelope (foundation footprint)")
+        gar = walk_legs("garage slab")
+        por = walk_legs("front porch slab")
+        if crawl and gar and por:
+            crawl_perim = sum(crawl)
+            gar_exp = sum(gar[i] for i in FOOTER_EXPOSED["garage slab"])
+            por_exp = sum(por[i] for i in FOOTER_EXPOSED["front porch slab"])
+            qty = crawl_perim + gar_exp + por_exp
+            footer_line = {
+                "trade": "footer_lf", "qty": round(qty, 1), "unit": "LF",
+                "source": "MEASURED", "method": "certified-walk-derivation",
+                "confidence": "high", "page": 3,
+                "note": (f"crawlspace {crawl_perim:.1f} + garage turndown "
+                         f"{gar_exp:.1f} + porch turndown {por_exp:.1f}; stoop "
+                         f"bump-outs not traced yet (~11 LF of the ground truth)"),
+                "geometry": None,
+                "id": eng._measurement_id("footer_lf", 3, "derived", f"{qty:.1f}"),
+            }
+            takeoff["lines"].append(footer_line)
+            # the evidence file was written inside run_takeoff, before this
+            # derivation existed — patch the derived line in so the viewer and
+            # the Buildern harness read the same takeoff the report prices
+            ev_path = os.path.join(args.evidence, "takeoff_evidence.json")
+            if os.path.exists(ev_path):
+                with open(ev_path, encoding="utf-8") as fh:
+                    ev_doc = json.load(fh)
+                ev_doc["measurements"] = [m for m in ev_doc.get("measurements", [])
+                                          if m.get("trade") != "footer_lf"]
+                ev_doc["measurements"].append(footer_line)
+                with open(ev_path, "w", encoding="utf-8") as fh:
+                    json.dump(ev_doc, fh, indent=1)
     print(f"  area certification: ok={cert['ok']}")
     for e in cert["errors"]:
         print(f"    - {e}")
