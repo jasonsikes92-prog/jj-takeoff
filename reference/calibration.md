@@ -1822,3 +1822,24 @@ the paired walk's leg verification is the ppf proof.
 artifacts of ~1580px screenshots (1 stroke px ≈ 3 page px; the 9×9 close kernel
 can swallow a 2-ft jog). Draw on the full-res staged canvases (4802px) — the same
 strokes carry 3× the precision and small jogs survive extraction.
+
+## Data point #70 — ROOFING LINES EMIT PITCH-CORRECTED SURFACE (Jason's ruling, 2026-08-17)
+
+**Found by the Buildern comparison harness:** Jason's manual shingle lines are FLAT
+plan-projected traces + 15% waste (Roberts: 3,724 ft² base = 42.8 sq purchased);
+the true pitch-corrected surface is ~47–52 sq. The ratio between the system's
+surface number and his flat traces is 1.404 — exactly the blended pitch factor of
+this 12:12-dominant roof, proving the two measured the same regions under
+different conventions.
+
+**Ruling:** the system emits PITCH-CORRECTED SURFACE per pitch band. The flat
+convention under-budgets steep roofs ~18%+ at 12:12; the rate book's per-square
+pricing assumes actual surface. His historical Buildern lines carry the legacy
+flat convention — comparisons against them must convert before judging.
+
+**Still open from the same comparison:** (a) our 52.3 sq vs his-traces×factors
+47.3 sq — a ~10% residual in zone assignment + overhang band, to be reconciled
+per pitch band; (b) he traced a 5-pitch band (porch/deck roofs) where the
+declared pitch_calls carry a different low-slope figure — verify against the
+sheet's printed pitch markers. Golden fixture pins roof LINE LENGTHS only, so
+none of this touches sacred values.

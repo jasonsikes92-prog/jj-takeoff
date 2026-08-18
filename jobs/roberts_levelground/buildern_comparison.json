@@ -1,0 +1,258 @@
+{
+ "rows": [
+  {
+   "sheet": "areas",
+   "line": "SF FIRST FLOOR",
+   "jason_base": 2127.2,
+   "system": 2099.0,
+   "note": "certified heated rollup",
+   "delta_pct": 1.3,
+   "verdict": "MATCHED"
+  },
+  {
+   "sheet": "areas",
+   "line": "Garage",
+   "jason_base": 714.6,
+   "system": 700.8,
+   "note": "certified component (markup primary)",
+   "delta_pct": 1.9,
+   "verdict": "MATCHED"
+  },
+  {
+   "sheet": "areas",
+   "line": "Covered Porches [front]",
+   "jason_base": 199.5,
+   "system": 198.4,
+   "note": "certified component",
+   "delta_pct": 0.6,
+   "verdict": "MATCHED"
+  },
+  {
+   "sheet": "areas",
+   "line": "Covered Porches [rear]",
+   "jason_base": 360.9,
+   "system": 357.3,
+   "note": "his porch-roof cover over the deck region",
+   "delta_pct": 1.0,
+   "verdict": "MATCHED"
+  },
+  {
+   "sheet": "areas",
+   "line": "Total under Roof",
+   "jason_base": 3416.2,
+   "system": 3355.5,
+   "note": "certified framing rollup",
+   "delta_pct": 1.8,
+   "verdict": "MATCHED"
+  },
+  {
+   "sheet": "deck_windows",
+   "line": "Deck (floor)",
+   "jason_base": 364.9,
+   "system": 357.3,
+   "note": "same footprint measured as deck framing \u2014 bills separately from cover",
+   "delta_pct": 2.1,
+   "verdict": "CLOSE"
+  },
+  {
+   "sheet": "foundation",
+   "line": "Footers",
+   "jason_base": 332.5,
+   "system": 250.9,
+   "note": "candidate mapping only \u2014 his footers include garage/porch turndowns",
+   "delta_pct": 24.5,
+   "verdict": "DISCREPANT"
+  },
+  {
+   "sheet": "roof",
+   "line": "Shingles (all pitches)",
+   "jason_base": 3724.2,
+   "system": 5230.0,
+   "note": "his traced planes vs face-decomposition \u2014 KNOWN discrepancy",
+   "delta_pct": 40.4,
+   "verdict": "DISCREPANT"
+  },
+  {
+   "sheet": "deck_windows",
+   "line": "Deck railing",
+   "jason_base": 47.8,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "deck_windows",
+   "line": "Windows",
+   "jason_base": 23,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "electrical",
+   "line": "Fans/Lights",
+   "jason_base": 12,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "electrical",
+   "line": "can lights",
+   "jason_base": 49,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "elevations_1",
+   "line": "Block Crawlspace walls",
+   "jason_base": 486.0,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "elevations_1",
+   "line": "Siding Fiber Cement Horizontal",
+   "jason_base": 458.2,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "elevations_1",
+   "line": "Siding Fiber Cement Vertical",
+   "jason_base": 618.0,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "elevations_1",
+   "line": "Corner Boards",
+   "jason_base": 72.0,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "elevations_2",
+   "line": "Block Crawlspace walls",
+   "jason_base": 427.4,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "elevations_2",
+   "line": "Siding Fiber Cement Horizontal",
+   "jason_base": 960.3,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "elevations_2",
+   "line": "Corner Boards",
+   "jason_base": 24.0,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "elevations_2",
+   "line": "Fascia and Soffit",
+   "jason_base": 137.8,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "elevations_2",
+   "line": "Brick sill and frieze",
+   "jason_base": 121.2,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "elevations_2",
+   "line": "Brick Veneer Ext",
+   "jason_base": 556.9,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "foundation",
+   "line": "4in Concrete Slab",
+   "jason_base": 924.6,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "foundation",
+   "line": "Concrete 6in",
+   "jason_base": 56.8,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "roof",
+   "line": "Roof Insulation",
+   "jason_base": 3869.5,
+   "system": null,
+   "note": "cross-checks his shingle planes (independent trace)",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "roof",
+   "line": "Gutters",
+   "jason_base": 229.3,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "roof",
+   "line": "Downspouts",
+   "jason_base": 189,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "site",
+   "line": "Silt Fence",
+   "jason_base": 914.1,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "site",
+   "line": "Driveway Length",
+   "jason_base": 894.7,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  },
+  {
+   "sheet": "site",
+   "line": "Permanent Power from pole",
+   "jason_base": 966.0,
+   "system": null,
+   "note": "",
+   "verdict": "NOT_PRODUCED"
+  }
+ ],
+ "counts": {
+  "MATCHED": 5,
+  "CLOSE": 1,
+  "DISCREPANT": 2,
+  "NOT_PRODUCED": 22
+ }
+}
