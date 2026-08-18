@@ -128,7 +128,7 @@ def doc_page_width(page):
     return w
 
 
-def magenta_contours(shot, want, np, cv2, color="magenta"):
+def magenta_contours(shot, want, np, cv2, color="magenta", sheet=None):
     """Largest `want` closed marker loops, eroded to their stroke centerline.
     Jason's magenta is pure (255,128,255 sampled; Paint default 255,0,255); his
     green (porch, 8/14 foundation markup) samples ~(128,255,158) RGB. The
@@ -160,6 +160,23 @@ def magenta_contours(shot, want, np, cv2, color="magenta"):
         # carries BLUE over green (b-g ~ +16); red halos are gray-toned (g==b).
         mask = ((r > 215) & (g > 140) & (b > 160) & (b - g > 5)
                 & (b - g < 45) & (r - b > 20)).astype(np.uint8) * 255
+    elif color == "gold":
+        # Paint's "Gold" (~240,192,0 sampled 8/17). Nothing in the plan competes.
+        mask = ((r > 200) & (g > 150) & (g < 230) & (b < 110)
+                & (r - b > 110) & (np.abs(r - g) < 80)).astype(np.uint8) * 255
+    elif color == "blue":
+        # His blue is inseparable from the plan's own blue linework by hue —
+        # the separator is a DIFF against the pristine sheet render: the plan's
+        # blue cancels itself, leaving only ink he added. Identity-sized direct
+        # draws only; a screenshot has no pixel-aligned reference to diff.
+        if sheet is None or shot.shape != sheet.shape:
+            print("REFUSED: blue extraction needs a direct draw on the sheet "
+                  "render (the plan's own linework is blue; only a pixel diff "
+                  "separates his stroke)")
+            return []
+        diff = np.abs(shot.astype(int) - sheet.astype(int)).max(axis=2) > 40
+        mask = ((b > 170) & (b - r > 80) & (b - g > 80)
+                & diff).astype(np.uint8) * 255
     else:
         mask = ((r > 230) & (b > 230) & (r - g > 60) & (b - g > 60)).astype(np.uint8) * 255
     n_pink = int(mask.sum() / 255)
@@ -420,7 +437,8 @@ def main():
     ap.add_argument("--page", type=int, default=None,
                     help="0-based sheet index (default: 3, or the component's own)")
     ap.add_argument("--color", default="magenta",
-                    choices=("magenta", "green", "purple", "brown", "pink"),
+                    choices=("magenta", "green", "purple", "brown", "pink",
+                             "gold", "blue"),
                     help="marker color to extract (Jason color-codes components)")
     args = ap.parse_args()
     components = args.component or [LEGACY_COMPONENT]
@@ -460,7 +478,8 @@ def main():
         pool[ch["orient"]].add(ch["total"])
     doc.close()
 
-    loops = magenta_contours(shot, len(components), np, cv2, color=args.color)
+    loops = magenta_contours(shot, len(components), np, cv2, color=args.color,
+                             sheet=sheet)
     if len(loops) < len(components):
         print(f"REFUSED: {len(components)} component(s) requested but only "
               f"{len(loops)} magenta loop(s) found")

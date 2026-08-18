@@ -3,8 +3,8 @@
  "coordinate_frame": "pdf-points: PyMuPDF page coordinates, origin top-left, y-down, 1 pt = 1/72 in; page = 0-based page index",
  "plan": "C:\\Users\\jason\\JJ-Takeoff\\tools\\tests\\golden\\roberts\\plan.pdf",
  "plan_sha256": "0B5720FC85EC723DB2A64AFF913A2DF6DF39A578EB4B055BC1A80843ECAB4124",
- "generated": "2026-08-17T21:00:56",
- "status": "more_information_required",
+ "generated": "2026-08-17T21:10:25",
+ "status": "certified",
  "sheet_map": {
   "sqft_schedule": 2,
   "foundation": 3,
@@ -190,6 +190,128 @@
   }
  ],
  "measurements": [
+  {
+   "trade": "heated_sf",
+   "qty": 2099.0,
+   "unit": "SF",
+   "source": "MEASURED",
+   "method": "certified-component-rollup",
+   "confidence": "high",
+   "page": [
+    "idx 3 Jason's registered markup",
+    "idx 3 printed dimension chains",
+    "idx 4 Jason's registered markup",
+    "idx 4 printed dimension chains"
+   ],
+   "note": "derived once from: crawlspace envelope (foundation footprint), garage slab, front porch slab, heated envelope (floor plan), rear deck (floor plan)",
+   "certified": true,
+   "proof": [
+    {
+     "component": "crawlspace envelope (foundation footprint)",
+     "classification": "foundation",
+     "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\crawlspace-envelope-foundation-footprint-primary.png",
+     "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\crawlspace-envelope-foundation-footprint-verification.png",
+     "delta_pct": 1.4
+    },
+    {
+     "component": "garage slab",
+     "classification": "garage",
+     "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\garage-slab-primary.png",
+     "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\garage-slab-verification.png",
+     "delta_pct": 0.46
+    },
+    {
+     "component": "front porch slab",
+     "classification": "covered",
+     "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\front-porch-slab-primary.png",
+     "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\front-porch-slab-verification.png",
+     "delta_pct": 1.0
+    },
+    {
+     "component": "heated envelope (floor plan)",
+     "classification": "heated",
+     "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\heated-envelope-floor-plan-primary.png",
+     "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\heated-envelope-floor-plan-verification.png",
+     "delta_pct": 0.58
+    },
+    {
+     "component": "rear deck (floor plan)",
+     "classification": "covered",
+     "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\rear-deck-floor-plan-primary.png",
+     "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\rear-deck-floor-plan-verification.png",
+     "delta_pct": 1.05
+    }
+   ],
+   "component_ids": [
+    "m5e7ec1aeb3",
+    "mcb40e700d4"
+   ],
+   "id": "mfefa7c591b"
+  },
+  {
+   "trade": "framing_sf",
+   "qty": 3355.5,
+   "unit": "SF",
+   "source": "MEASURED",
+   "method": "certified-component-rollup",
+   "confidence": "high",
+   "page": [
+    "idx 3 Jason's registered markup",
+    "idx 3 printed dimension chains",
+    "idx 4 Jason's registered markup",
+    "idx 4 printed dimension chains"
+   ],
+   "note": "derived once from: crawlspace envelope (foundation footprint), garage slab, front porch slab, heated envelope (floor plan), rear deck (floor plan)",
+   "certified": true,
+   "proof": [
+    {
+     "component": "crawlspace envelope (foundation footprint)",
+     "classification": "foundation",
+     "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\crawlspace-envelope-foundation-footprint-primary.png",
+     "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\crawlspace-envelope-foundation-footprint-verification.png",
+     "delta_pct": 1.4
+    },
+    {
+     "component": "garage slab",
+     "classification": "garage",
+     "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\garage-slab-primary.png",
+     "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\garage-slab-verification.png",
+     "delta_pct": 0.46
+    },
+    {
+     "component": "front porch slab",
+     "classification": "covered",
+     "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\front-porch-slab-primary.png",
+     "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\front-porch-slab-verification.png",
+     "delta_pct": 1.0
+    },
+    {
+     "component": "heated envelope (floor plan)",
+     "classification": "heated",
+     "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\heated-envelope-floor-plan-primary.png",
+     "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\heated-envelope-floor-plan-verification.png",
+     "delta_pct": 0.58
+    },
+    {
+     "component": "rear deck (floor plan)",
+     "classification": "covered",
+     "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\rear-deck-floor-plan-primary.png",
+     "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\rear-deck-floor-plan-verification.png",
+     "delta_pct": 1.05
+    }
+   ],
+   "component_ids": [
+    "madbf8a4070",
+    "m322cb4078e",
+    "m8fadf1fcb5",
+    "mada12484cf",
+    "m5e7ec1aeb3",
+    "mcb40e700d4",
+    "mc2a02f39cd",
+    "m1028f29177"
+   ],
+   "id": "mefd2ea48a3"
+  },
   {
    "trade": "foundation_wall_lf",
    "qty": 250.9,
@@ -553,31 +675,25 @@
     "gid": "m802e9d28b5"
    },
    "id": "m24c4e1c01e"
-  }
- ],
- "not_measured": [
-  {
-   "trade": "heated_sf",
-   "page": 4,
-   "why": "front porch slab: geometry measures differ by 11.2% (limit 2.0%)"
-  },
-  {
-   "trade": "framing_sf",
-   "page": 4,
-   "why": "front porch slab: geometry measures differ by 11.2% (limit 2.0%)"
   },
   {
    "trade": "roof_surface_sq",
+   "qty": 52.3,
+   "unit": "sq",
+   "source": "MEASURED",
+   "method": "face-decomposition",
+   "confidence": "high",
    "page": 6,
-   "why": "needs eye/VLM-verified pitch_calls + certified measured framing_sf (OCR pitch trap, cal #43 \u2014 never automated away)"
+   "note": "bounds 51.41-53.19 sq over overhang range; ppf solved 18.631",
+   "geometry": null,
+   "id": "m31838048ce"
   }
  ],
- "assumptions": [
-  "roof not measured: supply pitch callouts from a verified read"
- ],
+ "not_measured": [],
+ "assumptions": [],
  "area_certification": {
-  "ok": false,
-  "status": "more_information_required",
+  "ok": true,
+  "status": "certified",
   "tolerance_pct": 2.0,
   "components": [
    {
@@ -971,119 +1087,88 @@
    {
     "name": "front porch slab",
     "classification": "covered",
-    "qty": 190.23,
-    "verification_qty": 171.1,
-    "delta_pct": 11.18,
+    "qty": 198.37,
+    "verification_qty": 196.4,
+    "delta_pct": 1.0,
     "independence": "input-independent",
     "primary": {
-     "qty": 190.23,
+     "qty": 198.37,
      "unit": "SF",
      "source": "MEASURED",
-     "sheet": "idx 3 Jason's registered markup",
-     "page": 3,
+     "sheet": "idx 4 Jason's registered markup",
+     "page": 4,
      "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\front-porch-slab-primary.png",
      "method": "markup-raster",
      "confidence": "review",
-     "ppf": 16.646,
+     "ppf": 16.714,
      "origin": "jnj_takeoff.jason-markup-raster.v1",
      "scale_method": "text-dims",
      "scale_checks": [],
-     "id": "mb6c1dc9a35",
+     "id": "m8fadf1fcb5",
      "clip": null,
      "geometry": {
       "kind": "polygon",
       "points": [
        [
-        1201.04,
-        1056.78
+        1208.36,
+        1128.87
        ],
        [
-        1205.58,
-        1217.27
+        1208.86,
+        1296.35
        ],
        [
-        1304.0,
-        1217.27
+        1317.35,
+        1292.85
        ],
        [
-        1307.02,
-        1186.99
+        1317.85,
+        1262.35
        ],
        [
-        1591.66,
-        1179.42
+        1601.81,
+        1259.85
        ],
        [
-        1584.09,
-        1053.75
+        1599.81,
+        1129.37
        ]
       ],
       "closed": true,
-      "area_sf": 190.23
+      "area_sf": 198.37
      },
      "geometry_note": null
     },
     "verification": {
-     "qty": 171.1,
+     "qty": 196.4,
      "unit": "SF",
      "source": "MEASURED",
-     "sheet": "idx 3 printed dimension chains",
-     "page": 3,
+     "sheet": "idx 4 printed dimension chains",
+     "page": 4,
      "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\front-porch-slab-verification.png",
      "method": "printed-dimension-chains",
      "confidence": "review",
-     "ppf": 16.646,
+     "ppf": 16.714,
      "origin": "jnj_takeoff.plan-printed-dims.v1",
      "scale_method": "text-dims",
      "scale_checks": [],
-     "id": "m4626fc9e46",
+     "id": "mada12484cf",
      "clip": null,
-     "geometry": {
-      "kind": "polygon",
-      "points": [
-       [
-        1210.13,
-        1053.75
-       ],
-       [
-        1210.13,
-        1199.402
-       ],
-       [
-        1324.987,
-        1199.402
-       ],
-       [
-        1324.987,
-        1164.779
-       ],
-       [
-        1601.311,
-        1164.779
-       ],
-       [
-        1601.311,
-        1053.75
-       ]
-      ],
-      "closed": true,
-      "area_sf": 171.1
-     },
-     "geometry_note": null,
+     "geometry": null,
+     "geometry_note": "geometry self-check failed: polygon recomputes to 190.9 SF vs traced 196.4",
      "chain_checks": [
       {
-       "leg_ft": 8.75,
+       "leg_ft": 9.38,
        "dir": "D",
        "axis": "V",
-       "printed_ft": null,
-       "derived_by_closure": true,
+       "printed_ft": 9.38,
        "ok": true
       },
       {
-       "leg_ft": 6.9,
+       "leg_ft": 6.73,
        "dir": "R",
        "axis": "H",
-       "printed_ft": 6.9,
+       "printed_ft": 6.73,
        "ok": true
       },
       {
@@ -1094,17 +1179,18 @@
        "ok": true
       },
       {
-       "leg_ft": 16.6,
+       "leg_ft": 16.75,
        "dir": "R",
        "axis": "H",
-       "printed_ft": 16.6,
+       "printed_ft": null,
+       "derived_by_closure": true,
        "ok": true
       },
       {
-       "leg_ft": 6.67,
+       "leg_ft": 7.77,
        "dir": "U",
        "axis": "V",
-       "printed_ft": 6.67,
+       "printed_ft": 7.77,
        "ok": true
       },
       {
@@ -1355,9 +1441,250 @@
       }
      ]
     }
+   },
+   {
+    "name": "rear deck (floor plan)",
+    "classification": "covered",
+    "qty": 357.3,
+    "verification_qty": 361.1,
+    "delta_pct": 1.05,
+    "independence": "input-independent",
+    "primary": {
+     "qty": 357.3,
+     "unit": "SF",
+     "source": "MEASURED",
+     "sheet": "idx 4 Jason's registered markup",
+     "page": 4,
+     "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\rear-deck-floor-plan-primary.png",
+     "method": "markup-raster",
+     "confidence": "review",
+     "ppf": 16.714,
+     "origin": "jnj_takeoff.jason-markup-raster.v1",
+     "scale_method": "text-dims",
+     "scale_checks": [],
+     "id": "mc2a02f39cd",
+     "clip": null,
+     "geometry": {
+      "kind": "polygon",
+      "points": [
+       [
+        1212.36,
+        316.46
+       ],
+       [
+        1211.86,
+        571.93
+       ],
+       [
+        1602.31,
+        573.43
+       ],
+       [
+        1601.81,
+        316.96
+       ]
+      ],
+      "closed": true,
+      "area_sf": 357.3
+     },
+     "geometry_note": null
+    },
+    "verification": {
+     "qty": 361.1,
+     "unit": "SF",
+     "source": "MEASURED",
+     "sheet": "idx 4 printed dimension chains",
+     "page": 4,
+     "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\rear-deck-floor-plan-verification.png",
+     "method": "printed-dimension-chains",
+     "confidence": "review",
+     "ppf": 16.714,
+     "origin": "jnj_takeoff.plan-printed-dims.v1",
+     "scale_method": "text-dims",
+     "scale_checks": [],
+     "id": "m1028f29177",
+     "clip": null,
+     "geometry": {
+      "kind": "polygon",
+      "points": [
+       [
+        1212.36,
+        316.46
+       ],
+       [
+        1212.36,
+        573.521
+       ],
+       [
+        1604.805,
+        573.521
+       ],
+       [
+        1604.805,
+        316.46
+       ]
+      ],
+      "closed": true,
+      "area_sf": 361.1
+     },
+     "geometry_note": null,
+     "chain_checks": [
+      {
+       "leg_ft": 15.38,
+       "dir": "D",
+       "axis": "V",
+       "printed_ft": 15.38,
+       "ok": true
+      },
+      {
+       "leg_ft": 23.48,
+       "dir": "R",
+       "axis": "H",
+       "printed_ft": 23.48,
+       "ok": true
+      },
+      {
+       "leg_ft": 15.38,
+       "dir": "U",
+       "axis": "V",
+       "printed_ft": 15.38,
+       "ok": true
+      },
+      {
+       "leg_ft": 23.19,
+       "dir": "L",
+       "axis": "H",
+       "printed_ft": 23.19,
+       "ok": true
+      }
+     ]
+    }
    }
   ],
-  "lines": [],
+  "lines": [
+   {
+    "trade": "heated_sf",
+    "qty": 2099.0,
+    "unit": "SF",
+    "source": "MEASURED",
+    "method": "certified-component-rollup",
+    "confidence": "high",
+    "page": [
+     "idx 3 Jason's registered markup",
+     "idx 3 printed dimension chains",
+     "idx 4 Jason's registered markup",
+     "idx 4 printed dimension chains"
+    ],
+    "note": "derived once from: crawlspace envelope (foundation footprint), garage slab, front porch slab, heated envelope (floor plan), rear deck (floor plan)",
+    "certified": true,
+    "proof": [
+     {
+      "component": "crawlspace envelope (foundation footprint)",
+      "classification": "foundation",
+      "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\crawlspace-envelope-foundation-footprint-primary.png",
+      "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\crawlspace-envelope-foundation-footprint-verification.png",
+      "delta_pct": 1.4
+     },
+     {
+      "component": "garage slab",
+      "classification": "garage",
+      "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\garage-slab-primary.png",
+      "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\garage-slab-verification.png",
+      "delta_pct": 0.46
+     },
+     {
+      "component": "front porch slab",
+      "classification": "covered",
+      "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\front-porch-slab-primary.png",
+      "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\front-porch-slab-verification.png",
+      "delta_pct": 1.0
+     },
+     {
+      "component": "heated envelope (floor plan)",
+      "classification": "heated",
+      "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\heated-envelope-floor-plan-primary.png",
+      "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\heated-envelope-floor-plan-verification.png",
+      "delta_pct": 0.58
+     },
+     {
+      "component": "rear deck (floor plan)",
+      "classification": "covered",
+      "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\rear-deck-floor-plan-primary.png",
+      "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\rear-deck-floor-plan-verification.png",
+      "delta_pct": 1.05
+     }
+    ],
+    "component_ids": [
+     "m5e7ec1aeb3",
+     "mcb40e700d4"
+    ],
+    "id": "mfefa7c591b"
+   },
+   {
+    "trade": "framing_sf",
+    "qty": 3355.5,
+    "unit": "SF",
+    "source": "MEASURED",
+    "method": "certified-component-rollup",
+    "confidence": "high",
+    "page": [
+     "idx 3 Jason's registered markup",
+     "idx 3 printed dimension chains",
+     "idx 4 Jason's registered markup",
+     "idx 4 printed dimension chains"
+    ],
+    "note": "derived once from: crawlspace envelope (foundation footprint), garage slab, front porch slab, heated envelope (floor plan), rear deck (floor plan)",
+    "certified": true,
+    "proof": [
+     {
+      "component": "crawlspace envelope (foundation footprint)",
+      "classification": "foundation",
+      "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\crawlspace-envelope-foundation-footprint-primary.png",
+      "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\crawlspace-envelope-foundation-footprint-verification.png",
+      "delta_pct": 1.4
+     },
+     {
+      "component": "garage slab",
+      "classification": "garage",
+      "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\garage-slab-primary.png",
+      "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\garage-slab-verification.png",
+      "delta_pct": 0.46
+     },
+     {
+      "component": "front porch slab",
+      "classification": "covered",
+      "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\front-porch-slab-primary.png",
+      "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\front-porch-slab-verification.png",
+      "delta_pct": 1.0
+     },
+     {
+      "component": "heated envelope (floor plan)",
+      "classification": "heated",
+      "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\heated-envelope-floor-plan-primary.png",
+      "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\heated-envelope-floor-plan-verification.png",
+      "delta_pct": 0.58
+     },
+     {
+      "component": "rear deck (floor plan)",
+      "classification": "covered",
+      "primary_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\rear-deck-floor-plan-primary.png",
+      "verification_view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\rear-deck-floor-plan-verification.png",
+      "delta_pct": 1.05
+     }
+    ],
+    "component_ids": [
+     "madbf8a4070",
+     "m322cb4078e",
+     "m8fadf1fcb5",
+     "mada12484cf",
+     "m5e7ec1aeb3",
+     "mcb40e700d4",
+     "mc2a02f39cd",
+     "m1028f29177"
+    ],
+    "id": "mefd2ea48a3"
+   }
+  ],
   "schedule_checks": [
    {
     "trade": "heated_sf",
@@ -1369,14 +1696,12 @@
    {
     "trade": "framing_sf",
     "schedule_qty": 3431.0,
-    "measured_qty": 2990.1,
-    "delta_pct": 12.9,
+    "measured_qty": 3355.5,
+    "delta_pct": 2.2,
     "role": "comparison-only"
    }
   ],
-  "errors": [
-   "front porch slab: geometry measures differ by 11.2% (limit 2.0%)"
-  ]
+  "errors": []
  },
  "roof_lines": {
   "page": 6,

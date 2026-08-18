@@ -251,12 +251,10 @@
       }
     }
   ],
-  "takeoff_status": "more_information_required",
-  "area_certification_errors": [
-    "front porch slab: geometry measures differ by 11.2% (limit 2.0%)"
-  ],
+  "takeoff_status": "certified",
+  "area_certification_errors": [],
   "seconds": {
-    "takeoff": 23.47,
+    "takeoff": 38.14,
     "report": 0.0
   }
 }

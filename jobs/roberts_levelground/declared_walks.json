@@ -199,15 +199,14 @@
   },
   {
    "name": "front porch slab",
-   "page": 3,
+   "page": 4,
    "walk": [
     [
-     8.75,
-     "D",
-     "derived-by-closure"
+     9.38,
+     "D"
     ],
     [
-     6.9,
+     6.73,
      "R"
     ],
     [
@@ -215,11 +214,12 @@
      "U"
     ],
     [
-     16.6,
-     "R"
+     16.75,
+     "R",
+     "derived-by-closure"
     ],
     [
-     6.67,
+     7.77,
      "U"
     ],
     [
@@ -228,48 +228,48 @@
     ]
    ],
    "origin_pt": [
-    1210.13,
-    1053.75
+    1208.36,
+    1128.87
    ],
    "markup_polygon_pts": [
     [
-     1201.04,
-     1056.78
+     1208.36,
+     1128.87
     ],
     [
-     1205.58,
-     1217.27
+     1208.86,
+     1296.35
     ],
     [
-     1304.0,
-     1217.27
+     1317.35,
+     1292.85
     ],
     [
-     1307.02,
-     1186.99
+     1317.85,
+     1262.35
     ],
     [
-     1591.66,
-     1179.42
+     1601.81,
+     1259.85
     ],
     [
-     1584.09,
-     1053.75
+     1599.81,
+     1129.37
     ]
    ],
    "registration": {
-    "scale": 3.0284,
+    "scale": 1.0,
     "offset": [
-     16,
+     0,
      0
     ],
     "landmark_rate": 1.0,
-    "landmark_n": 50,
-    "landmark_control": 0.3,
-    "image": "Screenshot 2026-08-14 154056.png",
-    "image_sha256": "DC8D897CD4B65DC955D28AD8AECA3F57FE06F01A75B573F8198E220C3CCB37A4"
+    "landmark_n": 82,
+    "landmark_control": 0.232,
+    "image": "ROBERTS-floorplan-DRAW-HEATED.png",
+    "image_sha256": "7664D88467F92793A7927A28D6E4BBB7E973759F71A85D45FE34972151408BCA"
    },
-   "confirmed_by": "jason-pink-markup Screenshot 2026-08-14 154056.png"
+   "confirmed_by": "jason-pink-markup ROBERTS-floorplan-DRAW-HEATED.png"
   },
   {
    "name": "heated envelope (floor plan)",
@@ -390,6 +390,63 @@
     "landmark_control": 0.232,
     "image": "ROBERTS-floorplan-DRAW-HEATED.png",
     "image_sha256": "B5C14FBD83F893960938DC21CC2D0BAD0AD04DE42400AB48620700CC96494576"
+   },
+   "confirmed_by": "jason-pink-markup ROBERTS-floorplan-DRAW-HEATED.png"
+  },
+  {
+   "name": "rear deck (floor plan)",
+   "page": 4,
+   "walk": [
+    [
+     15.38,
+     "D"
+    ],
+    [
+     23.48,
+     "R"
+    ],
+    [
+     15.38,
+     "U"
+    ],
+    [
+     23.19,
+     "L"
+    ]
+   ],
+   "origin_pt": [
+    1212.36,
+    316.46
+   ],
+   "markup_polygon_pts": [
+    [
+     1212.36,
+     316.46
+    ],
+    [
+     1211.86,
+     571.93
+    ],
+    [
+     1602.31,
+     573.43
+    ],
+    [
+     1601.81,
+     316.96
+    ]
+   ],
+   "registration": {
+    "scale": 1.0,
+    "offset": [
+     0,
+     0
+    ],
+    "landmark_rate": 1.0,
+    "landmark_n": 82,
+    "landmark_control": 0.232,
+    "image": "ROBERTS-floorplan-DRAW-HEATED.png",
+    "image_sha256": "7664D88467F92793A7927A28D6E4BBB7E973759F71A85D45FE34972151408BCA"
    },
    "confirmed_by": "jason-pink-markup ROBERTS-floorplan-DRAW-HEATED.png"
   }

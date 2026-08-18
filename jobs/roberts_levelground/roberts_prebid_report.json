@@ -12,19 +12,22 @@
     },
     "date": "2026-08-06",
     "home": {
-      "heated_sf": 0,
+      "heated_sf": 2099,
       "stories": 1,
       "foundation": "crawlspace + slab garage",
       "garage": "2-car",
       "finish_level": "mid"
     },
     "bid_total": null,
-    "our_range": null,
-    "cost_basis": null,
-    "pricing_confirmed": null,
-    "market_calibrated": null,
-    "pricing_tier": null,
-    "verdict_note": "This is a pre-bid review: your home measured straight off your drawings, plus the scope to make sure any bid you get actually covers. Bring it to the table before you sign."
+    "our_range": {
+      "low": 470000.0,
+      "high": 537000.0
+    },
+    "cost_basis": "mid finish \u00b7 Middle Georgia \u00b7 $140-160/sf under-roof",
+    "pricing_confirmed": true,
+    "market_calibrated": true,
+    "pricing_tier": "calibrated",
+    "verdict_note": "This is a pre-bid review: your home measured off your drawings, an estimated build-cost range for a build like this in your market, and the scope to make sure any bid actually covers it. The range is regional and provisional -- a sanity check to bring to the table, not a quote."
   },
   "findings": [
     {
@@ -110,6 +113,27 @@
   ],
   "quantities": [
     {
+      "item": "Heated living area",
+      "qty": "2,099",
+      "unit": "sq ft",
+      "source": "your plans \u00b7 certified-component-rollup",
+      "confidence": "measured"
+    },
+    {
+      "item": "Total area under roof",
+      "qty": "3,356",
+      "unit": "sq ft",
+      "source": "your plans \u00b7 certified-component-rollup",
+      "confidence": "measured"
+    },
+    {
+      "item": "Roof area",
+      "qty": "52",
+      "unit": "squares",
+      "source": "page 7 \u00b7 face-decomposition",
+      "confidence": "measured"
+    },
+    {
       "item": "Foundation / slab edge",
       "qty": "251",
       "unit": "lin ft",
@@ -138,9 +162,6 @@
     "What's under the dirt -- rock, unsuitable soil, or drainage surprises no plan can show.",
     "Your final selections -- a $12 tile and a $40 tile read identically on a floor plan.",
     "Market swings between signing and dry-in -- lumber and labor move.",
-    "Permit and utility-connection fees, which vary by county and can't be verified from plans alone.",
-    "We could not measure heated living area from the plans provided (front porch slab: geometry measures differ by 11.2% (limit 2.0%)) -- ask your builder for it.",
-    "We could not measure total area under roof from the plans provided (front porch slab: geometry measures differ by 11.2% (limit 2.0%)) -- ask your builder for it.",
-    "We could not measure roof area from the plans provided (needs eye/VLM-verified pitch_calls + certified measured framing_sf (OCR pitch trap, cal #43 \u2014 never automated away)) -- ask your builder for it."
+    "Permit and utility-connection fees, which vary by county and can't be verified from plans alone."
   ]
 }
