@@ -329,19 +329,25 @@ def main():
                       f"{' + markup primary' if w.get('markup_polygon_pts') else ''} "
                       f"(teach-mode, {w.get('confirmed_by', 'unconfirmed')})")
 
-    # cal #67: heated is a FLOOR-PLAN scope. Once Jason's magenta declares the
-    # floor-plan walk, the heated component is built the same input-independent way
-    # the others certify — cal #69 markup-raster primary (his registered stroke),
+    # cal #67: heated is a FLOOR-PLAN scope. Once Jason's magenta declares a
+    # floor-plan walk, its component is built the same input-independent way the
+    # others certify — cal #69 markup-raster primary (his registered stroke),
     # printed-dims verification from the walk. Until then the gate must fail on
-    # exactly the missing heated component — never a relabeled proxy.
-    HEATED_WALK = "heated envelope (floor plan)"
-    w = declared.get(HEATED_WALK)
-    if w:
+    # exactly the missing heated component — never a relabeled proxy. The rear
+    # deck (schedule: REAR DECK - COVERED, 362 SF) is framed-but-unheated square
+    # footage no foundation loop carries, so framing_sf is short until Jason
+    # declares it the same way.
+    FLOORPLAN_WALKS = [("heated envelope (floor plan)", "heated"),
+                       ("rear deck (floor plan)", "covered")]
+    for wname, wclass in FLOORPLAN_WALKS:
+        w = declared.get(wname)
+        if not w:
+            continue
         fp_idx = w.get("page", SHEET_MAP["floor_area"])
         fp_ppf = next(r["ppf"] for r in rows if r["index"] == fp_idx)
         fp_checks = scale_checks(doc[fp_idx], fp_ppf)
         specs.append({
-            "name": HEATED_WALK, "classification": "heated",
+            "name": wname, "classification": wclass,
             "primary": {"page": fp_idx,
                         "sheet": f"idx {fp_idx} Jason's registered markup",
                         "method": "markup-raster",
@@ -354,8 +360,8 @@ def main():
                              "walk": w["walk"], "origin_pt": w["origin_pt"],
                              "ppf": fp_ppf, "scale_checks": fp_checks},
         })
-        print(f"  heated: floor-plan walk declared ({len(w['walk'])} printed legs, "
-              f"{w.get('confirmed_by', 'unconfirmed')}) -> heated component built")
+        print(f"  floor plan: {wname} declared ({len(w['walk'])} printed legs, "
+              f"{w.get('confirmed_by', 'unconfirmed')}) -> {wclass} component built")
     if not any(s["classification"] in ("heated", "conditioned_accessory") for s in specs):
         print(f"  heated: no component declared -- heated SF is a floor-plan scope "
               f"(idx {SHEET_MAP['floor_area']}); awaiting teach-mode declaration")

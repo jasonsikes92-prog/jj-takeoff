@@ -49,7 +49,8 @@ LEGACY_SHOT = (r"C:\Users\jason\OneDrive\Pictures\Screenshots"
 # cal #67: a crawlspace is NOT heated — the foundation footprint declares under its
 # true name. The heated walk is a FLOOR-PLAN component (default --page 4).
 LEGACY_COMPONENT = "crawlspace envelope (foundation footprint)"
-DEFAULT_PAGE = {"heated envelope (floor plan)": 4}
+DEFAULT_PAGE = {"heated envelope (floor plan)": 4,
+                "rear deck (floor plan)": 4}
 
 
 def register(shot, sheet, page, np, cv2):
@@ -137,7 +138,17 @@ def magenta_contours(shot, want, np, cv2, color="magenta"):
     b, g, r = (shot[:, :, 0].astype(int), shot[:, :, 1].astype(int),
                shot[:, :, 2].astype(int))
     if color == "green":
-        mask = ((g > 200) & (g - r > 60) & (g - b > 60)).astype(np.uint8) * 255
+        # bright marker green (his 8/14 screenshots) OR Paint's palette "Green"
+        # (34,177,76) — both sampled from his files, never guessed.
+        mask = (((g > 200) & (g - r > 60) & (g - b > 60))
+                | ((np.abs(r - 34) < 45) & (np.abs(g - 177) < 50)
+                   & (np.abs(b - 76) < 50))).astype(np.uint8) * 255
+    elif color == "purple":
+        # Paint's palette "Purple" (163,73,164), sampled off the 8/17 foundation
+        # canvas. r~b keeps the plan's blue linework (b>>r) and red scribbles
+        # (r>>b) out.
+        mask = ((np.abs(r - 163) < 45) & (np.abs(g - 73) < 45)
+                & (np.abs(b - 164) < 45)).astype(np.uint8) * 255
     else:
         mask = ((r > 230) & (b > 230) & (r - g > 60) & (b - g > 60)).astype(np.uint8) * 255
     n_pink = int(mask.sum() / 255)
@@ -145,9 +156,43 @@ def magenta_contours(shot, want, np, cv2, color="magenta"):
     if n_pink < 2000:
         print(f"REFUSED: {color} stroke not found at the sampled color")
         return []
-    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, np.ones((9, 9), np.uint8))
-    cnts, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:want]
+    # Strokes arrive as DASHED pen fragments (8/17 floor-plan magenta: 214 pieces
+    # of ~170 px) and with corner gaps, so bridging must run BEFORE any size
+    # filtering — a blob floor ahead of the close executes every dash. Abandoned
+    # dead-end strokes and flecks need no pre-filter: a filament welded onto the
+    # loop dies in the fill+erode centerline step (proven on the 8/17 purple
+    # color-switch spur), and off-loop flecks lose the top-`want` selection.
+    # 61 px ~ 3.7 ft at this render scale — gap territory only, and the
+    # chain/closure gates downstream refuse anything a bridge invented.
+    # Single-loop canvases may escalate further than multi-loop ones: a 101 px
+    # bridge (~6 ft) on a two-loop canvas could weld separate components.
+    kernels = (9, 31, 61, 81, 101) if want == 1 else (9, 31, 61)
+    welded = False
+    for k in kernels:
+        closed = cv2.morphologyEx(mask, cv2.MORPH_CLOSE,
+                                  np.ones((k, k), np.uint8))
+        cnts, _ = cv2.findContours(closed, cv2.RETR_EXTERNAL,
+                                   cv2.CHAIN_APPROX_SIMPLE)
+        cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:want]
+        band = closed.sum() / 255
+        # a closed loop's contour area dwarfs its own stroke-band pixel count;
+        # an unclosed C-shape's does not. Demand it before accepting this kernel.
+        if len(cnts) >= want and all(cv2.contourArea(c) > 1.5 * band / want
+                                     for c in cnts[:want]):
+            if k > 9:
+                print(f"stroke gaps bridged with a {k}px close")
+            welded = True
+            break
+    if not welded:
+        # Falling through with the last kernel's fragments once extracted an
+        # 11x12 ft dash-cluster as "the heated envelope" and its legs happened
+        # to snap printed — never proceed on an unwelded stroke.
+        print(f"REFUSED: {color} stroke never welds into {want} closed loop(s) "
+              f"(largest contour {int(cv2.contourArea(cnts[0])) if cnts else 0}px² "
+              f"vs stroke band {int(band)}px) — gaps exceed "
+              f"{kernels[-1]}px; draw with a continuous stroke")
+        return []
+    mask = closed
     out = []
     for c in cnts:
         if cv2.contourArea(c) < 1500:
@@ -359,7 +404,8 @@ def main():
                          "map to components by DESCENDING AREA")
     ap.add_argument("--page", type=int, default=None,
                     help="0-based sheet index (default: 3, or the component's own)")
-    ap.add_argument("--color", default="magenta", choices=("magenta", "green"),
+    ap.add_argument("--color", default="magenta",
+                    choices=("magenta", "green", "purple"),
                     help="marker color to extract (Jason color-codes components)")
     args = ap.parse_args()
     components = args.component or [LEGACY_COMPONENT]
@@ -423,21 +469,31 @@ def main():
         po = eng.polygon_outline([(w[0], w[1]) for w in walk])
         print(f"walk: {po['area_sf']} SF, perim {po['perimeter_lf']} LF, "
               f"closure {po['closure_err_ft']} ft")
+        if len(walk) < 4 or po["area_sf"] < 20:
+            failures.append(component)
+            print(f"REFUSED: degenerate walk ({len(walk)} legs, {po['area_sf']} SF) "
+                  f"— the stroke collapsed in extraction; draw the loop taller/"
+                  f"cleaner or check the color")
+            continue
         if po["closure_err_ft"] > 0.5:
             failures.append(component)
             print("REFUSED: printed legs do not close — a jog is mis-snapped")
             continue
-        # area-order mapping is only trusted when the walk is in the same ballpark
-        # as the component's own pixel trace — a garage loop declared as the porch
-        # would sail through chains and closure, so this is the gate that catches it.
-        if len(components) > 1:
-            ref = traced_primary_sf(component)
-            if ref and abs(po["area_sf"] - ref) / ref > 0.25:
-                failures.append(component)
-                print(f"REFUSED: walk {po['area_sf']:.0f} SF is {abs(po['area_sf']-ref)/ref:.0%} "
-                      f"from {component}'s traced {ref:.0f} SF — loop/component "
-                      f"mapping is not trustworthy")
-                continue
+        # The walk must be in the same ballpark as the component's last-known
+        # primary — this catches BOTH a swapped loop/component mapping on
+        # multi-loop canvases AND a wrong-region grab on re-ingest (an 11x12 ft
+        # dash-cluster once extracted as "the heated envelope"; every leg
+        # snapped printed and it replaced a good 2,100 SF walk). A first-ever
+        # ingest has no prior and skips; a deliberate boundary redefinition
+        # >25% needs the old evidence purged first, on purpose.
+        ref = traced_primary_sf(component)
+        if ref and abs(po["area_sf"] - ref) / ref > 0.25:
+            failures.append(component)
+            print(f"REFUSED: walk {po['area_sf']:.0f} SF is {abs(po['area_sf']-ref)/ref:.0%} "
+                  f"from {component}'s last-known {ref:.0f} SF — wrong loop or "
+                  f"wrong region; purge the old evidence first if this "
+                  f"redefinition is intentional")
+            continue
         declared.append({"name": component, "page": page,
                          "walk": walk,  # legs keep their cal #68 marker if present
                          "origin_pt": [round(origin[0], 2), round(origin[1], 2)],
