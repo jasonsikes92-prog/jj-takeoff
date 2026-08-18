@@ -156,12 +156,16 @@ def magenta_contours(shot, want, np, cv2, color="magenta"):
     if n_pink < 2000:
         print(f"REFUSED: {color} stroke not found at the sampled color")
         return []
-    # Strokes arrive as DASHED pen fragments (8/17 floor-plan magenta: 214 pieces
-    # of ~170 px) and with corner gaps, so bridging must run BEFORE any size
-    # filtering — a blob floor ahead of the close executes every dash. Abandoned
-    # dead-end strokes and flecks need no pre-filter: a filament welded onto the
-    # loop dies in the fill+erode centerline step (proven on the 8/17 purple
-    # color-switch spur), and off-loop flecks lose the top-`want` selection.
+    # Strokes arrive as DASHED pen fragments (8/17 floor-plan: 214 pieces of
+    # ~170 px) and with corner gaps, so bridging must run BEFORE any size
+    # filtering — a blob floor ahead of the close executes every dash. Dead-end
+    # filaments and flecks need no pre-filter: a filament welded onto the loop
+    # dies in the fill+erode centerline step (proven 8/17 — a same-color
+    # boundary line of a NEIGHBORING scope ran along the crawlspace loop and
+    # contributed nothing), and off-loop flecks lose the top-`want` selection.
+    # Jason's colors mark SCOPE, not components-per-canvas: his purple traces
+    # the crawlspace envelope AND the adjacent scope edges he considers the
+    # same family — never assume one color = one closed loop.
     # 61 px ~ 3.7 ft at this render scale — gap territory only, and the
     # chain/closure gates downstream refuse anything a bridge invented.
     # Single-loop canvases may escalate further than multi-loop ones: a 101 px
