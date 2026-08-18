@@ -1793,3 +1793,32 @@ the components now fail the 2% gate against their PIXEL primaries (6.0% / 32.5% 
 15.6%) — the tracers measure the footing/ink outline while the dims measure the
 dimensioned wall face, and on small components the face offset alone exceeds 2%.
 What is the pixel-side instrument for a declared-walk component? (cal #69)
+
+## Data point #69 — MARKUP RASTER IS THE PIXEL-SIDE INSTRUMENT FOR DECLARED WALKS (Jason's ruling, 2026-08-17)
+
+**Ruling:** for a declared-walk component, the second measurement is Jason's own
+registered markup polygon — his stroke in page points, proven by the ingest-time
+landmark oracle — against the walk's printed-dims values. No plan tracer measures
+the dimensioned wall face on small components: the tracers follow the footing/ink
+outline, and that face offset alone exceeds the 2% gate (Roberts garage 6.0%,
+porch 32.5%, heated 15.6% under pixel-vs-dims; 2.6% / 11.2% / 3.1% under
+markup-vs-dims, with the crawlspace tightening 1.9% → 1.5% and certifying).
+
+**What the pair proves:** registration and scale (a wrong ppf moves the markup area
+but not the printed values), and chain-snap coherence (a mis-snapped leg moves the
+walk but not the stroke). What it does NOT prove: wrong-REGION drawings — both
+sides inherit the stroke's shape, so the boundary itself is confirmed by Jason's
+overlay review in the viewer, which the teach loop already forces.
+
+**Contract:** origin `jnj_takeoff.jason-markup-raster.v1`, method `markup-raster`
+in `_AREA_METHOD_ORIGINS` (the one total map). Evidence must carry the registration
+landmark proof (≥70% of the sheet's dimension labels on ink, beating a shifted
+control by ≥15 pts) or it refuses — a polygon without provenance is just numbers in
+a file. Declared walks persist `markup_polygon_pts` (pre-snap, page points) +
+`registration` incl. image sha256. Rides the cal #66 review-tier scale admission:
+the paired walk's leg verification is the ppf proof.
+
+**Measured lesson (8/17):** the remaining 2.6/11.2/3.1% deltas are STROKE-FIDELITY
+artifacts of ~1580px screenshots (1 stroke px ≈ 3 page px; the 9×9 close kernel
+can swallow a 2-ft jog). Draw on the full-res staged canvases (4802px) — the same
+strokes carry 3× the precision and small jogs survive extraction.

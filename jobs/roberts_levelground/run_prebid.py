@@ -311,37 +311,42 @@ def main():
                     "walk": w["walk"], "origin_pt": w["origin_pt"],
                     "ppf": f_ppf, "scale_checks": checks,
                 }
-                print(f"  declared walk: {s['name']} <- {len(w['walk'])} printed legs "
+                # cal #69: the pixel-side primary for a declared-walk component is
+                # Jason's registered markup polygon — no plan tracer measures the
+                # dimensioned wall face on small components (they trace the footing
+                # /ink outline; the face offset alone breaks 2%). The tracer sweep
+                # printed above stays as the visible comparison.
+                if w.get("markup_polygon_pts"):
+                    s["primary"] = {
+                        "page": w.get("page", f_idx),
+                        "sheet": f"idx {w.get('page', f_idx)} Jason's registered markup",
+                        "method": "markup-raster",
+                        "polygon_pts": w["markup_polygon_pts"],
+                        "registration": w.get("registration"),
+                        "ppf": f_ppf, "scale_checks": checks,
+                    }
+                print(f"  declared walk: {s['name']} <- {len(w['walk'])} printed legs"
+                      f"{' + markup primary' if w.get('markup_polygon_pts') else ''} "
                       f"(teach-mode, {w.get('confirmed_by', 'unconfirmed')})")
 
     # cal #67: heated is a FLOOR-PLAN scope. Once Jason's magenta declares the
     # floor-plan walk, the heated component is built the same input-independent way
-    # the crawlspace certifies: pixel primary clipped by his declared boundary
-    # (the model says WHERE, the engine measures), printed-dims verification from
-    # the walk itself. Until then the gate must fail on exactly the missing heated
-    # component — never a relabeled proxy.
+    # the others certify — cal #69 markup-raster primary (his registered stroke),
+    # printed-dims verification from the walk. Until then the gate must fail on
+    # exactly the missing heated component — never a relabeled proxy.
     HEATED_WALK = "heated envelope (floor plan)"
     w = declared.get(HEATED_WALK)
     if w:
         fp_idx = w.get("page", SHEET_MAP["floor_area"])
         fp_ppf = next(r["ppf"] for r in rows if r["index"] == fp_idx)
         fp_checks = scale_checks(doc[fp_idx], fp_ppf)
-        x, y = w["origin_pt"]
-        xs, ys = [x], [y]
-        for leg in w["walk"]:  # legs may carry a cal #68 marker as a 3rd element
-            L, d = leg[0], leg[1]
-            dx, dy = {"R": (1, 0), "L": (-1, 0), "D": (0, 1), "U": (0, -1)}[d]
-            x += dx * L * fp_ppf
-            y += dy * L * fp_ppf
-            xs.append(x)
-            ys.append(y)
-        pad = 1.5 * fp_ppf
         specs.append({
             "name": HEATED_WALK, "classification": "heated",
-            "primary": {"page": fp_idx, "sheet": f"idx {fp_idx} MASTER FLOOR PLAN",
-                        "method": "clean-tracer",
-                        "clip": [min(xs) - pad, min(ys) - pad,
-                                 max(xs) + pad, max(ys) + pad],
+            "primary": {"page": fp_idx,
+                        "sheet": f"idx {fp_idx} Jason's registered markup",
+                        "method": "markup-raster",
+                        "polygon_pts": w.get("markup_polygon_pts"),
+                        "registration": w.get("registration"),
                         "ppf": fp_ppf, "scale_checks": fp_checks},
             "verification": {"page": fp_idx,
                              "sheet": f"idx {fp_idx} printed dimension chains",

@@ -111,7 +111,12 @@ def register(shot, sheet, page, np, cv2):
         print("REFUSED: transform fails the landmark check — cannot trust the "
               "magenta coordinates")
         return None
-    return s, ox, oy, render_zoom
+    # cal #69: this proof travels WITH the declared walk — the engine refuses a
+    # markup-raster measurement whose registration cannot show its landmark oracle.
+    stats = {"scale": round(s, 4), "offset": [int(ox), int(oy)],
+             "landmark_rate": round(rate, 3), "landmark_n": n,
+             "landmark_control": round(ctrl, 3)}
+    return (s, ox, oy, render_zoom), stats
 
 
 def doc_page_width(page):
@@ -378,9 +383,12 @@ def main():
     print(f"ingesting {os.path.basename(args.image)} -> sheet idx {page}, "
           f"components: {components}")
 
-    transform = register(shot, sheet, page, np, cv2)
-    if transform is None:
+    reg = register(shot, sheet, page, np, cv2)
+    if reg is None:
         return 1
+    transform, reg_stats = reg
+    reg_stats["image"] = os.path.basename(args.image)
+    reg_stats["image_sha256"] = eng.sha256_file(args.image)
 
     import fitz
     doc = fitz.open(PLAN)
@@ -433,6 +441,14 @@ def main():
         declared.append({"name": component, "page": page,
                          "walk": walk,  # legs keep their cal #68 marker if present
                          "origin_pt": [round(origin[0], 2), round(origin[1], 2)],
+                         # cal #69: the registered PRE-SNAP stroke polygon (page
+                         # points) is the pixel-side primary; its corners are the
+                         # rectilinearized edge starts, so collinear vertices from
+                         # the wrap-merge are harmless to the shoelace.
+                         "markup_polygon_pts": [[round(e["at"][0], 2),
+                                                 round(e["at"][1], 2)]
+                                                for e in edges],
+                         "registration": reg_stats,
                          "confirmed_by": f"jason-pink-markup {os.path.basename(args.image)}"})
 
     if not declared:

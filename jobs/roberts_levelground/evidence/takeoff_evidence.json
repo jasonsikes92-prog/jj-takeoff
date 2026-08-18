@@ -3,7 +3,7 @@
  "coordinate_frame": "pdf-points: PyMuPDF page coordinates, origin top-left, y-down, 1 pt = 1/72 in; page = 0-based page index",
  "plan": "C:\\Users\\jason\\JJ-Takeoff\\tools\\tests\\golden\\roberts\\plan.pdf",
  "plan_sha256": "0B5720FC85EC723DB2A64AFF913A2DF6DF39A578EB4B055BC1A80843ECAB4124",
- "generated": "2026-08-17T19:47:16",
+ "generated": "2026-08-17T19:57:51",
  "status": "more_information_required",
  "sheet_map": {
   "sqft_schedule": 2,
@@ -559,12 +559,12 @@
   {
    "trade": "heated_sf",
    "page": 4,
-   "why": "garage slab: geometry measures differ by 6.0% (limit 2.0%); front porch slab: geometry measures differ by 32.5% (limit 2.0%); heated envelope (floor plan): geometry measures differ by 15.6% (limit 2.0%)"
+   "why": "garage slab: geometry measures differ by 2.6% (limit 2.0%); front porch slab: geometry measures differ by 11.2% (limit 2.0%); heated envelope (floor plan): geometry measures differ by 3.1% (limit 2.0%)"
   },
   {
    "trade": "framing_sf",
    "page": 4,
-   "why": "garage slab: geometry measures differ by 6.0% (limit 2.0%); front porch slab: geometry measures differ by 32.5% (limit 2.0%); heated envelope (floor plan): geometry measures differ by 15.6% (limit 2.0%)"
+   "why": "garage slab: geometry measures differ by 2.6% (limit 2.0%); front porch slab: geometry measures differ by 11.2% (limit 2.0%); heated envelope (floor plan): geometry measures differ by 3.1% (limit 2.0%)"
   },
   {
    "trade": "roof_surface_sq",
@@ -583,132 +583,79 @@
    {
     "name": "crawlspace envelope (foundation footprint)",
     "classification": "foundation",
-    "qty": 2169.92,
+    "qty": 2097.05,
     "verification_qty": 2129.4,
-    "delta_pct": 1.9,
+    "delta_pct": 1.52,
     "independence": "input-independent",
     "primary": {
-     "qty": 2169.92,
+     "qty": 2097.05,
      "unit": "SF",
      "source": "MEASURED",
-     "sheet": "idx 3 FOUNDATION WALL PLAN",
+     "sheet": "idx 3 Jason's registered markup",
      "page": 3,
      "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\crawlspace-envelope-foundation-footprint-primary.png",
-     "method": "trace-footprint-clean",
-     "confidence": "high",
+     "method": "markup-raster",
+     "confidence": "review",
      "ppf": 16.646,
-     "origin": "jnj_takeoff.plan-pixel-geometry.v1",
-     "scale_method": "two-printed-dimension-checks",
-     "scale_checks": [
-      {
-       "label": "64'-3",
-       "printed_ft": 64.25,
-       "measured_points": 1071.99,
-       "ppf": 16.6847,
-       "delta_pct": 0.23
-      },
-      {
-       "label": "60'-10",
-       "printed_ft": 60.833333333333336,
-       "measured_points": 1014.86,
-       "ppf": 16.6826,
-       "delta_pct": 0.22
-      }
-     ],
-     "id": "m055a4faeee",
-     "clip": [
-      770.71,
-      193.09,
-      1836.05,
-      1178.54
-     ],
+     "origin": "jnj_takeoff.jason-markup-raster.v1",
+     "scale_method": "text-dims",
+     "scale_checks": [],
+     "id": "m654f51cdd8",
+     "clip": null,
      "geometry": {
       "kind": "polygon",
       "points": [
        [
-        761.0,
-        211.333
+        765.52,
+        209.58
        ],
        [
-        772.333,
-        776.0
+        765.52,
+        762.02
        ],
        [
-        1195.333,
-        770.667
+        1202.66,
+        765.46
        ],
        [
-        1189.0,
-        1158.667
+        1204.38,
+        1047.71
        ],
        [
-        953.333,
-        1159.0
+        1593.33,
+        1047.71
        ],
        [
-        964.333,
-        1171.0
+        1595.05,
+        1159.57
        ],
        [
-        1196.333,
-        1171.0
+        1798.13,
+        1163.01
        ],
        [
-        1203.0,
-        1059.667
+        1796.41,
+        498.7
        ],
        [
-        1586.0,
-        1060.0
+        1200.94,
+        500.43
        ],
        [
-        1580.667,
-        1159.0
+        1195.77,
+        244.0
        ],
        [
-        1300.0,
-        1182.0
+        947.95,
+        244.0
        ],
        [
-        1580.667,
-        1161.667
-       ],
-       [
-        1592.667,
-        1193.0
-       ],
-       [
-        1593.333,
-        1171.0
-       ],
-       [
-        1801.667,
-        1170.667
-       ],
-       [
-        1801.333,
-        502.0
-       ],
-       [
-        1201.667,
-        502.0
-       ],
-       [
-        1201.0,
-        246.0
-       ],
-       [
-        945.667,
-        246.0
-       ],
-       [
-        945.0,
-        211.0
+        944.51,
+        209.58
        ]
       ],
       "closed": true,
-      "area_sf": 2169.92,
-      "perim_lf": 317.14
+      "area_sf": 2097.05
      },
      "geometry_note": null
     },
@@ -874,132 +821,55 @@
    {
     "name": "garage slab",
     "classification": "garage",
-    "qty": 732.19,
+    "qty": 672.88,
     "verification_qty": 691.0,
-    "delta_pct": 5.96,
+    "delta_pct": 2.62,
     "independence": "input-independent",
     "primary": {
-     "qty": 732.19,
+     "qty": 672.88,
      "unit": "SF",
      "source": "MEASURED",
-     "sheet": "idx 3 FOUNDATION WALL PLAN",
+     "sheet": "idx 3 Jason's registered markup",
      "page": 3,
      "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\garage-slab-primary.png",
-     "method": "trace-footprint-clean",
-     "confidence": "high",
+     "method": "markup-raster",
+     "confidence": "review",
      "ppf": 16.646,
-     "origin": "jnj_takeoff.plan-pixel-geometry.v1",
-     "scale_method": "two-printed-dimension-checks",
-     "scale_checks": [
-      {
-       "label": "64'-3",
-       "printed_ft": 64.25,
-       "measured_points": 1071.99,
-       "ppf": 16.6847,
-       "delta_pct": 0.23
-      },
-      {
-       "label": "60'-10",
-       "printed_ft": 60.833333333333336,
-       "measured_points": 1014.86,
-       "ppf": 16.6826,
-       "delta_pct": 0.22
-      }
-     ],
-     "id": "m9acc2e1eb5",
-     "clip": [
-      709.95,
-      734.92,
-      1214.33,
-      1212.66
-     ],
+     "origin": "jnj_takeoff.jason-markup-raster.v1",
+     "scale_method": "text-dims",
+     "scale_checks": [],
+     "id": "mdd893bce4e",
+     "clip": null,
      "geometry": {
       "kind": "polygon",
       "points": [
        [
-        729.0,
-        764.667
+        734.73,
+        773.66
        ],
        [
-        729.0,
-        802.0
+        736.24,
+        1200.61
        ],
        [
-        740.333,
-        802.667
+        955.77,
+        1200.61
        ],
        [
-        740.333,
-        1137.667
+        958.8,
+        1162.76
        ],
        [
-        729.0,
-        1138.333
+        1187.42,
+        1162.76
        ],
        [
-        729.333,
-        1209.667
-       ],
-       [
-        964.333,
-        1209.667
-       ],
-       [
-        965.0,
-        1171.0
-       ],
-       [
-        1008.333,
-        1171.0
-       ],
-       [
-        1009.0,
-        1202.0
-       ],
-       [
-        1022.667,
-        1201.667
-       ],
-       [
-        1023.0,
-        1171.0
-       ],
-       [
-        1139.667,
-        1171.0
-       ],
-       [
-        1140.0,
-        1210.333
-       ],
-       [
-        1153.667,
-        1210.667
-       ],
-       [
-        1154.333,
-        1171.0
-       ],
-       [
-        1195.667,
-        1171.0
-       ],
-       [
-        1196.0,
-        1226.0
-       ],
-       [
-        1207.667,
-        1226.0
-       ],
-       [
-        1207.333,
-        758.333
+        1193.47,
+        769.12
        ]
       ],
       "closed": true,
-      "area_sf": 732.19,
-      "perim_lf": 127.48
+      "area_sf": 672.88
      },
      "geometry_note": null
     },
@@ -1101,92 +971,55 @@
    {
     "name": "front porch slab",
     "classification": "covered",
-    "qty": 226.65,
+    "qty": 190.23,
     "verification_qty": 171.1,
-    "delta_pct": 32.47,
+    "delta_pct": 11.18,
     "independence": "input-independent",
     "primary": {
-     "qty": 226.65,
+     "qty": 190.23,
      "unit": "SF",
      "source": "MEASURED",
-     "sheet": "idx 3 FOUNDATION WALL PLAN",
+     "sheet": "idx 3 Jason's registered markup",
      "page": 3,
      "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\front-porch-slab-primary.png",
-     "method": "trace-footprint-clean",
-     "confidence": "high",
+     "method": "markup-raster",
+     "confidence": "review",
      "ppf": 16.646,
-     "origin": "jnj_takeoff.plan-pixel-geometry.v1",
-     "scale_method": "two-printed-dimension-checks",
-     "scale_checks": [
-      {
-       "label": "64'-3",
-       "printed_ft": 64.25,
-       "measured_points": 1071.99,
-       "ppf": 16.6847,
-       "delta_pct": 0.23
-      },
-      {
-       "label": "60'-10",
-       "printed_ft": 60.833333333333336,
-       "measured_points": 1014.86,
-       "ppf": 16.6826,
-       "delta_pct": 0.22
-      }
-     ],
-     "id": "m68a0171682",
-     "clip": [
-      1168.55,
-      1022.9,
-      1604.67,
-      1227.64
-     ],
+     "origin": "jnj_takeoff.jason-markup-raster.v1",
+     "scale_method": "text-dims",
+     "scale_checks": [],
+     "id": "mb6c1dc9a35",
+     "clip": null,
      "geometry": {
       "kind": "polygon",
       "points": [
        [
-        1189.0,
-        1048.333
+        1201.04,
+        1056.78
        ],
        [
-        1189.0,
-        1159.333
+        1205.58,
+        1217.27
        ],
        [
-        1196.0,
-        1160.0
+        1304.0,
+        1217.27
        ],
        [
-        1196.333,
-        1226.333
+        1307.02,
+        1186.99
        ],
        [
-        1311.333,
-        1226.333
+        1591.66,
+        1179.42
        ],
        [
-        1312.0,
-        1193.0
-       ],
-       [
-        1593.0,
-        1192.667
-       ],
-       [
-        1593.0,
-        1160.0
-       ],
-       [
-        1599.667,
-        1159.333
-       ],
-       [
-        1599.333,
-        1048.0
+        1584.09,
+        1053.75
        ]
       ],
       "closed": true,
-      "area_sf": 226.65,
-      "perim_lf": 70.57
+      "area_sf": 190.23
      },
      "geometry_note": null
     },
@@ -1287,47 +1120,81 @@
    {
     "name": "heated envelope (floor plan)",
     "classification": "heated",
-    "qty": 1773.31,
+    "qty": 2036.04,
     "verification_qty": 2100.7,
-    "delta_pct": 15.58,
+    "delta_pct": 3.08,
     "independence": "input-independent",
     "primary": {
-     "qty": 1773.31,
+     "qty": 2036.04,
      "unit": "SF",
      "source": "MEASURED",
-     "sheet": "idx 4 MASTER FLOOR PLAN",
+     "sheet": "idx 4 Jason's registered markup",
      "page": 4,
      "view": "C:\\Users\\jason\\JJ-Takeoff\\jobs\\roberts_levelground\\evidence\\heated-envelope-floor-plan-primary.png",
-     "method": "trace-footprint-clean",
-     "confidence": "high",
+     "method": "markup-raster",
+     "confidence": "review",
      "ppf": 16.714,
-     "origin": "jnj_takeoff.plan-pixel-geometry.v1",
-     "scale_method": "two-printed-dimension-checks",
-     "scale_checks": [
-      {
-       "label": "64'-4",
-       "printed_ft": 64.33333333333333,
-       "measured_points": 1073.32,
-       "ppf": 16.6837,
-       "delta_pct": 0.18
-      },
-      {
-       "label": "59'-10",
-       "printed_ft": 59.833333333333336,
-       "measured_points": 998.19,
-       "ppf": 16.6828,
-       "delta_pct": 0.19
-      }
-     ],
-     "id": "mede8c9d98b",
-     "clip": [
-      932.59,
-      256.69,
-      2014.65,
-      1273.23
-     ],
-     "geometry": null,
-     "geometry_note": "geometry self-check failed: vertex (772, 834) outside its trace clip \u2014 coordinate-frame bug"
+     "origin": "jnj_takeoff.jason-markup-raster.v1",
+     "scale_method": "text-dims",
+     "scale_checks": [],
+     "id": "mab20d3d6e4",
+     "clip": null,
+     "geometry": {
+      "kind": "polygon",
+      "points": [
+       [
+        783.17,
+        290.28
+       ],
+       [
+        790.69,
+        831.81
+       ],
+       [
+        1213.38,
+        831.81
+       ],
+       [
+        1222.41,
+        1120.63
+       ],
+       [
+        1602.98,
+        1120.63
+       ],
+       [
+        1604.49,
+        1234.95
+       ],
+       [
+        1812.08,
+        1233.44
+       ],
+       [
+        1807.56,
+        577.59
+       ],
+       [
+        1216.39,
+        577.59
+       ],
+       [
+        1211.88,
+        324.88
+       ],
+       [
+        963.68,
+        324.88
+       ],
+       [
+        957.66,
+        285.77
+       ]
+      ],
+      "closed": true,
+      "area_sf": 2036.04
+     },
+     "geometry_note": null
     },
     "verification": {
      "qty": 2100.7,
@@ -1495,22 +1362,22 @@
    {
     "trade": "heated_sf",
     "schedule_qty": 2161.0,
-    "measured_qty": 1773.3,
-    "delta_pct": 17.9,
+    "measured_qty": 2036.0,
+    "delta_pct": 5.8,
     "role": "comparison-only"
    },
    {
     "trade": "framing_sf",
     "schedule_qty": 3431.0,
-    "measured_qty": 2732.2,
-    "delta_pct": 20.4,
+    "measured_qty": 2899.2,
+    "delta_pct": 15.5,
     "role": "comparison-only"
    }
   ],
   "errors": [
-   "garage slab: geometry measures differ by 6.0% (limit 2.0%)",
-   "front porch slab: geometry measures differ by 32.5% (limit 2.0%)",
-   "heated envelope (floor plan): geometry measures differ by 15.6% (limit 2.0%)"
+   "garage slab: geometry measures differ by 2.6% (limit 2.0%)",
+   "front porch slab: geometry measures differ by 11.2% (limit 2.0%)",
+   "heated envelope (floor plan): geometry measures differ by 3.1% (limit 2.0%)"
   ]
  },
  "roof_lines": {

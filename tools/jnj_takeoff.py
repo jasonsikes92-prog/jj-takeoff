@@ -3656,6 +3656,14 @@ _AREA_ENGINE_ORIGIN = "jnj_takeoff.plan-pixel-geometry.v1"
 # into a closed outline, are an admitted verification measurement. Printed text layer
 # vs ink raster = genuinely different inputs — the comparison a 2% gate can pass.
 _AREA_DIMS_ORIGIN = "jnj_takeoff.plan-printed-dims.v1"
+# cal #69 (Jason's ruling 2026-08-17): for a declared-walk component, the pixel-side
+# instrument is Jason's registered MARKUP polygon (his stroke in page points, proven
+# by the ingest landmark oracle) — no plan tracer measures the dimensioned wall face
+# on small components (they trace the footing/ink outline; the offset alone breaks
+# 2%). Markup raster vs printed dims: his hand's geometry vs the sheet's numbers.
+# The pair catches registration, scale, and chain-snap errors; a wrong-REGION
+# drawing is caught by his overlay confirmation in the viewer, not by this pair.
+_AREA_MARKUP_ORIGIN = "jnj_takeoff.jason-markup-raster.v1"
 # One total map from method to the origin it implies. Everything derives from it:
 # the evidence stamp, the independence test, and the pricing gate's cross-check —
 # so a new method CANNOT be added without declaring its origin, and a relabeled
@@ -3665,6 +3673,7 @@ _AREA_METHOD_ORIGINS = {
     "trace-footprint-all-ink": _AREA_ENGINE_ORIGIN,
     "trace-enclosed-region": _AREA_ENGINE_ORIGIN,
     "printed-dimension-chains": _AREA_DIMS_ORIGIN,
+    "markup-raster": _AREA_MARKUP_ORIGIN,
 }
 _AREA_ENGINE_METHODS = set(_AREA_METHOD_ORIGINS)
 _AREA_SCALE_METHODS = {
@@ -3707,9 +3716,13 @@ def _area_evidence_errors(component_name, evidence, label):
     # sheet's own chains (≤1%), which IS the scale proof — so the voted ppf's
     # "review" tier is admissible for that method alone (Roberts, the print-rescaled
     # motivating case, votes "review" by design; _measure_area_evidence already
-    # admits it there). Pixel tracers keep the strict bar.
+    # admits it there). cal #69: the markup raster is always PAIRED with a dims walk
+    # whose leg verification proves the same ppf, so it rides the same admission —
+    # and a wrong ppf cannot hide, since it scales the markup area but not the
+    # walk's printed values. Plan-pixel tracers keep the strict bar.
     allowed = (("high", "good", "review")
-               if _AREA_METHOD_ORIGINS.get(method) == _AREA_DIMS_ORIGIN
+               if _AREA_METHOD_ORIGINS.get(method) in (_AREA_DIMS_ORIGIN,
+                                                       _AREA_MARKUP_ORIGIN)
                else ("high", "good"))
     if confidence not in allowed:
         errors.append(
@@ -3948,14 +3961,18 @@ def _measure_area_evidence(doc, spec, evidence_dir, label):
     page = doc[page_i]
     method = str(spec.get("method", "clean-tracer")).lower()
     is_dims = method in ("printed-dims", "printed-dimension-chains", "dims")
+    is_markup = method in ("markup-raster", "markup")
     scale = _page_scale(page)
     # Pixel tracers need a snap-grade scale (high/good). The printed-dims walk needs
     # only the voted ppf: every declared leg must then reproduce a printed chain
     # within 1%, which IS the scale proof — a wrong ppf cannot match the sheet's own
     # numbers. (Roberts, the print-rescaled fixture cal #66 exists for, reads
     # confidence "review" by design; demanding high/good here would refuse the
-    # method on its motivating case.)
-    if scale is None or (not is_dims
+    # method on its motivating case.) cal #69: the markup raster is certified only
+    # in a pair with a dims walk, so it rides the same voted ppf — and a wrong ppf
+    # scales the markup area while leaving the walk's printed values fixed, so the
+    # pair itself refuses.
+    if scale is None or (not (is_dims or is_markup)
                          and scale.get("confidence") not in ("high", "good")):
         explicit = certify_explicit_scale(
             spec.get("ppf"), spec.get("scale_checks"),
@@ -3968,11 +3985,12 @@ def _measure_area_evidence(doc, spec, evidence_dir, label):
             )
         scale = explicit
     # Clip machinery is pixel-only: the dims walk is anchored by a declared
-    # origin_pt, never by a raster region — forcing it through find_drawing_region
+    # origin_pt (and the markup polygon arrives already registered in page points),
+    # never by a raster region — forcing them through find_drawing_region
     # would hard-fail flattened sheets (the very case printed dims exists for) and
     # containment-check the polygon against a region it never consulted.
     clip = None
-    if not is_dims:
+    if not (is_dims or is_markup):
         clip = spec.get("clip")
         if clip is None:
             region = find_drawing_region(page, ppf=scale["ppf"])
@@ -3984,7 +4002,46 @@ def _measure_area_evidence(doc, spec, evidence_dir, label):
             clip = _fitz.Rect(clip)
     safe = _re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-")
     view = _os.path.join(evidence_dir, f"{safe}.png")
-    if is_dims:
+    if is_markup:
+        # cal #69: Jason's registered stroke, measured in page points. The raster
+        # proof is the INGEST-time landmark oracle — the registration that produced
+        # these coordinates must have landed his image's linework on the sheet's own
+        # dimension labels, beating a shifted control. Without that proof the
+        # polygon is just numbers in a file, and it refuses.
+        poly = spec.get("polygon_pts")
+        reg = spec.get("registration") or {}
+        if not poly or len(poly) < 3:
+            raise ValueError(
+                f"{label}: markup-raster requires the registered markup polygon")
+        try:
+            rate = float(reg.get("landmark_rate"))
+            ctrl = float(reg.get("landmark_control", 0.0))
+        except (TypeError, ValueError):
+            raise ValueError(
+                f"{label}: markup-raster evidence lacks its registration "
+                f"landmark proof")
+        if rate < 0.7 or rate < ctrl + 0.15:
+            raise ValueError(
+                f"{label}: markup registration fails the landmark oracle "
+                f"({rate:.0%} on-ink vs shifted control {ctrl:.0%})")
+        a_pt2, perim_pt = _poly_area_perim_pts(poly)
+        result = {"area_sf": a_pt2 / scale["ppf"] ** 2,
+                  "perim_lf": perim_pt / scale["ppf"],
+                  "polygon_pts": [[float(x), float(y)] for x, y in poly]}
+        method_name = "markup-raster"
+        import cv2 as _cv2
+        import numpy as _np
+        import fitz as _fz
+        zoom = 2.0
+        pix = page.get_pixmap(matrix=_fz.Matrix(zoom, zoom))
+        img = _np.frombuffer(pix.samples, dtype=_np.uint8).reshape(
+            pix.height, pix.width, pix.n)[:, :, :3].copy()
+        bgr = _cv2.cvtColor(img, _cv2.COLOR_RGB2BGR)
+        arr = _np.array([[int(round(x * zoom)), int(round(y * zoom))]
+                         for x, y in result["polygon_pts"]])
+        _cv2.polylines(bgr, [arr], True, (255, 0, 255), 5)
+        _cv2.imwrite(view, bgr)
+    elif is_dims:
         result = dims_outline_evidence(
             page, scale["ppf"], spec.get("walk"), spec.get("origin_pt"),
             overlay_path=view,
@@ -4013,10 +4070,10 @@ def _measure_area_evidence(doc, spec, evidence_dir, label):
     geometry, geometry_note = _geometry_record(
         result.get("polygon_pts"), scale["ppf"],
         area_sf=result["area_sf"],
-        # dims perimeter is the declared-leg sum; the polygon closes the (gated,
-        # <=0.5 ft) walk gap as one extra edge, so a perimeter self-check would
-        # strip valid geometry on small components. Area binds either way.
-        perim_lf=(None if is_dims
+        # dims perimeter is the declared-leg sum and the markup stroke closes its
+        # (gated) gap as one extra edge, so a perimeter self-check would strip
+        # valid geometry on small components. Area binds either way.
+        perim_lf=(None if (is_dims or is_markup)
                   else result.get("perim_lf", result.get("perimeter_lf"))),
         clip=clip,
     )
@@ -4113,10 +4170,11 @@ def certify_takeoff_for_pricing(takeoff, required_area_trades=CORE_AREA_TRADES):
         for label in ("primary", "verification"):
             evidence = component.get(label) or {}
             prefix = f"{component_name} {label}"
-            if evidence.get("origin") not in (_AREA_ENGINE_ORIGIN, _AREA_DIMS_ORIGIN):
+            if evidence.get("origin") not in (_AREA_ENGINE_ORIGIN, _AREA_DIMS_ORIGIN,
+                                              _AREA_MARKUP_ORIGIN):
                 errors.append(
                     f"{prefix}: evidence was not produced by a recognized measurement "
-                    f"engine (plan-pixel or printed-dims)"
+                    f"engine (plan-pixel, printed-dims, or markup-raster)"
                 )
             if evidence.get("method") not in _AREA_ENGINE_METHODS:
                 errors.append(f"{prefix}: unsupported engine geometry method")

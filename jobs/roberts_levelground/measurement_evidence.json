@@ -253,12 +253,12 @@
   ],
   "takeoff_status": "more_information_required",
   "area_certification_errors": [
-    "garage slab: geometry measures differ by 6.0% (limit 2.0%)",
-    "front porch slab: geometry measures differ by 32.5% (limit 2.0%)",
-    "heated envelope (floor plan): geometry measures differ by 15.6% (limit 2.0%)"
+    "garage slab: geometry measures differ by 2.6% (limit 2.0%)",
+    "front porch slab: geometry measures differ by 11.2% (limit 2.0%)",
+    "heated envelope (floor plan): geometry measures differ by 3.1% (limit 2.0%)"
   ],
   "seconds": {
-    "takeoff": 24.22,
+    "takeoff": 23.82,
     "report": 0.0
   }
 }

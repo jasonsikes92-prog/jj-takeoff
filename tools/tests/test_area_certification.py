@@ -138,6 +138,24 @@ class AreaCertificationTests(unittest.TestCase):
             any("confidence must be one of" in e for e in result2["errors"]),
             result2["errors"])
 
+    def test_markup_raster_pairs_input_independent_with_dims(self):
+        # cal #69 (Jason's ruling 2026-08-17): for a declared-walk component the
+        # pixel-side primary is his registered markup polygon. Markup origin vs
+        # printed-dims origin is a genuine input pair; "review"-tier scale rides
+        # the same admission as dims (the paired walk's legs are the ppf proof).
+        comp = self._component("garage slab", "garage", 688.5, 691.0, 21)
+        comp["primary"]["method"] = "markup-raster"
+        comp["primary"]["origin"] = eng._AREA_MARKUP_ORIGIN
+        comp["primary"]["confidence"] = "review"
+        comp["verification"]["method"] = "printed-dimension-chains"
+        comp["verification"]["origin"] = eng._AREA_DIMS_ORIGIN
+        comp["verification"]["confidence"] = "review"
+        heated = self._component("Conditioned residence", "heated", 3938, 3940, 22)
+        result = eng.certify_area_measurements([comp, heated])
+        self.assertTrue(result["ok"], result["errors"])
+        self.assertEqual(result["components"][0]["independence"], "input-independent")
+        self.assertEqual(result["components"][0]["classification"], "garage")
+
     def test_total_or_under_roof_cannot_be_a_component(self):
         components = self._dugger_components()
         components.append(

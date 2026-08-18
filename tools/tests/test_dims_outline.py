@@ -145,6 +145,40 @@ def main():
     assert abs(ev["qty"] - r["area_sf"]) < 0.01
     assert os.path.exists(ev["view"]), "dims overlay PNG must exist (gate requires it)"
 
+    # --- cal #69 dispatch: markup-raster measures the registered polygon in page
+    # points; the ingest-time landmark oracle is its raster proof and refusing
+    # without it is the fail-closed contract. -------------------------------------
+    rect = [[origin[0], origin[1]],
+            [origin[0] + W * ppf, origin[1]],
+            [origin[0] + W * ppf, origin[1] + D * ppf],
+            [origin[0], origin[1] + D * ppf]]
+    ev2 = eng._measure_area_evidence(
+        doc, {"page": PAGE, "method": "markup-raster", "polygon_pts": rect,
+              "registration": {"landmark_rate": 1.0, "landmark_n": 50,
+                               "landmark_control": 0.2}},
+        tmp, "markup-dispatch-check")
+    assert ev2["method"] == "markup-raster"
+    assert ev2["origin"] == eng._AREA_MARKUP_ORIGIN
+    assert abs(ev2["qty"] - W * D) <= W * D * 0.01, (ev2["qty"], W * D)
+    assert ev2["clip"] is None, "markup evidence must not carry a pixel clip"
+    assert os.path.exists(ev2["view"]), "markup overlay PNG must exist"
+    try:
+        eng._measure_area_evidence(
+            doc, {"page": PAGE, "method": "markup-raster", "polygon_pts": rect},
+            tmp, "markup-noproof")
+        raise AssertionError("markup without landmark proof was accepted")
+    except ValueError as exc:
+        assert "landmark" in str(exc), exc
+    try:
+        eng._measure_area_evidence(
+            doc, {"page": PAGE, "method": "markup-raster", "polygon_pts": rect,
+                  "registration": {"landmark_rate": 0.5, "landmark_n": 50,
+                                   "landmark_control": 0.2}},
+            tmp, "markup-weakproof")
+        raise AssertionError("markup with a failing landmark oracle was accepted")
+    except ValueError as exc:
+        assert "landmark oracle" in str(exc), exc
+
     doc.close()
     print(f"PASS: printed-dims outline on Roberts p{PAGE + 1} — walk {W} x {D} ft from "
           f"the sheet's own chains -> {r['area_sf']} SF anchored in page points; "
