@@ -1,0 +1,178 @@
+{
+ "source": "Buildern takeoff export, Roberts Residence (Chance & Marianne), downloaded by Jason 2026-08-17",
+ "file": "Downloads/Roberts Residence - Mon Aug 17 2026.pdf",
+ "note": "quantity includes the waste %; sizes are the individual traced segments (base, no waste)",
+ "measurements": {
+  "site": {
+   "Silt Fence": {
+    "waste": 0.1,
+    "qty_ft": 1005.53
+   },
+   "Driveway Length": {
+    "waste": 0,
+    "qty_ft": 894.74
+   },
+   "Permanent Power from pole": {
+    "waste": 0,
+    "qty_ft": 965.99
+   }
+  },
+  "foundation": {
+   "Footers": {
+    "waste": 0.1,
+    "qty_ft": 365.78,
+    "segments": [
+     238.14,
+     64.67,
+     26.25,
+     3.47
+    ]
+   },
+   "4in Concrete Slab": {
+    "waste": 0.1,
+    "qty_sf": 1017.07,
+    "segments": [
+     669.79,
+     34.15,
+     205.89,
+     14.78
+    ]
+   },
+   "Concrete 6in": {
+    "waste": 0.1,
+    "qty_sf": 62.52,
+    "segments": [
+     9.53,
+     9.78,
+     9.11,
+     9.11,
+     9.53,
+     9.78
+    ]
+   }
+  },
+  "areas": {
+   "SF FIRST FLOOR": {
+    "qty_sf": 2127.25
+   },
+   "Garage": {
+    "qty_sf": 714.61
+   },
+   "Covered Porches": {
+    "qty_sf": 560.39,
+    "segments": [
+     199.52,
+     360.87
+    ]
+   },
+   "Total under Roof": {
+    "qty_sf": 3416.22,
+    "segments": [
+     2766.99,
+     50.46,
+     27.48,
+     31.45,
+     13.98,
+     24.13,
+     501.74
+    ]
+   }
+  },
+  "deck_windows": {
+   "Deck": {
+    "waste": 0.1,
+    "qty_sf": 401.43,
+    "base_sf": 364.94
+   },
+   "Deck railing": {
+    "waste": 0.1,
+    "qty_ft": 52.58
+   },
+   "Windows": {
+    "count": 23
+   }
+  },
+  "electrical": {
+   "Fans/Lights": {
+    "count": 12
+   },
+   "can lights": {
+    "count": 49
+   }
+  },
+  "roof": {
+   "Shingle 5 pitch": {
+    "waste": 0.15,
+    "qty_sf": 750.62,
+    "base_sf": 652.71
+   },
+   "Shingles 8 Pitch": {
+    "waste": 0.15,
+    "qty_sf": 1738.01,
+    "base_sf": 1511.32
+   },
+   "Shingles 12 Pitch": {
+    "waste": 0.15,
+    "qty_sf": 1794.22,
+    "base_sf": 1560.18
+   },
+   "Roof Insulation": {
+    "waste": 0.1,
+    "qty_sf": 4256.48
+   },
+   "Gutters": {
+    "waste": 0.1,
+    "qty_ft": 252.18
+   },
+   "Downspouts": {
+    "qty_ft": 189,
+    "piece_ft": 13
+   }
+  },
+  "elevations_1": {
+   "Block Crawlspace walls": {
+    "waste": 0.1,
+    "qty_sf": 534.63
+   },
+   "Siding Fiber Cement Horizontal": {
+    "waste": 0.1,
+    "qty_sf": 504.03
+   },
+   "Siding Fiber Cement Vertical": {
+    "waste": 0.1,
+    "qty_sf": 679.79
+   },
+   "Corner Boards": {
+    "waste": 0.1,
+    "qty_ft": 79.2,
+    "piece_ft": 8
+   }
+  },
+  "elevations_2": {
+   "Block Crawlspace walls": {
+    "waste": 0.1,
+    "qty_sf": 470.09
+   },
+   "Siding Fiber Cement Horizontal": {
+    "waste": 0.1,
+    "qty_sf": 1056.32
+   },
+   "Corner Boards": {
+    "waste": 0.1,
+    "qty_ft": 26.4
+   },
+   "Fascia and Soffit": {
+    "waste": 0.1,
+    "qty_ft": 151.59
+   },
+   "Brick sill and frieze": {
+    "waste": 0.1,
+    "qty_ft": 133.32
+   },
+   "Brick Veneer Ext": {
+    "waste": 0.1,
+    "qty_sf": 612.57
+   }
+  }
+ }
+}
