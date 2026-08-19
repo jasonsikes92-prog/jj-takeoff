@@ -103,13 +103,24 @@ Zegarra PR-114 · Guarino V3 PR-111 · Show PR-097 · Dugger PR-108 · Dolsen PR
   Guarino V3 Inputs expose the driver model (SF FIRST FLOOR 2637 manual, Room
   Perimeters 1067.6 ft traced on "Areas" plan). Mason estimate proves the
   takeoff→estimate quantity wiring at his composite rates.
+- 8/19 ~01:45 STRETCH 1b: **Burns (45687) m+e staged — full takeoff, $423,795.70
+  estimate. Watkins (37525) m+e staged (2 trim measurements: fascia 86.26 ft,
+  crown 344.46 ft on "Watkins (2-4-26)" plans).** Corpus: 10 jobs with
+  measurements, 17 estimates total.
+- **Plan-drawing PDFs staged:** Roberts (Jason's 8/17 export), Davis 83MB@300dpi
+  12 sheets, Pace 23MB 5 sheets. Export recipe: Takeoff→Plans → Select→Select all
+  → download icon → dialog: header checkbox, All drawings, 300 DPI, Show sizes
+  breakdown → Download. ⛔ DO NOT navigate away while "Preparing download" toast
+  is live — a forced navigation killed Mason's render (redo Mason). QBO per-job
+  revenue snapshot saved (training/qbo_sales_by_customer.json, 31 jobs).
 - NEXT STRETCH (in order):
-  1. Remaining estimate exports: Burns, Watkins, Wilson PR-077 + PR-044, Dolsen,
-     Lankford, Peterson, Talbot, Bouchard, Hetherington, Bozeman (+ takeoff check
-     on Burns/Watkins/Wilson).
-  2. **Plan PDFs for the 8 takeoff jobs** (Takeoff → Plans tab → per-plan download,
-     or Files) — REQUIRED for Phase B engine runs. Not yet pulled for any job.
-  3. A2: QBO per-job actuals (P&L by customer + AP detail; duplicate-name gotcha).
+  1. Plan PDFs still needed: Mason (redo), Zegarra 64238, Guarino 63505,
+     Show 53711, Dugger 63242, Burns 45687, Watkins 37525, Stiggers 58690 (has
+     takeoff plans? check), Pace already done. Stay on page until download lands.
+  2. Remaining estimate exports: Wilson PR-077 + PR-044, Dolsen PR-038, Lankford,
+     Peterson, Talbot, Bouchard, Hetherington, Bozeman, Guarino V1 PR-098.
+  3. Per-project Budget exports (actuals by cost code) for the 9 m+e jobs.
   4. A3: email sweeps (Jason MCP + Keli via JARVIS email-tool KELI_IMAP_*).
   5. B: parse all measurement exports → normalized ground-truth table → engine runs
      where plans exist → per-job scorecards (DEFECT/CONVENTION/MY-ERROR).
+  6. E: per-job viewers + morning report.
