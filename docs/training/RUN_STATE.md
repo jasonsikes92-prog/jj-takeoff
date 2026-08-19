@@ -113,14 +113,32 @@ Zegarra PR-114 · Guarino V3 PR-111 · Show PR-097 · Dugger PR-108 · Dolsen PR
   breakdown → Download. ⛔ DO NOT navigate away while "Preparing download" toast
   is live — a forced navigation killed Mason's render (redo Mason). QBO per-job
   revenue snapshot saved (training/qbo_sales_by_customer.json, 31 jobs).
+- 8/19 ~02:30 STRETCH 2: **ground_truth.json built — 5,400+ measurement rows
+  normalized across 8 full-takeoff jobs** (parse_corpus.py committed; categories =
+  the room-scoped template incl. Bath 2/3/4, Bedrooms, 6'8/8' Doors...). Inputs
+  driver table cross-checks memory (Davis 3551 ✓, Zegarra 2127+2020 ✓, Roberts
+  2127.25 = his hand number ✓, Pace has basement 1957.85). Zegarra plans staged
+  (4 sets now: roberts/davis/pace/zegarra). Wilson PR-077 estimate staged
+  (wilson_pope). Guarino V3 plan render IN FLIGHT on tab 1 (watcher bm72aizo9) —
+  stage from Downloads when it lands ("Guarino Residence V3 - Wed Aug 19*.pdf" or
+  similar). Naive qty-matching of measurements→estimate lines = mostly
+  coincidence on small ints; REAL matches need name+qty joint keys (works: Roberts
+  driveway 894.7 @ $1.75/LF, silt 1005.5 @ $3.50/LF, Dugger 59 windows @ $686.90
+  ASSEMBLY). ⭐ cost types seen: MATERIAL/LABOR/SUBCONTRACTOR/EQUIPMENT/FEE/
+  ALLOWANCE/ASSEMBLY.
 - NEXT STRETCH (in order):
-  1. Plan PDFs still needed: Mason (redo), Zegarra 64238, Guarino 63505,
-     Show 53711, Dugger 63242, Burns 45687, Watkins 37525, Stiggers 58690 (has
-     takeoff plans? check), Pace already done. Stay on page until download lands.
-  2. Remaining estimate exports: Wilson PR-077 + PR-044, Dolsen PR-038, Lankford,
+  1. Stage Guarino plan PDF when landed; then renders for Show 53711, Dugger
+     63242, Burns 45687, Mason 65138 (redo — killed by navigation). Recipe in
+     "Buildern acquisition pattern" above; dialog dance: Select→Select all→
+     download icon→header checkbox→300 DPI→sizes breakdown→Download; STAY on page.
+  2. Remaining estimates (lower priority): Wilson PR-044, Dolsen PR-038, Lankford,
      Peterson, Talbot, Bouchard, Hetherington, Bozeman, Guarino V1 PR-098.
-  3. Per-project Budget exports (actuals by cost code) for the 9 m+e jobs.
-  4. A3: email sweeps (Jason MCP + Keli via JARVIS email-tool KELI_IMAP_*).
-  5. B: parse all measurement exports → normalized ground-truth table → engine runs
-     where plans exist → per-job scorecards (DEFECT/CONVENTION/MY-ERROR).
-  6. E: per-job viewers + morning report.
+  3. Per-project Budget exports (actuals by cost code) for the 10 m+e jobs.
+  4. A3: email sweeps (Jason Gmail MCP + Keli via JARVIS email-tool KELI_IMAP_*).
+  5. B: engine runs on staged plan PDFs vs ground_truth.json → per-job scorecards
+     (DEFECT/CONVENTION/MY-ERROR). Note: plan PDFs are RASTER exports with
+     drawings burned in — for pristine vector sets check project Files section;
+     the "No drawings" export option gives clean rasters.
+  6. C: rate learning — name+qty joint match measurements→estimate lines →
+     composite rate table with provenance; then vs POs/bids/QBO actuals.
+  7. E: per-job viewers + morning report + memory/HANDOFF updates.
