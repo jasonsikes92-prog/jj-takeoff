@@ -1843,3 +1843,32 @@ per pitch band; (b) he traced a 5-pitch band (porch/deck roofs) where the
 declared pitch_calls carry a different low-slope figure — verify against the
 sheet's printed pitch markers. Golden fixture pins roof LINE LENGTHS only, so
 none of this touches sacred values.
+
+## Data point #71 — PRINTED AREA SCHEDULE MAY SELECT THE DIMENSIONED FACE (Jason's ruling, 2026-08-18)
+
+**Ruling:** the plan's printed AREAS schedule (comparison-only by its own evidence
+note) may act as a FACE-SELECTOR in the autonomy lane: among closure-valid walks
+whose every leg is a printed chain value, readings inside a ±2% window of the
+schedule figure are admitted as the dimensioned-face candidates, and the pick among
+them stays geometry-driven (closest to the engine's drawn loop). The schedule never
+feeds a quantity, never rescues a walk that does not close, and never overrides the
+2% certification gate.
+
+**Why it exists:** the engine's only autonomous shape source today draws the INSIDE
+wall face (cal #69's tracer lesson), so closure-valid readings come in face families
+— Roberts garage: inside 664.9 SF vs outside 702.4 SF, both all-printed, both
+closing. The schedule is the sheet's own statement of which family is the takeoff
+quantity. Jason ran the identical cross-check on his own certified walks (garage vs
+707, porch vs 201) before approving them.
+
+**Measured basis (auto_declare.py v0, 2026-08-18):** with the selector, the engine's
+first zero-ink component reproduced Jason's certified garage walk 6/6 legs, 702.4 SF
+vs certified 700.84 (0.22%), closure 0.00. Porch declares 203.8 SF (2.74% off) — the
+selector admits 4 readings and geometry picks a wrong V split; the gate still
+refuses it against certification, which is the designed behavior: selector chooses a
+family, never proves a walk.
+
+**Contract:** walks chosen this way carry `selected_by` naming the schedule row and
+window; a component whose in-window readings disagree materially still lists all of
+them. Approved by Jason in chat, 2026-08-18 ("cal #71 approved - use the schedule as
+face-selector").

@@ -166,8 +166,8 @@ SCHED_SEL_PCT = 2.0    # schedule cross-check window for selecting the dimension
 # quantity (its own evidence note says so) — here it only SELECTS which closure-
 # valid, all-printed-legs reading is the dimensioned OUTSIDE face, exactly the
 # cross-check Jason ran on his own walks (garage vs 707, porch vs 201).
-# ⚠ Selector use is a PENDING JASON RULING (proposed cal #71) — walks chosen this
-# way are marked "selected_by" so the dependency is visible.
+# RULED: cal #71 (Jason, 2026-08-18) — selector yes, quantity never; walks chosen
+# this way carry "selected_by" naming the row and window.
 SCHEDULE_MAP = {"garage slab": "GARAGE",
                 "front porch slab": "FRONT PORCH - COVERED",
                 "heated envelope (floor plan)": "HEATED",
@@ -312,7 +312,7 @@ def main():
                 rec["selected_by"] = (f"plan-schedule cross-check "
                                       f"({SCHEDULE_MAP[name]} {sched_sf:.0f} SF window "
                                       f"±{SCHED_SEL_PCT}%, {len(near)} readings) — "
-                                      f"PENDING RULING cal #71")
+                                      f"cal #71")
         if not decisive:
             rec["status"] = "ambiguous"
             rec["exception"] = (f"{len(combos)} closing readings with a real area "

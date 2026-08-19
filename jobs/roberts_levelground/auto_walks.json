@@ -310,7 +310,7 @@
   {
    "name": "garage slab",
    "certified_sf": 700.84,
-   "selected_by": "plan-schedule cross-check (GARAGE 707 SF window \u00b12.0%, 29 readings) \u2014 PENDING RULING cal #71",
+   "selected_by": "plan-schedule cross-check (GARAGE 707 SF window \u00b12.0%, 29 readings) \u2014 cal #71",
    "equivalent_readings": 29,
    "area_spread_pct": 9.07,
    "status": "auto-declared",
@@ -363,7 +363,7 @@
   {
    "name": "front porch slab",
    "certified_sf": 198.37,
-   "selected_by": "plan-schedule cross-check (FRONT PORCH - COVERED 201 SF window \u00b12.0%, 4 readings) \u2014 PENDING RULING cal #71",
+   "selected_by": "plan-schedule cross-check (FRONT PORCH - COVERED 201 SF window \u00b12.0%, 4 readings) \u2014 cal #71",
    "equivalent_readings": 4,
    "area_spread_pct": 28.73,
    "status": "auto-declared",
