@@ -90,3 +90,26 @@ Zegarra PR-114 · Guarino V3 PR-111 · Show PR-097 · Dugger PR-108 · Dolsen PR
   takeoff-era jobs land in the plan viewer (URL /takeoff/<planId>), navigate to
   /takeoff/measurements directly. Chrome extension dropped once (~00:05) and
   recovered on retry — if it drops again, JARVIS BUILDERN_* creds are the fallback.
+  Measurements download menu: the icon row is columns(1407)/copy(1445)/download(1484)
+  at y=136; menu item "Download Excel" at (1443,187). If the first click lands during
+  page load the menu doesn't open — retry the pair.
+- 8/19 ~01:00 STRETCH 1 COMPLETE. **Measurement-rich corpus staged (m+e): Roberts
+  566 rows, Pace Kinards 707 (51861), Mason 59 (65138), Davis 745 (63248), Zegarra
+  745 (64238), Guarino V3 561 (63505), Show 789 (53711), Dugger 752 (63242).**
+  Estimate-only: Waddell 26293, Thomas 28956, Villanueva 29560, Miller 37524,
+  Hernandez 26530, Holbrook 26989, Stiggers 58690, Davis/Dugger/Guarino/Zegarra/Show
+  estimates too. All takeoff-era jobs share the category template (Inputs 14 / Site
+  Work 3 / Foundation 4 / Shingles 8 / Metal 7 / Windows+Doors 27 / Trim 8 / ...).
+  Guarino V3 Inputs expose the driver model (SF FIRST FLOOR 2637 manual, Room
+  Perimeters 1067.6 ft traced on "Areas" plan). Mason estimate proves the
+  takeoff→estimate quantity wiring at his composite rates.
+- NEXT STRETCH (in order):
+  1. Remaining estimate exports: Burns, Watkins, Wilson PR-077 + PR-044, Dolsen,
+     Lankford, Peterson, Talbot, Bouchard, Hetherington, Bozeman (+ takeoff check
+     on Burns/Watkins/Wilson).
+  2. **Plan PDFs for the 8 takeoff jobs** (Takeoff → Plans tab → per-plan download,
+     or Files) — REQUIRED for Phase B engine runs. Not yet pulled for any job.
+  3. A2: QBO per-job actuals (P&L by customer + AP detail; duplicate-name gotcha).
+  4. A3: email sweeps (Jason MCP + Keli via JARVIS email-tool KELI_IMAP_*).
+  5. B: parse all measurement exports → normalized ground-truth table → engine runs
+     where plans exist → per-job scorecards (DEFECT/CONVENTION/MY-ERROR).
