@@ -39,3 +39,6 @@ levelground/**/*.jpg
 #   tools/tests/golden/*/expected.yaml   the ground truth per house
 #   eval/truth/measurement_truth_v3.json 1.9 MB, 690 positive truths + 1,167 explicit zeros
 #   reference/calibration.md             1,619 lines, 63 data points
+
+# overnight self-calibration corpus (client data: Buildern/QBO/email exports) — never in git
+/training/
