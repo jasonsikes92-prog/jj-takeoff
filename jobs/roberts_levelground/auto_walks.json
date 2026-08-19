@@ -1,0 +1,442 @@
+{
+ "schema": "roberts.auto_walks.v1",
+ "origin": "engine-auto.loops+chains.v0",
+ "doctrine": "no human ink anywhere in this lane; grade-only vs certified",
+ "components": [
+  {
+   "name": "crawlspace envelope (foundation footprint)",
+   "certified_sf": 2106.38,
+   "status": "ambiguous",
+   "exception": "5000 closing readings with a real area spread (1945.0\u20131996.2 SF, 2.6%) \u2014 refusing rather than guessing; the sheet does not decide this component alone",
+   "competing": [
+    {
+     "area_sf": 1962.1,
+     "walk": [
+      [
+       33.19,
+       "D"
+      ],
+      [
+       26.08,
+       "R"
+      ],
+      [
+       17.38,
+       "D"
+      ],
+      [
+       23.48,
+       "R"
+      ],
+      [
+       6.92,
+       "D"
+      ],
+      [
+       11.48,
+       "R"
+      ],
+      [
+       38.73,
+       "U"
+      ],
+      [
+       36.02,
+       "L"
+      ],
+      [
+       15.17,
+       "U"
+      ],
+      [
+       3.17,
+       "L"
+      ],
+      [
+       4.19,
+       "D"
+      ],
+      [
+       3.67,
+       "U"
+      ],
+      [
+       18.75,
+       "L",
+       "derived-by-closure"
+      ],
+      [
+       3.17,
+       "R"
+      ],
+      [
+       2.08,
+       "U"
+      ],
+      [
+       2.08,
+       "U"
+      ],
+      [
+       6.27,
+       "L"
+      ]
+     ]
+    },
+    {
+     "area_sf": 1977.7,
+     "walk": [
+      [
+       33.58,
+       "D"
+      ],
+      [
+       26.08,
+       "R"
+      ],
+      [
+       17.46,
+       "D"
+      ],
+      [
+       23.48,
+       "R"
+      ],
+      [
+       6.67,
+       "D"
+      ],
+      [
+       11.48,
+       "R"
+      ],
+      [
+       38.73,
+       "U"
+      ],
+      [
+       36.02,
+       "L"
+      ],
+      [
+       15.38,
+       "U"
+      ],
+      [
+       3.17,
+       "L"
+      ],
+      [
+       4.19,
+       "D"
+      ],
+      [
+       3.67,
+       "U"
+      ],
+      [
+       18.75,
+       "L",
+       "derived-by-closure"
+      ],
+      [
+       3.17,
+       "R"
+      ],
+      [
+       2.08,
+       "U"
+      ],
+      [
+       2.08,
+       "U"
+      ],
+      [
+       6.27,
+       "L"
+      ]
+     ]
+    },
+    {
+     "area_sf": 1960.0,
+     "walk": [
+      [
+       33.19,
+       "D"
+      ],
+      [
+       26.08,
+       "R"
+      ],
+      [
+       17.46,
+       "D"
+      ],
+      [
+       23.48,
+       "R"
+      ],
+      [
+       6.92,
+       "D"
+      ],
+      [
+       11.48,
+       "R"
+      ],
+      [
+       38.73,
+       "U"
+      ],
+      [
+       36.02,
+       "L"
+      ],
+      [
+       15.17,
+       "U"
+      ],
+      [
+       3.17,
+       "L"
+      ],
+      [
+       4.19,
+       "D"
+      ],
+      [
+       3.67,
+       "U"
+      ],
+      [
+       18.75,
+       "L",
+       "derived-by-closure"
+      ],
+      [
+       3.17,
+       "R"
+      ],
+      [
+       2.08,
+       "U"
+      ],
+      [
+       2.08,
+       "U"
+      ],
+      [
+       6.27,
+       "L"
+      ]
+     ]
+    },
+    {
+     "area_sf": 1962.3,
+     "walk": [
+      [
+       33.19,
+       "D"
+      ],
+      [
+       26.08,
+       "R"
+      ],
+      [
+       17.38,
+       "D"
+      ],
+      [
+       23.48,
+       "R"
+      ],
+      [
+       6.92,
+       "D"
+      ],
+      [
+       11.48,
+       "R"
+      ],
+      [
+       38.73,
+       "U"
+      ],
+      [
+       36.02,
+       "L"
+      ],
+      [
+       15.17,
+       "U"
+      ],
+      [
+       3.17,
+       "L"
+      ],
+      [
+       4.19,
+       "D"
+      ],
+      [
+       3.67,
+       "U"
+      ],
+      [
+       18.71,
+       "L",
+       "derived-by-closure"
+      ],
+      [
+       3.17,
+       "R"
+      ],
+      [
+       2.08,
+       "U"
+      ],
+      [
+       2.08,
+       "U"
+      ],
+      [
+       6.31,
+       "L"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "garage slab",
+   "certified_sf": 700.84,
+   "selected_by": "plan-schedule cross-check (GARAGE 707 SF window \u00b12.0%, 29 readings) \u2014 PENDING RULING cal #71",
+   "equivalent_readings": 29,
+   "area_spread_pct": 9.07,
+   "status": "auto-declared",
+   "page": 3,
+   "walk": [
+    [
+     26.67,
+     "D"
+    ],
+    [
+     13.43,
+     "R",
+     "derived-by-closure"
+    ],
+    [
+     2.38,
+     "U"
+    ],
+    [
+     14.17,
+     "R"
+    ],
+    [
+     24.29,
+     "U",
+     "derived-by-closure"
+    ],
+    [
+     27.6,
+     "L"
+    ]
+   ],
+   "tiers": {
+    "H": "one-derived",
+    "V": "one-derived"
+   },
+   "walk_area_sf": 702.4,
+   "walk_closure_ft": 0.0,
+   "loop_inside_face_sf": 654.9,
+   "delta_vs_certified_pct": 0.22,
+   "vs_jason_walk": {
+    "auto_legs": 6,
+    "declared_legs": 6,
+    "agreeing_legs": 6,
+    "auto_only": []
+   },
+   "jason_walk_area_sf": 704.1,
+   "delta_vs_jason_walk_pct": 0.24
+  },
+  {
+   "name": "front porch slab",
+   "certified_sf": 198.37,
+   "selected_by": "plan-schedule cross-check (FRONT PORCH - COVERED 201 SF window \u00b12.0%, 4 readings) \u2014 PENDING RULING cal #71",
+   "equivalent_readings": 4,
+   "area_spread_pct": 28.73,
+   "status": "auto-declared",
+   "page": 3,
+   "walk": [
+    [
+     10.4,
+     "D"
+    ],
+    [
+     6.56,
+     "R"
+    ],
+    [
+     2.23,
+     "U"
+    ],
+    [
+     16.6,
+     "R"
+    ],
+    [
+     8.17,
+     "U",
+     "derived-by-closure"
+    ],
+    [
+     23.19,
+     "L"
+    ]
+   ],
+   "tiers": {
+    "H": "printed-only",
+    "V": "one-derived"
+   },
+   "walk_area_sf": 203.8,
+   "walk_closure_ft": 0.03,
+   "loop_inside_face_sf": 177.4,
+   "delta_vs_certified_pct": 2.74,
+   "vs_jason_walk": {
+    "auto_legs": 6,
+    "declared_legs": 6,
+    "agreeing_legs": 4,
+    "auto_only": [
+     [
+      "V",
+      8.17
+     ],
+     [
+      "V",
+      10.4
+     ]
+    ]
+   },
+   "jason_walk_area_sf": 196.4,
+   "delta_vs_jason_walk_pct": 3.77
+  },
+  {
+   "name": "heated envelope (floor plan)",
+   "certified_sf": 2099.0,
+   "status": "no-autonomous-shape",
+   "exception": "wall-loop decomposition resolves no envelope for this scope (floor-plan loops top out at closet scale) \u2014 no engine-drawn shape exists yet"
+  },
+  {
+   "name": "rear deck (floor plan)",
+   "certified_sf": 357.3,
+   "status": "no-autonomous-shape",
+   "exception": "wall-loop decomposition resolves no envelope for this scope (floor-plan loops top out at closet scale) \u2014 no engine-drawn shape exists yet"
+  }
+ ],
+ "scoreboard": {
+  "components": 5,
+  "auto_declared": 2,
+  "within_2pct_of_certified": 1
+ }
+}

@@ -5,6 +5,72 @@ Created 2026-08-03. **This is the tracking document.** Update status here as pha
 
 ---
 
+## ⭐ THE GOAL — restated by Jason 2026-08-18
+
+**"The goal is not to keep having to draw on each plan. The goal is to teach you to
+draw your own lines and take your own measurements."** His markup is TRAINING SIGNAL
+and exception handling — never the permanent operating mode. This formally retires the
+"autonomous stays defunded" doctrine line: autonomy is the product, but it runs BEHIND
+the fail-closed gates this repo built, never instead of them. (Handoff built H1 the
+same way — founders hand-marked thousands of blueprints as training data; see
+`docs/HANDOFF_AI_INTEL.md` for the full competitor recon.)
+
+**Architecture consequence:** the supervised loop and the autonomous product are one
+system. Certification (walks vs the sheets' own chains, 2% gate) is an autonomous
+GRADER; Jason's certified strokes are the labeled corpus; the teach loop is the
+exception path. Autonomy = engine proposes → gates grade → Jason adjudicates failures.
+
+### Autonomy lane v0 — first measured run (2026-08-18, `jobs/roberts_levelground/auto_declare.py`)
+
+Engine-drawn walks with NO human ink: shape from `foundation_wall_loops` (the engine's
+own paired-wall decomposition), lengths from BOTH plan sheets' printed chains pooled
+(p3+p4 — Jason's own garage certification needed cross-sheet dims), solved under
+cal #68 rules (≤1 derived leg/axis, closure ≤0.05 ft), ambiguity judged by AREA,
+plan's printed AREAS schedule used as a face-SELECTOR only (⚠ pending ruling below).
+Report-only: writes `auto_walks.json`, never touches `declared_walks.json` or the engine.
+
+| Component | Result | vs certified | Why |
+|---|---|---|---|
+| garage slab | ✅ auto-declared 702.4 SF, closure 0.00 | **0.22%** — 6/6 legs match Jason's walk | full chain worked |
+| front porch slab | ⚠ auto-declared 203.8 SF | 2.74% — wrong V split (8.17/10.40 vs his 9.38/7.77) | schedule window admits 4 readings; no independent side to referee |
+| crawlspace envelope | ✋ refused | all 5,000 closing readings are the INSIDE face (~1965 SF vs 2106) | loop = inside face + micro-jogs; outside-face shape doesn't exist autonomously |
+| heated envelope | ✋ refused | — | floor-plan loop decomposition resolves rooms, not the envelope |
+| rear deck | ✋ refused | — | same — no autonomous shape source |
+
+**Scoreboard: 2/5 auto-declared, 1/5 inside the 2% gate, 0 wrong numbers shipped**
+(every failure refused loudly with a named cause — the zero-false-positive property held).
+
+### The three named gaps (next levers, in order)
+
+1. **Outside-face shape** — the loop decomposition knows both lines of every wall pair;
+   emitting the OUTER loop (engine edit, needs Jason's ratify + full gates) unlocks
+   crawlspace and sharpens every snap. This is the single highest-value lever.
+2. **Floor-plan envelope detection** — heated/deck have no autonomous shape at all today.
+   Candidate: outermost wall-pair boundary on floor plans, or elevation-reconciled extents.
+3. **An independent second side for autonomous runs** — on Roberts, Jason's stroke was
+   the pixel side. Blind runs need a non-chain verification (outer-face pixel area, or
+   schedule-as-verification once ruled) before an auto walk can ever certify.
+
+### Pending Jason rulings (autonomy lane)
+
+- **Proposed cal #71:** the plan's printed AREAS schedule may SELECT which closure-valid,
+  all-printed-legs reading is the dimensioned face (never feed a quantity). Both v0
+  auto-declarations depend on it; walks carry `selected_by` marking the dependency.
+- The 8/14 engine-edit ratify backlog (`todo_takeoff_engine_ratify_0814`) still open.
+
+### Cloned from Handoff (recon 8/18, mapped to this roadmap)
+
+- **Summary-report contract** (assumptions / missing info / clashes per run):
+  `auto_declare.py` exceptions are v0; formalize as a required emission per cert run.
+- **Cross-sheet reading** ("a detail on page 40 changes the quantity on page 12"):
+  adopted as cross-page chain pooling; grows into Phase 3 reconciliation.
+- **Clash detection** (schedule-vs-elevation counts): already Phase 3's opening move.
+- **TakeoffBench-V1** (their 15-set benchmark, harness in "OpenHarbor", data by research
+  request): external fixtures for grading autonomy beyond Roberts — Jason to send the
+  research request when ready.
+
+---
+
 ## The product
 
 A program that reads a residential plan PDF and fills J&J's measurement sheet — all 230
