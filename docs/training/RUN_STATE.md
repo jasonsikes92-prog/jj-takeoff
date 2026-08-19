@@ -66,6 +66,22 @@ PR-044 · Talbot PR-048 · Stiggers PR-102 · Mason PR-116 · Bouchard PR-039 ·
 Hetherington PR-065 · Bozeman PR-093 · estimates-only: Davis PR-109 ·
 Zegarra PR-114 · Guarino V3 PR-111 · Show PR-097 · Dugger PR-108 · Dolsen PR-038.
 
+## Phase A — COMPLETE 8/19 ~03:30 (except Mason plan redo)
+- 10/10 measurement jobs staged; 17 estimates; **8 plan-drawing sets** (roberts,
+  davis 83MB, pace 23MB, zegarra, guarino_v3 36MB, show 112MB, dugger 184MB,
+  burns 108MB — all 300 DPI all-drawings; Mason 3-sheet redo pending, Chrome
+  dropped a 3rd time). ground_truth.json (5,400+ rows) + segment_sizes.json
+  (Roberts 97 / Davis 96 / Guarino 113 per-segment values from PDF text pages —
+  Pace/Zegarra/Show renders may lack sizes-breakdown pages, re-check pattern).
+- **ALL FOUR ACCESS PATHS PROVEN**, incl. Keli IMAP end-to-end: JARVIS
+  `searchEmail({query,days,limit,account:{user:KELI_IMAP_USER,pass:KELI_IMAP_PASSWORD}})`
+  → 6 invoice hits/45d incl. "Mike Padgett: 1301 sailview & 1551 swords trail
+  invoices" (Peterson + Talbot sub invoices). `fetchPdfAttachment` + `extractPdfText`
+  available for pulling invoice PDFs. NOTE: export name is searchEmail, NOT
+  searchMailbox.
+- Chrome extension drops periodically overnight (3×) — retry after ~30s works;
+  renders in flight on a dropped tab survive IF the browser stays open.
+
 ## Log
 - 8/18 eve: run initialized. cal #71 committed (9ddbb19). Autonomy lane v0 committed
   (a7f501b): garage zero-ink 0.22%; gaps = outer-face shape, floor-plan envelope,
