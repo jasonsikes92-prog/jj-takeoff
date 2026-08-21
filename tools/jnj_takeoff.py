@@ -2737,8 +2737,12 @@ FRAMING_LABOR_RATE = 6.00  # $/sf, blended under-roof FRAMED area. JASON LIVE 20
 _FRAME_FLATWORK = ("patio", "stoop", "sidewalk", "side walk", "driveway", "walk", "concrete")
 _FRAME_FRAMED   = ("htd", "heated", "main", "basement", "second", "upper", "third",
                    "loft", "bonus", "attic", "garage", "covered", "porch", "deck", "screen",
-                   "expansion", "unfinished", "outdoor", "under roof")  # future-expansion/
-                   # unfinished bonus IS framed + in TOTAL UNDER ROOF (Peterson/Fairview)
+                   "expansion", "unfinished", "outdoor", "under roof",
+                   "1st floor", "first floor", "2nd floor", "3rd floor")  # future-expansion/
+                   # unfinished bonus IS framed + in TOTAL UNDER ROOF (Peterson/Fairview).
+                   # Ordinal-floor family: Guarino V3's schedule says "1ST FLOOR LIVING"
+                   # (no htd/heated/main anywhere) — bare "living" stays out (room-
+                   # schedule rows like "LIVING ROOM 345" would false-positive).
 
 def classify_area_row(label):
     """Classify a SQFT-schedule row as 'framed' (counts for framing labor),
@@ -2774,6 +2778,11 @@ def read_sqft_schedule(page, min_sf=40, max_sf=12000):
         label = line[:line.rfind(nums[-1])].strip()
         if not any(c.isalpha() for c in label):
             continue
+        if re.search(r"\b(plan|elevation|section|detail)\b", label, re.I):
+            continue  # sheet-index/title row ("1ST FLOOR ELECTRICAL PLAN 8" + a code
+                      # year), not a schedule row — the ordinal-floor keywords would
+                      # otherwise turn these into phantom areas. NOT vetoing "code":
+                      # Show's real garage row parses as "code. GARAGE 1038".
         out.append({"label": label, "sqft": val, "klass": classify_area_row(label)})
     return out
 
