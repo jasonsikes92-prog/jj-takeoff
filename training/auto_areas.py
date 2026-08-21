@@ -27,8 +27,8 @@ sys.path.insert(0, os.path.join(ROOT, "jobs", "roberts_levelground"))
 import fitz  # noqa: E402
 import jnj_takeoff as eng  # noqa: E402
 from auto_declare import (  # noqa: E402  (proven Roberts machinery, unchanged)
-    split_small_diagonals, solve_axis, evaluate_combos, AXIS,
-    AREA_EQUIV_PCT, DECISIVE_GAP_FT, SCHED_SEL_PCT,
+    split_small_diagonals, solve_axis, evaluate_combos, AXIS, SIGN,
+    AREA_EQUIV_PCT, DECISIVE_GAP_FT, SCHED_SEL_PCT, CAND_TOL_FT,
 )
 from propose_walks import rectilinear_edges  # noqa: E402
 
@@ -67,12 +67,49 @@ def _complexity(axis_legs, axis_pool):
     return prod
 
 
+JOG_MAX_FT = 2.0       # a shorter axis-aligned leg with NO printed candidate is
+                       # band-contour noise (the sealed band stepping around a
+                       # wall joint), not a dimensioned offset — pace's garage
+                       # refused on 0.57-1.67 ft jogs whose nearest dims were
+                       # 2.33+/3.71+. Real short bumps keep their printed dim
+                       # and are never folded.
+_DIR_OF = {("H", 1): "R", ("H", -1): "L", ("V", 1): "D", ("V", -1): "U"}
+
+
+def _fold_micro_jogs(edges, pool):
+    """Fold undimensioned micro-jogs into their nearest same-axis leg. The signed
+    per-axis sums are preserved exactly, so closure math is untouched; the solver
+    then sees the dimensioned run lengths instead of artifact fragments."""
+    out = [dict(e) for e in edges]
+    def undimmed(e):
+        vals = pool["H"] if AXIS[e["dir"]] == "H" else pool["V"]
+        return (e["len_ft"] < JOG_MAX_FT and
+                not any(abs(v - e["len_ft"]) <= CAND_TOL_FT for v in vals))
+    while True:
+        idx = next((i for i, e in enumerate(out) if undimmed(e)), None)
+        if idx is None:
+            return out
+        e = out.pop(idx)
+        peers = [j for j, o in enumerate(out) if AXIS[o["dir"]] == AXIS[e["dir"]]]
+        if not peers:
+            return out
+        j = min(peers, key=lambda j: min(abs(j - idx), len(out) - abs(j - idx)))
+        t = out[j]
+        signed = SIGN[t["dir"]] * t["len_ft"] + SIGN[e["dir"]] * e["len_ft"]
+        if abs(signed) < 0.05:
+            out.pop(j)
+            continue
+        t["dir"] = _DIR_OF[(AXIS[t["dir"]], 1 if signed >= 0 else -1)]
+        t["len_ft"] = abs(signed)
+
+
 def _solve_seed(seed, face, pgi, ppf, L, page_pool, pool, sched):
     """One seed polygon -> solved-record dict (same contract as before, + face)."""
     edges = split_small_diagonals(rectilinear_edges(seed, ppf), ppf, max_ft=6.0)
     base = {"page": pgi, "loop_sf": round(L["area_sf"], 1), "face": face}
     if any(e["dir"] == "?" for e in edges):
         return {**base, "status": "diagonal"}
+    edges = _fold_micro_jogs(edges, pool)
     legs = [(i, e["dir"], e["len_ft"]) for i, e in enumerate(edges)]
     h = [l for l in legs if AXIS[l[1]] == "H"]
     v = [l for l in legs if AXIS[l[1]] == "V"]
