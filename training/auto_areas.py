@@ -9,6 +9,10 @@ machinery, verbatim import) -> cal #71 schedule window (read_sqft_schedule) ->
 grade vs Inputs (SF FIRST FLOOR / Garage / Covered Porches).
 
 Report-only. Writes training/auto_areas_scorecard.json.
+
+v6: loops seed only from scale-verified pages (a multi-label chain certifies the
+page's ppf); the hard 14-leg gate is gone (the 300k candidate-product guard rules,
+MAX_LEGS is a sanity ceiling); every face attempt is recorded per loop.
 """
 
 import json
@@ -31,6 +35,9 @@ from propose_walks import rectilinear_edges  # noqa: E402
 MIN_LOOP_SF = 300
 MAX_LOOP_SF = 9000
 MAX_LOOPS_PER_JOB = 8
+MAX_LEGS = 30          # sanity ceiling only — the 300k candidate-product guard is
+                       # what actually refuses runaways (v5's hard 14-leg gate was
+                       # refusing 15-26-leg notched footprints the guard would pass)
 
 JOBS = ["roberts", "davis", "guarino_v3", "show", "watkins", "dugger",
         "pace_kinards", "burns", "holbrook", "zegarra"]
@@ -74,18 +81,20 @@ def _solve_seed(seed, face, pgi, ppf, L, page_pool, pool, sched):
     # sets whose union pool is too dense to search.
     hs = vs = None
     tier_used = None
-    if len(legs) <= 14:
+    attempted = False
+    if len(legs) <= MAX_LEGS:
         for tier, tp in (("union", pool), ("page", page_pool.get(pgi, pool))):
             if (_complexity(h, tp["H"]) > 300000 or
                     _complexity(v, tp["V"]) > 300000):
                 continue
+            attempted = True
             ths, _ = solve_axis(h, tp["H"])
             tvs, _ = solve_axis(v, tp["V"])
             if ths and tvs:
                 hs, vs, tier_used = ths, tvs, tier
                 break
     if not hs or not vs:
-        return {**base, "status": "no-solution" if len(legs) <= 14
+        return {**base, "status": "no-solution" if attempted
                 else "too-complex", "legs": len(legs)}
     combos = evaluate_combos(hs, vs, legs)
     areas = [c["area_sf"] for c in combos]
@@ -142,22 +151,36 @@ def main():
         # 2. chains: per-page pools first (small candidate sets), union as fallback
         page_pool = {}
         union = {"H": set(), "V": set()}
+        scale_ok = {}
         for r in scaled:
             pp = {"H": set(), "V": set()}
+            cs = []
             try:
-                for c in eng.read_dimension_chains(doc[r["i"]], r["ppf"]):
-                    pp[c["orient"]].update(c["runs"])
-                    pp[c["orient"]].add(c["total"])
+                cs = list(eng.read_dimension_chains(doc[r["i"]], r["ppf"]))
             except Exception:
                 pass
+            for c in cs:
+                pp[c["orient"]].update(c["runs"])
+                pp[c["orient"]].add(c["total"])
+            # Loop-budget gate: pages with NO parsed dimension text and only a
+            # 'review'-grade scale are plats/details/covers — in v5 holbrook's
+            # whole slate was 5-8k SF phantoms from ppf-0.73 zero-chain pages
+            # crowding real floor-plan loops out of the budget. Requiring a
+            # multi-label chain was falsified (davis p4 / guarino p3 print
+            # single-label dims only, 105 and 22 chains, 0 multi): dimension
+            # TEXT presence or a high/good scale vote is the gate; the solver's
+            # candidate snapping + closure stays the actual correctness guard.
+            scale_ok[r["i"]] = bool(cs) or r.get("conf") in ("high", "good")
             page_pool[r["i"]] = pp
             union["H"].update(pp["H"])
             union["V"].update(pp["V"])
         pool = union
 
-        # 3. loops on every scaled page
+        # 3. loops on every scale-verified page
         loops = []
         for r in scaled:
+            if not scale_ok.get(r["i"]):
+                continue
             try:
                 for L in eng.foundation_wall_loops(doc[r["i"]], ppf=r["ppf"],
                                                   close_ft=2.0):
@@ -181,13 +204,17 @@ def main():
                 attempts.append(("outer", L["outer_polygon_pts"]))
             attempts.append(("inner", L["polygon_pts"]))
             best_rec = None
+            tried = []   # every face's outcome — v5 kept only the outer record
             for face, seed in attempts:
                 rec = _solve_seed(seed, face, pgi, ppf, L, page_pool, pool, sched)
+                tried.append({"face": face, "status": rec["status"],
+                              "legs": rec.get("legs")})
                 if rec["status"] == "auto-declared":
                     best_rec = rec
                     break
                 if best_rec is None:
                     best_rec = rec
+            best_rec["attempts"] = tried
             solved.append(best_rec)
         doc.close()
 
