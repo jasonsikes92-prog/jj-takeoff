@@ -169,6 +169,25 @@ Zegarra PR-114 · Guarino V3 PR-111 · Show PR-097 · Dugger PR-108 · Dolsen PR
   driveway 894.7 @ $1.75/LF, silt 1005.5 @ $3.50/LF, Dugger 59 windows @ $686.90
   ASSEMBLY). ⭐ cost types seen: MATERIAL/LABOR/SUBCONTRACTOR/EQUIPMENT/FEE/
   ALLOWANCE/ASSEMBLY.
+- 8/21 eve: REFUSAL DIAGNOSIS COMPLETE (the queued next action). Blockers ranked
+  from the new per-loop `attempts` records: (1) phantom loops off junk-scale
+  zero-chain pages ate holbrook's budget — pages now need dim text or high/good
+  scale to seed loops; multi-label-chain gating was tried and FALSIFIED (davis
+  p4 105 chains / guarino p3 22 chains are single-label-only and carry the
+  winning loops); (2) the 14-leg cap (not the 300k product guard) caused 10/23
+  refusals — removed, guard rules; (3) sub-2-ft undimensioned band jogs blocked
+  pace's garage — fold them (closure preserved; dimensioned bumps survive).
+  Engine: ordinal-floor schedule keywords + drawing-title veto (burns golden
+  would have gained a phantom 2021-SF code-year row without it). Gates green,
+  cert re-pinned 20:48Z. **Scoreboard 4→5 MATCHED + 1 NEAR, 0 wrong: pace
+  garage 630.6 vs his 623.71 (1.1%), declared from two pages independently.**
+  Commits bd9786d / 2a48662 / 36c4407 (+ cert dc3d450 in Desktop repo).
+  ANSWERED open Q1 (blocker mix). Q3 partially (ordinal family; junk labels
+  remain, noted harmless). Guarino first floor = CLOSED-BY-EVIDENCE for the
+  selection path: full 16,731-reading space spans 2693–2800 vs printed 2599 /
+  his 2637 — needs the floor-plan tracer (Q2), not schedule tuning. NEW for
+  Jason: cal #73 candidate — derived-by-closure legs inside schedule-selected
+  walks (all ratified declares have 1-2) vs cal #71's literal "all-printed".
 - NEXT STRETCH (in order):
   1. Stage Guarino plan PDF when landed; then renders for Show 53711, Dugger
      63242, Burns 45687, Mason 65138 (redo — killed by navigation). Recipe in

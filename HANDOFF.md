@@ -1,151 +1,186 @@
-# J&J Takeoff — Engineering Handoff (Overnight self-calibration relay)
+# J&J Takeoff — Engineering Handoff (Zero-ink autonomy era)
 
-**Written:** 2026-08-18 23:40 EDT · **Repo:** `C:\Users\jason\JJ-Takeoff` · **Branch:** `virtual-takeoff` @ `9ddbb19`
-**Prior handoff:** `HANDOFF-archive-2026-08-18-2340.md` (best source for the viewer/teach-loop era: Phase 0/A/B/D architecture, teach-mode mechanics, cal #66/#67 context, repo layout)
+**Written:** 2026-08-21 16:26 EDT · **Repo:** `C:\Users\jason\JJ-Takeoff` · **Branch:** `virtual-takeoff` @ `2b007c0`
+**Prior handoff:** `HANDOFF-archive-2026-08-21-1626.md` (best source for the overnight corpus-acquisition story and relay-era state; the acquisition recipes themselves live in `docs/training/RUN_STATE.md`)
 
 ---
 
 ## 1. Mission
 
-Jason's goal, stated 8/18: **teach the system to draw its own lines and take its own
-measurements** — his markup is training signal, not the operating mode. Tonight's
-mandate: overnight self-calibration against ALL his real jobs — pull every Buildern
-takeoff/estimate/PO, cross-reference my measurements vs his hand-done ones (his are
-ground truth), cross-reference pricing vs POs/bids/QBO actuals/sub invoices, fix what's
-wrong, keep going until each thing works. This is a RELAY session: at ~60% context,
-update this handoff and continue in a fresh session (his explicit rule).
+Jason's goal, his words (8/18): **"teach you to draw your own lines and take your own
+measurements"** — his markup is training signal and exception handling, never the
+operating mode. The training corpus is built (his 5,400+ Buildern measurement rows
+across 10 jobs = ground truth), cal #72 shipped the outer-face capability, and the
+zero-ink scoreboard went 0 → **4 MATCHED + 1 NEAR, 0 wrong** in one night. Done looks
+like: engine-drawn walks that certify against an independent side and price.
 
 ## 2. Current State
 
-**Verified tonight:**
-- **Autonomy lane v0 works** (`jobs/roberts_levelground/auto_declare.py`, commit
-  `a7f501b`): engine-drawn garage walk with zero human ink = 702.4 SF, closure 0.00,
-  6/6 legs match Jason's certified walk (0.22%). Scoreboard 2/5 auto-declared, 1/5 in
-  gate, 0 wrong numbers. Full gap list in `docs/ROADMAP.md` "THE GOAL" section.
-- **cal #71 APPROVED + recorded** (`reference/calibration.md`, commit `9ddbb19`):
-  printed AREAS schedule may SELECT the dimensioned face among closure-valid
-  all-printed-legs readings; never feeds a quantity.
-- **All four data sources verified reachable** — see `docs/training/RUN_STATE.md`
-  "Access" section (Buildern via Jason's Chrome; QBO MCP; Jason Gmail MCP; Keli's
-  mailbox via JARVIS `agent/email-tool.js` + `KELI_IMAP_USER/PASSWORD` in JARVIS/.env).
-- **Buildern acquisition pattern PROVEN on Roberts** and documented step-by-step in
-  RUN_STATE (project list export ✓, 167 POs ✓, Roberts measurements 566 rows ✓ +
-  estimate 602 rows ✓ staged under `training/`).
+**Verified at `2b007c0` (gates run 2026-08-21, output quoted from `jj.py verify`):**
+- Engine gates GREEN: golden 6/6 houses, self-test ALL PASS, unit battery 7/7,
+  fixture cert re-pinned `2026-08-21T19:36:11Z`. Two `[FAIL]` lines remain and are
+  **pre-existing stopped-track drift, not this session's**: `offline system test`
+  (v3 contract: `run_phase1_measurement_observations.mjs → anthropic_structured_
+  vision_client.mjs` import edge, in the tree since 8/4) and `readiness 16/13 vs
+  baseline 18/11`. Engine-change gate set = golden + self-test + battery + cert.
+- **cal #72 shipped** (`4d54781`): `foundation_wall_loops` now also emits
+  `outer_area_sf` / `outer_polygon_pts` — the component grown one max-wall-thickness
+  into its own sealed band; contour = the dimensioned face. Additive keys only.
+- **Zero-ink scoreboard (harness v5, `fb6e0f2`)** — engine loops + cross-page chain
+  pools + cal #68 solver + cal #71 schedule window, graded vs Jason's Buildern Inputs:
+  Roberts **full heated envelope 2,126 vs his 2,127.25 = 0.08%** + garage 703/715
+  1.6% (2/2 loops declared); Davis garage 899/898 0.12% + envelope 3,302/3,551 7.0%
+  NEAR; Zegarra garage 547/537 1.9%. **0 wrong numbers across every run all night.**
+  Raw per-loop records: `training/auto_areas_scorecard.json`; honest buckets:
+  `python training/autonomy_report.py`.
+- **Training corpus** (`training/`, gitignored, ~700MB): `ground_truth.json` (10 jobs'
+  measurements + 20 estimates normalized), 9 budgets w/ actuals, 8 all-drawings plan
+  PDFs (his traces burned in + per-segment sizes as text → `segment_sizes.json`),
+  10 original plan sets (8 vector-readable; Mason + Dugger local copies are rasters),
+  167 POs, `qbo_sales_by_customer.json`, `learned_rates.json` (484 name+qty matched
+  rate lines), `readability_scorecard.json` (census: davis 206 chains … watkins 0).
+- **Access proven ×4**: Buildern (Jason's Chrome; JARVIS `BUILDERN_*` env fallback),
+  QBO MCP, Jason Gmail MCP, **Keli IMAP** via JARVIS `agent/email-tool.js`
+  `searchEmail`/`fetchPdfAttachment` with `{account:{user:KELI_IMAP_USER,pass:
+  KELI_IMAP_PASSWORD}}` (env in `JARVIS/.env`) — invoice PDFs extract to text.
+- **Blocked/refused (correctly):** show 0/3, pace_kinards 0/4, holbrook 0/8 loops
+  declared; guarino_v3 declares only a 430 SF room (its envelope never loops);
+  burns/dugger/watkins produce 0 loops in range on their readable pages.
 
-**Uncommitted:** `.gitignore` (root-anchored `/training/` — the unanchored pattern was
-silently ignoring `docs/training/` too), `docs/training/RUN_STATE.md`. Commit these
-first.
-
-**Not run tonight:** full gate suite (no engine files touched — auto_declare.py is an
-additive job-local tool). Any session that touches `tools/jnj_takeoff.py` must run
-`python jj.py verify` + fixture cert refresh per convention.
-
-**Exact next action:** execute Phase A of RUN_STATE — loop the ~26 priority jobs
-through the proven Buildern export pattern (collect each project's internal id from
-the projects list row link; Roberts = 29093), staging into `training/<job>/`. Then
-A2 (QBO per-job actuals), A3 (email sweeps), then Phase B measurement calibration.
+**Exact next action:** refusal diagnosis. Load `training/auto_areas_scorecard.json`,
+tabulate per-loop `face × status` for show / pace_kinards / holbrook / guarino_v3,
+and pick the dominant blocker (expected mix: no-solution on both faces = chain-pool
+coverage; missing AREAS schedule = designer formats for `read_sqft_schedule`;
+floor-plan envelopes never looping = the same shape gap heated has everywhere).
 
 ## 3. Decisions Made (and Why)
 
 | Decision | Alternatives | Reason | Reversibility |
 |---|---|---|---|
-| Autonomy is the goal; supervised loop = training rig (Jason 8/18) | keep "autonomous defunded" doctrine | his explicit ruling; gates make autonomy safe | settled — his words in memory + ROADMAP |
-| cal #71 schedule-as-face-selector | refuse all face-ambiguous readings | inside-face vs outside-face families both close; the sheet's own figure picks the family; Jason ran the same check by hand | his ruling — settled |
-| Cross-page chain pooling (p3+p4) in the solver | single-page pools | his own garage cert needed p4 dims to settle a p3 ambiguity | measured: true reading only reachable pooled |
-| Ambiguity judged by AREA spread, not value-tie | refuse on any tie | 12.54-vs-12.52 is one measurement, not two readings | in auto_declare.py, tunable consts |
-| Overnight engine fixes allowed, gates green, morning ratify | diagnose-only | Jason: "figure out how to fix it… you have full access"; rate-book VALUES stay proposals | his mandate, this run only |
-| Buildern browser crawling authorized (supersedes ask-for-export) | JARVIS BUILDERN_* headless | his explicit instruction; Chrome verified logged in; JARVIS creds = fallback | mandate for this run |
-| QBO MCP replaces Buildern Bills/Invoices UI (no export button there) | scrape the grids | bills are QB-synced anyway; MCP is cheaper and structured | trivial |
+| **cal #71** (Jason): printed AREAS schedule may SELECT the dimensioned face among closure-valid all-printed readings; never feeds a quantity | refuse all face-ambiguity | inside/outside-face families both close; the sheet's own figure picks; he ran the same check by hand | his ruling — settled |
+| **cal #72** (Jason, verbatim "ratify both"): outer-face emission + 8/14 engine pair blessed | keep inner-only | inner face capped envelopes at ~7%; his dim strings run to outside faces even on shared walls (garage 26'-8" = inner 25.25 + 2 walls) | his ruling — settled |
+| Outer face = geodesic band-grow (dilate component by `thick_ft[1]`, ∩ sealed, contour) | polygon offset math | raster truth already in hand; sealed spans face-to-face; ~15 lines, additive | easy to refine |
+| Harness seeds outer face FIRST, inner fallback per loop | outer-only (v4) | measured: each face solves loops the other refuses (outer→envelope 0.08%; inner→garage 1.6%) | settled by data |
+| Union chain pool primary; page-tier only rescues too-complex | page-first (v2) | a single page CLOSES ON A WRONG READING (garage p3→665 vs true 703 needing p4) — reproduces the exact ambiguity Jason's own cert hit | load-bearing |
+| Ambiguity judged by AREA of resulting walks; quarter-inch printed variants = one reading; decisive-margin else refuse | refuse all ties | 12.54-vs-12.52 isn't two readings; 8.75-vs-10.4 is — refuse only real spreads | tunable consts, top of `auto_declare.py` |
+| Complexity guard: candidate-product > 300k or > 14 legs → refuse "too-complex" | let it run | 4^17 tier-0 products ran away on Davis' 206-chain pool (killed a live run) | tunable |
+| His measurements are GROUND TRUTH; disagreement classifies DEFECT / CONVENTION / MY-ERROR | treat diffs as errors | cal #70 proved conventions differ (his flat roof traces vs our pitch-corrected) | doctrine |
+| Raw corpus stays out of git (`/training/` ignored, root-anchored); tools force-added | commit everything | client data; tools are code | settled |
+| Stopped-track v3 FAILs left untouched, flagged to Jason | "fix" them | `estimator_accuracy` is harvest-only per standing doctrine; drift predates this work | his call |
 
 ## 4. Architecture & Key Files
 
-**Created tonight:**
-- `jobs/roberts_levelground/auto_declare.py` — the autonomy lane: engine loop shape →
-  cross-page printed-chain pools → per-axis closure solver (cal #68: ≤1 derived/axis,
-  ±0.05) → walk-level candidate evaluation (area-equivalence 1.0%, decisive margin
-  0.5 ft, cal #71 schedule window ±2%) → scoreboard vs `declared_walks.json` +
-  certified areas → `auto_walks.json`. Report-only; never writes declared/evidence.
-- `docs/training/RUN_STATE.md` — **the run's persistent brain.** Access paths, rules,
-  phase checklist, proven Buildern export pattern, staged inventory, priority-job
-  list, log. Update it after every milestone; it's what survives relays.
-- `docs/HANDOFF_AI_INTEL.md` — Handoff.ai/H1 competitor recon (their 3-artifact
-  deliverable contract, TakeoffBench-V1, what we cloned).
-- `training/` (gitignored) — raw corpus: `buildern_projects.xlsx` (69 jobs),
-  `buildern_purchase_orders.xlsx` (167 POs), `roberts/measurements.xlsx` +
-  `estimate_items.xlsx`.
+**Engine (modified this session):**
+- `tools/jnj_takeoff.py` — the outer-face block inside `foundation_wall_loops`
+  (~line 806): grows each interior component one max wall thickness into `sealed`,
+  emits `outer_area_sf` + `outer_polygon_pts`. Only session engine change.
 
-**Modified:** `docs/ROADMAP.md` (goal restated + autonomy-lane results + gap list),
-`reference/calibration.md` (#71), `.gitignore` (`/training/`).
+**Autonomy harness (created this session, all force-added under `training/`):**
+- `training/auto_areas.py` — cross-job zero-ink harness v5: per-loop `_solve_seed`
+  (outer→inner), two-tier pools, complexity guard, cal #71 window, grades vs Inputs.
+- `training/autonomy_report.py` — honest buckets (a loop grades a target only ≤10%;
+  MATCHED ≤2 / CLOSE ≤5 / NEAR ≤10 / else NOT PRODUCED).
+- `training/parse_corpus.py` → `ground_truth.json`; `training/readability_scan.py` →
+  `readability_scorecard.json` (per-page ppf/chains, consumed by the harness).
+- `jobs/roberts_levelground/auto_declare.py` — Roberts-local v0; the harness imports
+  its solver machinery (`solve_axis`, `evaluate_combos`, consts) verbatim.
 
-**Don't touch unless the task demands:** `tools/jnj_takeoff.py` (engine — gates +
-ratify discipline applies), golden `expected.yaml` values, `declared_walks.json`
-(Jason's certified answers — grading truth, never inputs to autonomy).
+**Docs/records:** `reference/calibration.md` (#71, #72 appended — append-only),
+`docs/training/RUN_STATE.md` (recipes: Buildern export dances, queues, inventory),
+`docs/training/MORNING_REPORT.md` (Jason-facing scoreboards),
+`docs/HANDOFF_AI_INTEL.md` (Handoff.ai/H1 recon incl. TakeoffBench access path).
+
+**Outside this repo:** `Desktop\Claude\estimator_accuracy\golden_fixture_certification_
+2026-07-20.json` — rewritten by the cert refresher this session, **uncommitted in the
+workspace repo** (that repo also carries pre-existing `v3_execution_readiness.*` drift
++ untracked `_backup/`, `multi-agent-guide/` — none of it this session's).
+
+**Looks touchable, isn't:** `tools/tests/golden/*/expected.yaml` values,
+`jobs/roberts_levelground/declared_walks.json` (Jason's certified answers = grading
+truth, never autonomy input), `reference/` rate-book VALUES, `estimator_accuracy/`.
 
 ## 5. Gotchas & Hard-Won Knowledge
 
-- **Unanchored `.gitignore` dir patterns match at any depth** — `training/` swallowed
-  `docs/training/` and the run state was invisible to git. Root-anchor: `/training/`.
-- **Buildern SPA screenshots time out while it renders** — wait 4-6s and retry the
-  screenshot; do NOT re-click (a double-click on Download Excel produced duplicate
-  exports).
-- **Buildern search box persists filters across sessions** — the projects list opened
-  pre-filtered to "rober" and looked like a 2-project account. Clear it first.
-- **Buildern update modal** blocks the dashboard on fresh loads; Escape does nothing —
-  click "Try it out now" to dismiss.
-- **Buildern Bills/Client-Invoices grids have no export UI** (POs and Projects do).
-- **The autonomy seed is the INSIDE wall face** (engine loops). All 5,000 crawlspace
-  closing readings cluster ~1965 SF vs certified 2106 — no snapping fixes a
-  wrong-face seed; outer-face loop emission is the #1 engine lever (needs ratify).
-- **His measurements can differ by CONVENTION, not error** — cal #70: his Buildern
-  shingle lines are FLAT plan traces (+15% waste); ours is pitch-corrected surface;
-  ratio 1.404 = blended pitch factor. Phase B must classify DEFECT vs CONVENTION vs
-  MY-ERROR before "fixing" anything.
-- **QBO duplicate projects silently zero reports** (standing memory) — reconcile job
-  names before trusting per-job actuals.
-- `polygon_outline` + solver consts live at the top of auto_declare.py — CAND_TOL_FT
-  1.6 exists because inside-face legs sit up to 2 wall-thicknesses from printed values.
+- **Each wall face solves loops the other refuses.** Outer-only seeding (v4) silently
+  dropped v3's inner-face wins. Always try both.
+- **A single sheet can close on a wrong reading** (v2): garage from p3-only chains =
+  665 SF closure-valid and wrong. Cross-sheet union first; page-pool only for rescue.
+- **Solver combinatorics run away on dense chain pools** — Davis' 206-chain union hung
+  a run (killed by PID). Guard BEFORE `solve_axis`, refuse "too-complex".
+- **`foundation_wall_loops` on floor plans finds closet-scale rooms, not envelopes**
+  (guarino's lone declare = a 430 SF room). The ≤10% grading window in
+  `autonomy_report.py` is what keeps such declares from polluting the scoreboard.
+- **`A && B && python x.py &` backgrounds the whole chain** in Git Bash — a commit
+  once silently didn't land. Verify `git log` after committing; never trust `&`.
+- Unanchored `.gitignore` dir patterns match at any depth — `training/` swallowed
+  `docs/training/` until root-anchored to `/training/`.
+- **Watkins dims are OUTLINED VECTOR glyphs** (calibration #537's documented
+  measurement-hostile case) — census reproduced it; vision lane, no parser fix owed.
+- Buildern UI (recipes with coordinates in RUN_STATE): search inputs need
+  find→`form_input` (typed text gets overwritten by late hydration); download menus
+  shift position per page-state — screenshot before the second click; **navigating
+  away kills an in-flight "Preparing download" render**; the Chrome extension drops
+  every few hours and recovers on retry.
+- Keli mailbox: the export is `searchEmail` (NOT searchMailbox); `fetchPdfAttachment`
+  already returns extracted `text` + saved `path`; ambiguous matches return
+  `candidates` — re-call with `uid`.
+- `jj.py verify` includes stopped-track checks that fail pre-existing; a red VERIFY
+  does not automatically mean the engine gates failed — read the line items.
 
 ## 6. Conventions In Play
 
-Per `~\.claude\CLAUDE.md`, `Desktop\Claude\CLAUDE.md`, and this repo's standards:
-gates after any engine change (`python jj.py verify` + cert refresh); additive keys
-only; fail-closed refusals everywhere; calibration entries append-only, numbered,
-Jason's rulings only; commits descriptive with `Co-Authored-By: Claude Fable 5
-<noreply@anthropic.com>`; job PDFs/exports out of git (`/training/` ignored on
-purpose); **Jason's output preference: BRIEF — status lines, detail in files**;
-Jason-only steps go to JARVIS "Waiting on You" via `agent/jason-todos.js addTodo`;
-read-only in Buildern/QBO/email — no sends, no approvals, no state changes there.
+Gates after ANY `tools/jnj_takeoff.py` edit: `python jj.py verify` + `python
+Desktop\Claude\estimator_accuracy\refresh_golden_fixture_certification.py --write`
+(refuses unless golden is green). Additive keys only in engine dicts. Fail-closed:
+refuse loudly with a named reason, never guess (the 0-wrong streak is the product).
+Calibration entries: numbered, append-only, Jason's rulings only — next is **#73**.
+Commits: descriptive line + consequences body + `Co-Authored-By: Claude Fable 5
+<noreply@anthropic.com>`. Chat output to Jason: BRIEF, lead with the number.
+Buildern/QBO/email: read-only. Rate-book VALUES: proposals only, never edited.
+Governing files: `~\.claude\CLAUDE.md`, `Desktop\Claude\CLAUDE.md`, this file.
 
 ## 7. Open Questions
 
-1. **Outer-face loop emission** — `foundation_wall_loops` knows both lines of each
-   wall pair; emitting the outer loop is an engine edit. Next session: prototype it
-   behind the gates, present for ratify. (Next-session question, not Jason's.)
-2. **Floor-plan envelope detection** — heated/deck have no autonomous shape source;
-   loop decomposition resolves closet-scale rooms only. Approach TBD.
-3. **Independent second side for blind autonomous runs** — what verifies an auto walk
-   on a job with no Jason stroke? (Candidate: outer-face pixel area once #1 lands.)
-4. **Jason (morning):** review the overnight report; ratify any engine commits made
-   during the run; the 8/14 ratify backlog (`todo_takeoff_engine_ratify_0814`) is
-   still open too.
-5. **Jason (whenever):** send Handoff the TakeoffBench-V1 research request (15
-   external graded blueprint sets) — see `docs/HANDOFF_AI_INTEL.md` §4.
+1. *(next session)* Show/Pace/Holbrook: which blocker dominates their all-refused
+   loops — both-face no-solution, missing schedule rows, or trace topology? The
+   per-loop `face`/`status`/`pool_tier` fields in `auto_areas_scorecard.json` answer
+   this without new runs.
+2. *(next session)* Floor-plan envelopes never loop (heated everywhere, guarino
+   especially). What autonomous shape source closes that — outer-face on the
+   FOUNDATION page mapped to heated scope, elevation-reconciled extents, or a new
+   floor-plan wall-network tracer?
+3. *(next session)* `read_sqft_schedule` returns rows for some designers, empty for
+   others — sample the misses and extend, or accept schedule-less jobs refuse more?
+4. *(Jason, eventually)* Certification admission for auto walks needs an independent
+   second side (his stroke played that role on Roberts). Outer-face raster area vs
+   the walk is engine-vs-engine — does that satisfy independence, or does a human
+   spot-check stay in the loop? Not ripe until a concrete proposal exists.
+5. *(Jason)* The v3 stopped-track contract failure (`phase1 → vision-client` import,
+   since 8/4): investigate, bless, or leave? → filed to JARVIS.
+6. *(Jason)* Send Handoff the TakeoffBench-V1 research request (15 external graded
+   blueprint sets; access path in `docs/HANDOFF_AI_INTEL.md` §4)? → filed to JARVIS.
+7. *(Jason)* Davis fiber-cement siding ran $3.20/ft² vs $2.50 on Burns/Roberts/Show
+   (`learned_rates.json`) — sub change or scope premium? One-line answer calibrates
+   the rate book.
 
 ## 8. Do Not Touch
 
-- `declared_walks.json` and golden `expected.yaml` values — grading truth.
-- Rate-book VALUES in `reference/` — proposals only, even under "full access".
-- The certified Roberts component names/scopes (cal #67 wrong-scope discipline).
-- Buildern/QBO/email write paths — this run is read-only in external systems.
-- `estimator_accuracy/` (Desktop\Claude) — harvest-only, stopped track.
+- Golden `expected.yaml` asserted values/tolerances; the 2% reconciliation gate; the
+  fail-closed refusals. `_AREA_METHOD_ORIGINS` coupling.
+- `declared_walks.json` — grading truth; never an input to the autonomy lane.
+- Rate-book VALUES (`reference/`), even under "full access" — proposals only.
+- `estimator_accuracy/` source (harvest-only), including its two failing checks.
+- The dropdown teach cards (markup-first is settled; cards are verification detail).
+- `training/` raw client data stays out of git; `HANDOFF-archive-*.md` history.
 
 ## 9. Resume Command
 
-> Read `HANDOFF.md`, then `docs/training/RUN_STATE.md`, then follow its NEXT line:
-> commit the two uncommitted files, then run the Buildern acquisition loop across the
-> priority jobs (pattern proven on Roberts — internal ids from the projects list),
-> staging to `training/<job>/` and updating RUN_STATE after each. Then QBO per-job
-> actuals, then email sweeps, then Phase B measurement calibration (classify
-> DEFECT/CONVENTION/MY-ERROR; engine fixes need gates green + commit-with-evidence).
-> Keep chat output brief. Do not touch declared_walks.json, golden values, or
-> rate-book values. At ~60% context, update RUN_STATE + this handoff and relay again.
+> Read `HANDOFF.md`, then `docs/training/RUN_STATE.md`. Start with refusal diagnosis:
+> tabulate per-loop `face × status × pool_tier` from `training/auto_areas_scorecard.json`
+> for show, pace_kinards, holbrook, guarino_v3, and pursue the dominant blocker
+> (schedule formats → `read_sqft_schedule` samples; chain coverage → pool diagnostics;
+> floor-plan envelopes → open question 2). Run `python jj.py verify` before and after
+> any engine edit — engine gates are golden/self-test/battery/cert; the offline-v3 and
+> readiness FAILs are pre-existing stopped-track drift, leave them. Do not touch golden
+> values, `declared_walks.json`, or rate-book values. Keep chat output brief; save
+> engine-doctrine changes for Jason's ruling as cal #73+.
