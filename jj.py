@@ -122,7 +122,8 @@ def cmd_verify():
         p = subprocess.run(['powershell.exe', '-NoProfile', '-ExecutionPolicy', 'Bypass',
                             '-File', sys_test], cwd=WORKSPACE, capture_output=True,
                            text=True, env=env, timeout=1800)
-        good &= ok('offline system test', p.returncode == 0, 'exit 0, no network')
+        good &= ok('offline system test', p.returncode == 0,
+                   f'exit {p.returncode}, no network')
 
     rc, out = run(['node', os.path.join(WORKSPACE, 'estimator_accuracy',
                                         'evaluate_v3_execution_readiness.mjs')], cwd=WORKSPACE)

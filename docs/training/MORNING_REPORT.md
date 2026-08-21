@@ -143,10 +143,52 @@ holbrook has no Buildern Inputs, so those grade against the sheet only.
 to select. That envelope needs the floor-plan tracer (open question 2), and the
 refusal is fail-closed doing its job.
 
+## External review triage (8/21 late — `REVIEW-FINDINGS-2026-08-21.md`)
+
+A read-only audit by another agent (not me — it snapshotted the repo mid-flight
+between my commits; provenance unknown, possibly Sol) landed in the repo root.
+Verified every claim against the code myself:
+
+**Confirmed real, fixed tonight:**
+- *Backup stale + incomplete* — the mirror hadn't run since 8/14; tonight's
+  engine wasn't in it and JJ-Takeoff has NO git remote. Ran `jj.py backup`
+  (515 files updated) → `eval/verify_backup.py` now says **BACKUP VERIFIED**.
+- *cal #72 had no committed regression test* — outer-face keys were proven only
+  by the gitignored scorecard. `tools/tests/test_outer_face_loops.py` now pins
+  them on the golden Roberts sheet, anchored to YOUR certified 2,127.25 SF
+  (engine outer face: 2,142.6, 0.72%). Auto-discovered by the verify battery.
+- *Scoreboard could double-count* — grading paired each target with its nearest
+  declare and exempted MATCHED from the reuse guard, so one walk could count
+  twice. Now a one-to-one assignment; tonight's 5 MATCHED are unchanged (they
+  were 5 distinct walks — verified before and after).
+- *Verifier printed a false detail* — the offline-test line hard-coded
+  "exit 0" even when failing. Now prints the real exit code.
+
+**Confirmed real, YOUR call (they change what "green" means):**
+- `coverage.py` fails OPEN: missing scorer output or a nonzero
+  falseCertificationCount cannot fail `jj.py verify`.
+- The readiness check can NEVER fail verify (it passes a literal True), so the
+  16/13-vs-18/11 regression only shows as text.
+- `jj.py save` still commits the DESKTOP workspace repo (pre-consolidation
+  leftover) — `git add -A` there would sweep the 627MB `_backup/` mirror into
+  a commit. Don't use `save` until re-pointed; `backup` alone is safe.
+- Hardening any of these makes verify permanently red under the standing
+  stopped-track drift — quarantine vs hard-fail is a doctrine choice, queued
+  below.
+
+**Race artifacts, no action:** its "scoreboard not current / 3 MATCHED"
+readings came from grading a scorecard my background harness was mid-rewrite
+on; the completed runs say 5 MATCHED + 1 NEAR of 15, reproducible at
+`36c4407`. Its missing-fitz gate failures are its own shell's Python, not the
+gates (its recommendation to document the supported runtime is fair).
+
 ## Waiting on you
 
 - Ratify list: bd9786d + 36c4407 (harness), **2a48662 (engine — schedule
   keywords + title-row veto, gates green, cert re-pinned)**.
+- Review follow-ups queued for ruling: fail-closed coverage/readiness in
+  `jj.py verify` (or quarantine the stopped-track checks out of verify),
+  re-point `jj.py save` at the engine repo, add a git remote for JJ-Takeoff.
 - **cal #73 candidate:** cal #71 says the schedule selects among "all-printed"
   readings — but every selected walk to date (your ratified 2,126 envelope
   included) carries 1–2 derived-by-closure legs. Operative reading: a derived

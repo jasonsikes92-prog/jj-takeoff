@@ -24,17 +24,29 @@ def main():
     lines = []
     for job, e in sc.items():
         declared = [s for s in e.get("solved", []) if s.get("status") == "auto-declared"]
-        used = set()
-        for tname, g in sorted(e.get("grades", {}).items()):
-            d = g["delta_pct"]
-            b = bucket(d)
-            if b is None or (g["auto_sf"] in used and b != "MATCHED"):
+        targets = {t: g["his_sf"] for t, g in e.get("grades", {}).items()}
+        # One-to-one assignment, greedy by ascending delta: each declared walk
+        # may satisfy at most ONE target. The old nearest-per-target pairing
+        # exempted MATCHED from its reuse guard, so a single declare could
+        # count as two MATCHED targets sitting close together (review P2-5).
+        pairs = sorted((abs(s["walk_area_sf"] - his) / his * 100, t, i)
+                       for t, his in targets.items()
+                       for i, s in enumerate(declared))
+        assign, taken = {}, set()
+        for d, t, i in pairs:
+            if t not in assign and i not in taken:
+                assign[t] = (d, i)
+                taken.add(i)
+        for tname in sorted(targets):
+            his = targets[tname]
+            d, i = assign.get(tname, (None, None))
+            b = bucket(d) if d is not None else None
+            if b is None:
                 counts["NOT PRODUCED"] += 1
-                lines.append((job, tname, g["his_sf"], None, None, "NOT PRODUCED"))
-                continue
-            used.add(g["auto_sf"])
-            counts[b] += 1
-            lines.append((job, tname, g["his_sf"], g["auto_sf"], d, b))
+                lines.append((job, tname, his, None, None, "NOT PRODUCED"))
+            else:
+                counts[b] += 1
+                lines.append((job, tname, his, declared[i]["walk_area_sf"], d, b))
         refused = [s for s in e.get("solved", []) if s.get("status") != "auto-declared"]
         lines.append((job, f"[{len(declared)} declared / {len(refused)} refused "
                            f"of {e.get('loops_considered', 0)} loops]",
