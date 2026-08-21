@@ -108,6 +108,24 @@ def main():
             legs = [(i, e["dir"], e["len_ft"]) for i, e in enumerate(edges)]
             h = [l for l in legs if AXIS[l[1]] == "H"]
             v = [l for l in legs if AXIS[l[1]] == "V"]
+
+            # complexity guard: dense chain pools give every leg a full candidate
+            # slate; 4^17 tier-0 products are a runaway, not a measurement. Refuse
+            # loudly like every other undecidable case.
+            def complexity(axis_legs, axis_pool):
+                prod = 1
+                for _i, _d, t in axis_legs:
+                    n = sum(1 for val in axis_pool if abs(val - t) <= 1.6)
+                    prod *= max(1, min(n, 4))
+                    if prod > 300000:
+                        return prod
+                return prod
+            if (complexity(h, pool["H"]) > 300000 or
+                    complexity(v, pool["V"]) > 300000 or len(legs) > 14):
+                solved.append({"page": pgi, "loop_sf": round(L["area_sf"], 1),
+                               "status": "too-complex",
+                               "legs": len(legs)})
+                continue
             hs, _ = solve_axis(h, pool["H"])
             vs, _ = solve_axis(v, pool["V"])
             if not hs or not vs:
