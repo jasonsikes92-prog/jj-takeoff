@@ -188,6 +188,15 @@ Zegarra PR-114 · Guarino V3 PR-111 · Show PR-097 · Dugger PR-108 · Dolsen PR
   his 2637 — needs the floor-plan tracer (Q2), not schedule tuning. NEW for
   Jason: cal #73 candidate — derived-by-closure legs inside schedule-selected
   walks (all ratified declares have 1-2) vs cal #71's literal "all-printed".
+- 8/21 late: **JASON RATIFIED ALL ("ratify all of it, cal #73 blessed as
+  written")** — session commits ratified; cal #73 appended to calibration.md
+  (derived-by-closure legs = printed for schedule selection). Follow-ups
+  executed: jj.py save re-pointed to the ENGINE repo (P1-2; `training/` added
+  to DELIBERATE), coverage gate fail-closed at the gate in jj.py (P1-1;
+  estimator_accuracy untouched), readiness line displays honestly but stays
+  quarantined from the exit verdict (P1-3). Git remote: permission layer
+  blocks remote add/push from here — Jason creates private
+  `jasonsikes92-prog/jj-takeoff` + one push (commands in MORNING_REPORT).
 - NEXT STRETCH (in order):
   1. Stage Guarino plan PDF when landed; then renders for Show 53711, Dugger
      63242, Burns 45687, Mason 65138 (redo — killed by navigation). Recipe in

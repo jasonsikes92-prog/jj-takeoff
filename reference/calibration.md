@@ -1890,3 +1890,25 @@ his dimension strings run to outside faces even on shared walls (Roberts garage
 **Contract:** additive keys only (`outer_area_sf`, `outer_polygon_pts`); no
 existing consumer changes behavior; certification admission of any outer-face
 measurement stays a SEPARATE future ruling once before/after numbers exist.
+
+## Data point #73 — DERIVED-BY-CLOSURE LEGS COUNT AS PRINTED FOR SCHEDULE SELECTION (Jason's ruling, 2026-08-21)
+
+**Ruling ("cal #73 blessed as written"):** cal #71's schedule-selection window
+("among closure-valid all-printed readings") ADMITS readings that contain
+derived-by-closure legs, up to cal #68's limit of one per axis. Operative
+principle as proposed and blessed: a derived leg carries zero declarative
+freedom — its value is exactly what the printed legs force (±0.05 engine-
+enforced) — so it is printed-in-substance, and a walk built from printed legs
+plus such forced legs is an "all-printed reading" for selection purposes.
+
+**Why it needed ruling:** every schedule-selected walk to date carried 1–2
+derived legs, including the ratified Roberts envelope (2,126 vs his 2,127.25 =
+0.08%) and garage, Pace's garage (630.6 vs his 623.71 = 1.1%, declared from
+two pages independently), and Guarino's screen porch. A literal reading of
+cal #71 would have retroactively invalidated the ratified scoreboard; this
+entry records that the operative interpretation is the ruled one.
+
+**Contract unchanged elsewhere:** the schedule still NEVER feeds a quantity
+(selection only, cal #71); at most one derived leg per axis (cal #68); the
+pick inside the window stays geometry-driven (closest to the drawn loop),
+never nearest-to-schedule.

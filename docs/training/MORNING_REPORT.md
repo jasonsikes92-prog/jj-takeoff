@@ -182,13 +182,33 @@ on; the completed runs say 5 MATCHED + 1 NEAR of 15, reproducible at
 `36c4407`. Its missing-fitz gate failures are its own shell's Python, not the
 gates (its recommendation to document the supported runtime is fair).
 
+## Ratified 8/21 ("ratify all of it, cal #73 blessed as written")
+
+All session commits ratified; **cal #73 recorded in calibration.md as blessed**
+(derived-by-closure legs count as printed for schedule selection — zero
+declarative freedom, value forced by the printed legs; schedule still never
+feeds a quantity). Ruled follow-ups executed the same night:
+
+- `jj.py save` re-pointed at the ENGINE repo (was committing Desktop/Claude —
+  would have swept the 627MB `_backup/` mirror in). `training/` added to the
+  deliberate-ignore list (raw corpus; harness source stays force-add-only).
+- Coverage gate fail-closed AT THE GATE (estimator_accuracy untouched,
+  harvest-only preserved): verify now requires the scorer to have run and both
+  falsePositiveCount AND falseCertificationCount to be exactly 0.
+- Readiness line no longer hard-codes [OK]: it displays honestly against the
+  18-pass baseline but stays quarantined from the exit verdict (stopped
+  track) — so the standing 16/13 drift now SHOWS as FAIL without turning
+  every future verify red.
+
 ## Waiting on you
 
-- Ratify list: bd9786d + 36c4407 (harness), **2a48662 (engine — schedule
-  keywords + title-row veto, gates green, cert re-pinned)**.
-- Review follow-ups queued for ruling: fail-closed coverage/readiness in
-  `jj.py verify` (or quarantine the stopped-track checks out of verify),
-  re-point `jj.py save` at the engine repo, add a git remote for JJ-Takeoff.
+- **Git remote (one step, permission layer blocks me from remotes):** create a
+  PRIVATE repo `jj-takeoff` under `jasonsikes92-prog` (same pattern as
+  `jarvis`), then:
+  `git remote add origin https://github.com/jasonsikes92-prog/jj-takeoff.git`
+  `git push -u origin virtual-takeoff`
+  (history is only 8.2MB — plan sets and client data are gitignored).
+- Still parked: Watkins notation sample; the stopped-track v3 FAILs.
 - **cal #73 candidate:** cal #71 says the schedule selects among "all-printed"
   readings — but every selected walk to date (your ratified 2,126 envelope
   included) carries 1–2 derived-by-closure legs. Operative reading: a derived

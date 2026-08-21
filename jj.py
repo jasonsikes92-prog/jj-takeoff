@@ -53,6 +53,10 @@ ASSETS = [
 # Ignored on purpose is a decision; ignored by accident is a bug. Only flag the second.
 # Add an entry here only with a reason on the line.
 DELIBERATE = (
+    'training/',                                   # raw corpus + derived artifacts (client
+                                                   # data stays out of git); harness SOURCE
+                                                   # files there are force-added one by one
+                                                   # per RUN_STATE convention
     '.claude/',                                    # per-machine settings, not portable
     '.codex-house-budgets-readonly/',              # read-only mirror of another workspace
     '.estimate_deps/',                             # vendored python packages (PIL et al)
@@ -129,8 +133,12 @@ def cmd_verify():
                                         'evaluate_v3_execution_readiness.mjs')], cwd=WORKSPACE)
     try:
         j = json.loads(out[out.index('{'):out.rindex('}') + 1])
-        # not_ready is EXPECTED while release gates remain; regression = fewer passes
-        ok(f"readiness (expected not_ready)", True,
+        # not_ready is EXPECTED while release gates remain. QUARANTINED from the
+        # exit verdict (stopped track, harvest-only doctrine) — but the line must
+        # not LIE: it used to pass a literal True, so a regression below the
+        # 18-pass baseline displayed [OK]. Ratified 8/21 (review follow-up):
+        # display honestly, still no effect on `good` until the track revives.
+        ok(f"readiness (expected not_ready)", j.get('passed', 0) >= 18,
            f"{j.get('status')}, {j.get('passed')} passed / {j.get('failed')} failed"
            f"{'   <-- REGRESSION vs baseline 18/11' if j.get('passed', 0) < 18 else ''}")
     except Exception:
@@ -143,7 +151,21 @@ def cmd_verify():
                   cwd=WORKSPACE)
     cov = next((l.strip() for l in out.splitlines() if l.strip().startswith('answered ')), '')
     fp = next((l.strip() for l in out.splitlines() if l.strip().startswith('false positives')), '')
-    good &= ok('coverage (baseline 0.3%, 0 FP)', rc == 0,
+    fc = next((l.strip() for l in out.splitlines() if l.strip().startswith('false certifications')), '')
+
+    def _count(line):
+        """Trailing integer of a counter line; None if absent/non-numeric."""
+        try:
+            return int(line.split('<--')[0].split()[-1])
+        except (ValueError, IndexError):
+            return None
+    # Fail-closed (ratified 8/21, review follow-up): coverage.py exits 0 even
+    # when the scorer never ran ('unknown') and never looks at
+    # falseCertificationCount — so the gate itself now requires the scorer to
+    # have run and BOTH counters to be exactly zero. estimator_accuracy source
+    # stays untouched (harvest-only); the gate hardens at the gate.
+    good &= ok('coverage (0 FP, 0 false certs)',
+               rc == 0 and _count(fp) == 0 and _count(fc) == 0,
                f"{cov}  |  {fp.replace('   <-- THE CONSTRAINT. Must stay 0.', '')}")
 
     print('\nVERIFY:', 'GREEN' if good else 'NOT GREEN')
@@ -211,7 +233,7 @@ def cmd_status():
     print(f'  active job           {JOB}')
     print(f'  backup mirror        {BACKUP}')
     print()
-    gitdir = os.path.join(WORKSPACE, '.git')
+    gitdir = os.path.join(ROOT, '.git')
     if os.path.isdir(gitdir) and os.listdir(gitdir):
         gv = 'git present'
     elif os.path.isdir(gitdir):
@@ -259,7 +281,7 @@ def _untracked_sources():
     # -uall: without it git collapses a wholly-untracked directory to one `?? dir/` line,
     #   which has no source extension -- a whole new folder of code would slip the filter.
     rc, out = run(['git', '-c', 'core.quotepath=false', 'status', '--porcelain',
-                   '-uall', '--ignored=matching'], cwd=WORKSPACE, timeout=300)
+                   '-uall', '--ignored=matching'], cwd=ROOT, timeout=300)
     if rc != 0:
         return []
     found = []
@@ -286,24 +308,28 @@ def cmd_save():
     exit code instead."""
     cmd_backup()
     print(os.linesep + 'COMMIT')
-    rc, _ = run(['git', 'rev-parse', '--is-inside-work-tree'], cwd=WORKSPACE, timeout=60)
+    # ROOT, not WORKSPACE: until 2026-08-21 this committed the Desktop/Claude
+    # repo — a pre-consolidation leftover that left JJ-Takeoff's own dirty files
+    # uncommitted and would have swept the workspace's untracked 627MB _backup
+    # mirror into a commit (review finding P1-2, re-point ratified by Jason).
+    rc, _ = run(['git', 'rev-parse', '--is-inside-work-tree'], cwd=ROOT, timeout=60)
     if rc != 0:
         print('  [FAIL] not a git repository')
         return 1
-    run(['git', 'add', '-A'], cwd=WORKSPACE, timeout=300)
-    rc, out = run(['git', 'diff', '--cached', '--name-only'], cwd=WORKSPACE, timeout=120)
+    run(['git', 'add', '-A'], cwd=ROOT, timeout=300)
+    rc, out = run(['git', 'diff', '--cached', '--name-only'], cwd=ROOT, timeout=120)
     changed = [l for l in out.splitlines() if l.strip()]
     if not changed:
         print('  nothing to commit - working tree already clean')
     else:
         msg = 'save: %s (%d files)' % (datetime.now().strftime('%Y-%m-%d %H:%M'), len(changed))
-        rc, out = run(['git', 'commit', '-m', msg], cwd=WORKSPACE, timeout=300)
+        rc, out = run(['git', 'commit', '-m', msg], cwd=ROOT, timeout=300)
         print(f"  [{'OK ' if rc == 0 else 'FAIL'}] {msg}")
         for f in changed[:8]:
             print('        ', f)
         if len(changed) > 8:
             print(f'         ... and {len(changed) - 8} more')
-    rc, out = run(['git', 'log', '--oneline', '-1'], cwd=WORKSPACE, timeout=60)
+    rc, out = run(['git', 'log', '--oneline', '-1'], cwd=ROOT, timeout=60)
     print('  HEAD:', out.strip())
     print(os.linesep + '  Let OneDrive finish syncing before going offline.')
 
