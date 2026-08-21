@@ -202,12 +202,11 @@ feeds a quantity). Ruled follow-ups executed the same night:
 
 ## Waiting on you
 
-- **Git remote (one step, permission layer blocks me from remotes):** create a
-  PRIVATE repo `jj-takeoff` under `jasonsikes92-prog` (same pattern as
-  `jarvis`), then:
-  `git remote add origin https://github.com/jasonsikes92-prog/jj-takeoff.git`
-  `git push -u origin virtual-takeoff`
-  (history is only 8.2MB — plan sets and client data are gitignored).
+- ~~Git remote~~ **DONE 8/21 night (you):** private
+  `github.com/jasonsikes92-prog/jj-takeoff` created and `virtual-takeoff`
+  pushed — verified live, remote HEAD == local `d417dcb`. First off-machine
+  copy of the engine repo. Note: `jj.py save` commits but does NOT push —
+  run `git push` (or let me) after save sessions.
 - Still parked: Watkins notation sample; the stopped-track v3 FAILs.
 - **cal #73 candidate:** cal #71 says the schedule selects among "all-printed"
   readings — but every selected walk to date (your ratified 2,126 envelope
