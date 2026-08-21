@@ -1872,3 +1872,21 @@ family, never proves a walk.
 window; a component whose in-window readings disagree materially still lists all of
 them. Approved by Jason in chat, 2026-08-18 ("cal #71 approved - use the schedule as
 face-selector").
+
+## Data point #72 — RATIFY BOTH: outer-face loops authorized + 8/14 engine pair blessed (Jason's ruling, 2026-08-21)
+
+**Ruling (verbatim "ratify both"):** (1) The 8/14 engine pair — `foundation` in
+`AREA_COMPONENT_CLASSES` (feeds neither heated nor framing rollup) and the
+certify-side dims-method-only "review"-tier scale admission keyed through
+`_AREA_METHOD_ORIGINS` — is retroactively ratified; in the tree since 8/17,
+regression-tested, gates green through every run since. Closes
+`todo_takeoff_engine_ratify_0814`. (2) The engine may emit the OUTER wall face
+from `foundation_wall_loops`' paired-wall decomposition, as an ADDITIVE key,
+behind the full gate suite. Motivation: the cross-job zero-ink harness showed
+inside-face loops cap autonomous envelopes at ~7% (Davis 3,302 vs his 3,551);
+his dimension strings run to outside faces even on shared walls (Roberts garage
+26'-8" = inner 25.25 + 2 walls).
+
+**Contract:** additive keys only (`outer_area_sf`, `outer_polygon_pts`); no
+existing consumer changes behavior; certification admission of any outer-face
+measurement stays a SEPARATE future ruling once before/after numbers exist.

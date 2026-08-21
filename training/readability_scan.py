@@ -7,7 +7,7 @@ OUT = "training/readability_scorecard.json"
 results = {}
 if os.path.exists(OUT):
     results = json.load(open(OUT))
-jobs = ["roberts","davis","guarino_v3","show","watkins","dugger","pace_kinards","burns","holbrook","mason"]
+jobs = ["roberts","davis","guarino_v3","show","watkins","dugger","pace_kinards","burns","holbrook","mason","zegarra"]
 for job in jobs:
     if job in results:
         continue

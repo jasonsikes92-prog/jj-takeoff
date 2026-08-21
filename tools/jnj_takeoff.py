@@ -795,14 +795,32 @@ def foundation_wall_loops(page, ppf, clip=None, zoom=3.0, thick_ft=(0.40, 1.00),
         c = max(cnts, key=cv2.contourArea)
         ap = cv2.approxPolyDP(c, 0.004 * cv2.arcLength(c, True), True)
         _, _, bbox_w, bbox_h = cv2.boundingRect(ap)
-        out.append({"area_sf": round(cv2.contourArea(ap) / ppx / ppx, 1),
-                    "perim_lf": round(cv2.arcLength(ap, True) / ppx, 1),
-                    "corners": len(ap),
-                    "bbox_ft": (round(bbox_w / ppx, 1), round(bbox_h / ppx, 1)),
-                    "centroid_ft": (round(cent[i][0] / ppx, 1), round(cent[i][1] / ppx, 1)),
-                    "polygon_pts": _px_poly_to_page_pts(ap, zoom, clip),
-                    "clip_pts": [round(clip.x0, 2), round(clip.y0, 2),
-                                 round(clip.x1, 2), round(clip.y1, 2)]})
+        entry = {"area_sf": round(cv2.contourArea(ap) / ppx / ppx, 1),
+                 "perim_lf": round(cv2.arcLength(ap, True) / ppx, 1),
+                 "corners": len(ap),
+                 "bbox_ft": (round(bbox_w / ppx, 1), round(bbox_h / ppx, 1)),
+                 "centroid_ft": (round(cent[i][0] / ppx, 1), round(cent[i][1] / ppx, 1)),
+                 "polygon_pts": _px_poly_to_page_pts(ap, zoom, clip),
+                 "clip_pts": [round(clip.x0, 2), round(clip.y0, 2),
+                              round(clip.x1, 2), round(clip.y1, 2)]}
+        # cal #72 (ratified): OUTER face, additive. Dimension strings run to the
+        # outside face even on shared walls (Roberts garage 26'-8" = inner 25.25
+        # + two walls), so the inner contour under-measures every dimensioned
+        # envelope by one wall band. `sealed` already spans face-to-face; growing
+        # this component by one max wall thickness pulls exactly its own
+        # perimeter band, whose outer contour is the dimensioned face.
+        r_px = max(1, int(round(thick_ft[1] * ppx)))
+        band = cv2.dilate((lab == i).astype(np.uint8),
+                          cv2.getStructuringElement(cv2.MORPH_ELLIPSE,
+                                                    (2 * r_px + 1, 2 * r_px + 1)))
+        blob = (((band > 0) & (sealed > 0)) | (lab == i)).astype(np.uint8)
+        ocnts, _ = cv2.findContours(blob, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        if ocnts:
+            oc = max(ocnts, key=cv2.contourArea)
+            oap = cv2.approxPolyDP(oc, 0.004 * cv2.arcLength(oc, True), True)
+            entry["outer_area_sf"] = round(cv2.contourArea(oap) / ppx / ppx, 1)
+            entry["outer_polygon_pts"] = _px_poly_to_page_pts(oap, zoom, clip)
+        out.append(entry)
     out.sort(key=lambda d: -d["area_sf"])
     return out
 

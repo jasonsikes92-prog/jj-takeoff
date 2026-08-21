@@ -106,13 +106,18 @@ def main():
         # 4. solve each loop
         solved = []
         for pgi, ppf, L in loops:
+            # cal #72: seed from the OUTER face when the engine emits it — the
+            # dimensioned face. The solver still snaps every leg to printed
+            # values, so the band's raster overshoot never survives into a walk.
+            seed = L.get("outer_polygon_pts") or L["polygon_pts"]
+            face = "outer" if L.get("outer_polygon_pts") else "inner"
             # chamfers up to 6 ft split into L-steps (area shift <= dx*dy/2, inches²
             # at these scales); only a genuinely angled wall (>6 ft diagonal) refuses
-            edges = split_small_diagonals(rectilinear_edges(L["polygon_pts"], ppf),
+            edges = split_small_diagonals(rectilinear_edges(seed, ppf),
                                           ppf, max_ft=6.0)
             if any(e["dir"] == "?" for e in edges):
                 solved.append({"page": pgi, "loop_sf": round(L["area_sf"], 1),
-                               "status": "diagonal"})
+                               "status": "diagonal", "face": face})
                 continue
             legs = [(i, e["dir"], e["len_ft"]) for i, e in enumerate(edges)]
             h = [l for l in legs if AXIS[l[1]] == "H"]
@@ -149,7 +154,7 @@ def main():
             if not hs or not vs:
                 solved.append({"page": pgi, "loop_sf": round(L["area_sf"], 1),
                                "status": "no-solution" if len(legs) <= 14
-                               else "too-complex", "legs": len(legs)})
+                               else "too-complex", "legs": len(legs), "face": face})
                 continue
             combos = evaluate_combos(hs, vs, legs)
             areas = [c["area_sf"] for c in combos]
@@ -175,7 +180,7 @@ def main():
                 "legs": len(best["walk"]) if decisive else None,
                 "derived": len(best["derived"]) if decisive else None,
                 "readings": len(combos), "spread_pct": round(spread, 2),
-                "schedule_selected": sel, "pool_tier": tier_used,
+                "schedule_selected": sel, "pool_tier": tier_used, "face": face,
             })
         doc.close()
 
