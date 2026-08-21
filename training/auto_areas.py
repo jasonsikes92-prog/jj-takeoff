@@ -48,6 +48,71 @@ def his_inputs(gt, job):
             if m.get("category") == "Inputs"}
 
 
+def _complexity(axis_legs, axis_pool):
+    """Candidate-product estimate; dense chain pools give every leg a full slate
+    and a 4^17 tier-0 product is a runaway, not a measurement."""
+    prod = 1
+    for _i, _d, t in axis_legs:
+        n = sum(1 for val in axis_pool if abs(val - t) <= 1.6)
+        prod *= max(1, min(n, 4))
+        if prod > 300000:
+            return prod
+    return prod
+
+
+def _solve_seed(seed, face, pgi, ppf, L, page_pool, pool, sched):
+    """One seed polygon -> solved-record dict (same contract as before, + face)."""
+    edges = split_small_diagonals(rectilinear_edges(seed, ppf), ppf, max_ft=6.0)
+    base = {"page": pgi, "loop_sf": round(L["area_sf"], 1), "face": face}
+    if any(e["dir"] == "?" for e in edges):
+        return {**base, "status": "diagonal"}
+    legs = [(i, e["dir"], e["len_ft"]) for i, e in enumerate(edges)]
+    h = [l for l in legs if AXIS[l[1]] == "H"]
+    v = [l for l in legs if AXIS[l[1]] == "V"]
+    # union pool FIRST — a single page can close on the wrong reading (Roberts
+    # garage p3 closes at 665; the true 703 needs p4). Page-tier only rescues
+    # sets whose union pool is too dense to search.
+    hs = vs = None
+    tier_used = None
+    if len(legs) <= 14:
+        for tier, tp in (("union", pool), ("page", page_pool.get(pgi, pool))):
+            if (_complexity(h, tp["H"]) > 300000 or
+                    _complexity(v, tp["V"]) > 300000):
+                continue
+            ths, _ = solve_axis(h, tp["H"])
+            tvs, _ = solve_axis(v, tp["V"])
+            if ths and tvs:
+                hs, vs, tier_used = ths, tvs, tier
+                break
+    if not hs or not vs:
+        return {**base, "status": "no-solution" if len(legs) <= 14
+                else "too-complex", "legs": len(legs)}
+    combos = evaluate_combos(hs, vs, legs)
+    areas = [c["area_sf"] for c in combos]
+    spread = ((max(areas) - min(areas)) / (sum(areas) / len(areas)) * 100
+              if len(areas) > 1 else 0.0)
+    best = combos[0]
+    decisive = (len(combos) == 1 or spread <= AREA_EQUIV_PCT or
+                combos[1]["delta_score_ft"] - best["delta_score_ft"]
+                >= DECISIVE_GAP_FT)
+    sel = None
+    if not decisive and sched:
+        for label, ssf in sched.items():
+            near = [c for c in combos
+                    if abs(c["area_sf"] - ssf) / ssf * 100 <= SCHED_SEL_PCT]
+            if near:
+                combos, best, decisive, sel = near, near[0], True, label
+                break
+    return {**base,
+            "status": "auto-declared" if decisive else "ambiguous",
+            "walk_area_sf": best["area_sf"] if decisive else None,
+            "closure_ft": best["closure_ft"] if decisive else None,
+            "legs": len(best["walk"]) if decisive else None,
+            "derived": len(best["derived"]) if decisive else None,
+            "readings": len(combos), "spread_pct": round(spread, 2),
+            "schedule_selected": sel, "pool_tier": tier_used}
+
+
 def main():
     gt = json.load(open(os.path.join(HERE, "ground_truth.json"), encoding="utf-8"))
     readab = json.load(open(os.path.join(HERE, "readability_scorecard.json"),
@@ -106,82 +171,24 @@ def main():
         # 4. solve each loop
         solved = []
         for pgi, ppf, L in loops:
-            # cal #72: seed from the OUTER face when the engine emits it — the
-            # dimensioned face. The solver still snaps every leg to printed
-            # values, so the band's raster overshoot never survives into a walk.
-            seed = L.get("outer_polygon_pts") or L["polygon_pts"]
-            face = "outer" if L.get("outer_polygon_pts") else "inner"
-            # chamfers up to 6 ft split into L-steps (area shift <= dx*dy/2, inches²
-            # at these scales); only a genuinely angled wall (>6 ft diagonal) refuses
-            edges = split_small_diagonals(rectilinear_edges(seed, ppf),
-                                          ppf, max_ft=6.0)
-            if any(e["dir"] == "?" for e in edges):
-                solved.append({"page": pgi, "loop_sf": round(L["area_sf"], 1),
-                               "status": "diagonal", "face": face})
-                continue
-            legs = [(i, e["dir"], e["len_ft"]) for i, e in enumerate(edges)]
-            h = [l for l in legs if AXIS[l[1]] == "H"]
-            v = [l for l in legs if AXIS[l[1]] == "V"]
-
-            # complexity guard: dense chain pools give every leg a full candidate
-            # slate; 4^17 tier-0 products are a runaway, not a measurement. Refuse
-            # loudly like every other undecidable case.
-            def complexity(axis_legs, axis_pool):
-                prod = 1
-                for _i, _d, t in axis_legs:
-                    n = sum(1 for val in axis_pool if abs(val - t) <= 1.6)
-                    prod *= max(1, min(n, 4))
-                    if prod > 300000:
-                        return prod
-                return prod
-
-            # two-tier solve: union pool FIRST — a single page can close on the
-            # wrong reading (Roberts garage p3 closes at 665; the true 703 needs
-            # p4's dims, exactly the ambiguity Jason's own cert hit). Page-tier
-            # exists only to rescue sets whose union pool is too dense to search.
-            hs = vs = None
-            tier_used = None
-            if len(legs) <= 14:
-                for tier, tp in (("union", pool), ("page", page_pool.get(pgi, pool))):
-                    if (complexity(h, tp["H"]) > 300000 or
-                            complexity(v, tp["V"]) > 300000):
-                        continue
-                    ths, _ = solve_axis(h, tp["H"])
-                    tvs, _ = solve_axis(v, tp["V"])
-                    if ths and tvs:
-                        hs, vs, tier_used = ths, tvs, tier
-                        break
-            if not hs or not vs:
-                solved.append({"page": pgi, "loop_sf": round(L["area_sf"], 1),
-                               "status": "no-solution" if len(legs) <= 14
-                               else "too-complex", "legs": len(legs), "face": face})
-                continue
-            combos = evaluate_combos(hs, vs, legs)
-            areas = [c["area_sf"] for c in combos]
-            spread = ((max(areas) - min(areas)) / (sum(areas) / len(areas)) * 100
-                      if len(areas) > 1 else 0.0)
-            best = combos[0]
-            decisive = (len(combos) == 1 or spread <= AREA_EQUIV_PCT or
-                        combos[1]["delta_score_ft"] - best["delta_score_ft"]
-                        >= DECISIVE_GAP_FT)
-            sel = None
-            if not decisive and sched:
-                for label, ssf in sched.items():
-                    near = [c for c in combos
-                            if abs(c["area_sf"] - ssf) / ssf * 100 <= SCHED_SEL_PCT]
-                    if near:
-                        combos, best, decisive, sel = near, near[0], True, label
-                        break
-            solved.append({
-                "page": pgi, "loop_sf": round(L["area_sf"], 1),
-                "status": "auto-declared" if decisive else "ambiguous",
-                "walk_area_sf": best["area_sf"] if decisive else None,
-                "closure_ft": best["closure_ft"] if decisive else None,
-                "legs": len(best["walk"]) if decisive else None,
-                "derived": len(best["derived"]) if decisive else None,
-                "readings": len(combos), "spread_pct": round(spread, 2),
-                "schedule_selected": sel, "pool_tier": tier_used, "face": face,
-            })
+            # cal #72: OUTER face first (the dimensioned face), inner as the
+            # fallback — v4 showed each face solves loops the other refuses
+            # (outer: Roberts envelope 0.08%; inner: Roberts garage 1.6%). The
+            # solver snaps every leg to printed values either way, so the seed
+            # only ever contributes topology.
+            attempts = []
+            if L.get("outer_polygon_pts"):
+                attempts.append(("outer", L["outer_polygon_pts"]))
+            attempts.append(("inner", L["polygon_pts"]))
+            best_rec = None
+            for face, seed in attempts:
+                rec = _solve_seed(seed, face, pgi, ppf, L, page_pool, pool, sched)
+                if rec["status"] == "auto-declared":
+                    best_rec = rec
+                    break
+                if best_rec is None:
+                    best_rec = rec
+            solved.append(best_rec)
         doc.close()
 
         # 5. grade vs his Inputs
