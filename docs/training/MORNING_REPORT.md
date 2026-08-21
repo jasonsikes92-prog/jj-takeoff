@@ -66,6 +66,27 @@ matched, full provenance):
 - Your estimate cost-types: MATERIAL / LABOR / SUBCONTRACTOR / EQUIPMENT / FEE /
   ALLOWANCE / ASSEMBLY
 
+## Post-ratification update (cal #72, same day)
+
+You ratified outer-face loops; built behind the full gates (golden 6/6,
+self-test, 7/7 units, cert re-pinned) and wired into the harness with inner-face
+fallback. **Zero-ink scoreboard moved 2 MATCHED / 1 NEAR → 4 MATCHED / 1 NEAR,
+still 0 wrong:**
+
+| job | target | yours | engine | delta |
+|---|---|---|---|---|
+| roberts | **First floor (full envelope)** | 2,127.25 | 2,126 | **0.08%** |
+| roberts | Garage | 715 | 703 | 1.6% |
+| davis | Garage | 898 | 899 | **0.12%** |
+| davis | First floor | 3,551 | 3,302 | 7.0% (NEAR, inner fallback) |
+| zegarra | Garage | 537 | 547 | 1.9% |
+
+Also closed: `todo_takeoff_engine_ratify_0814` + the morning-review todo;
+cal #72 recorded. Known pre-existing FAIL left alone per do-not-touch:
+the stopped v3 track's offline contract (phase1→vision-client import edge, in
+the tree since 8/4 — predates this run; readiness 16/13 vs baseline 18/11 is
+the same drift). Worth a look when you're in that codebase next.
+
 ## Honest gaps + next levers
 
 1. **Whole-envelope autonomy still needs the outer-face loop** (the 8/18 finding
