@@ -74,15 +74,21 @@ def main():
                 sched_rows = rows
         sched = {row["label"]: row["sqft"] for row in sched_rows}
 
-        # 2. chains pool across scaled pages
-        pool = {"H": set(), "V": set()}
+        # 2. chains: per-page pools first (small candidate sets), union as fallback
+        page_pool = {}
+        union = {"H": set(), "V": set()}
         for r in scaled:
+            pp = {"H": set(), "V": set()}
             try:
                 for c in eng.read_dimension_chains(doc[r["i"]], r["ppf"]):
-                    pool[c["orient"]].update(c["runs"])
-                    pool[c["orient"]].add(c["total"])
+                    pp[c["orient"]].update(c["runs"])
+                    pp[c["orient"]].add(c["total"])
             except Exception:
                 pass
+            page_pool[r["i"]] = pp
+            union["H"].update(pp["H"])
+            union["V"].update(pp["V"])
+        pool = union
 
         # 3. loops on every scaled page
         loops = []
@@ -100,7 +106,10 @@ def main():
         # 4. solve each loop
         solved = []
         for pgi, ppf, L in loops:
-            edges = split_small_diagonals(rectilinear_edges(L["polygon_pts"], ppf), ppf)
+            # chamfers up to 6 ft split into L-steps (area shift <= dx*dy/2, inches²
+            # at these scales); only a genuinely angled wall (>6 ft diagonal) refuses
+            edges = split_small_diagonals(rectilinear_edges(L["polygon_pts"], ppf),
+                                          ppf, max_ft=6.0)
             if any(e["dir"] == "?" for e in edges):
                 solved.append({"page": pgi, "loop_sf": round(L["area_sf"], 1),
                                "status": "diagonal"})
@@ -120,17 +129,27 @@ def main():
                     if prod > 300000:
                         return prod
                 return prod
-            if (complexity(h, pool["H"]) > 300000 or
-                    complexity(v, pool["V"]) > 300000 or len(legs) > 14):
-                solved.append({"page": pgi, "loop_sf": round(L["area_sf"], 1),
-                               "status": "too-complex",
-                               "legs": len(legs)})
-                continue
-            hs, _ = solve_axis(h, pool["H"])
-            vs, _ = solve_axis(v, pool["V"])
+
+            # two-tier solve: union pool FIRST — a single page can close on the
+            # wrong reading (Roberts garage p3 closes at 665; the true 703 needs
+            # p4's dims, exactly the ambiguity Jason's own cert hit). Page-tier
+            # exists only to rescue sets whose union pool is too dense to search.
+            hs = vs = None
+            tier_used = None
+            if len(legs) <= 14:
+                for tier, tp in (("union", pool), ("page", page_pool.get(pgi, pool))):
+                    if (complexity(h, tp["H"]) > 300000 or
+                            complexity(v, tp["V"]) > 300000):
+                        continue
+                    ths, _ = solve_axis(h, tp["H"])
+                    tvs, _ = solve_axis(v, tp["V"])
+                    if ths and tvs:
+                        hs, vs, tier_used = ths, tvs, tier
+                        break
             if not hs or not vs:
                 solved.append({"page": pgi, "loop_sf": round(L["area_sf"], 1),
-                               "status": "no-solution"})
+                               "status": "no-solution" if len(legs) <= 14
+                               else "too-complex", "legs": len(legs)})
                 continue
             combos = evaluate_combos(hs, vs, legs)
             areas = [c["area_sf"] for c in combos]
@@ -156,7 +175,7 @@ def main():
                 "legs": len(best["walk"]) if decisive else None,
                 "derived": len(best["derived"]) if decisive else None,
                 "readings": len(combos), "spread_pct": round(spread, 2),
-                "schedule_selected": sel,
+                "schedule_selected": sel, "pool_tier": tier_used,
             })
         doc.close()
 

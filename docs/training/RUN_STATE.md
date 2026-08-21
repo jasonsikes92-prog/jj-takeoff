@@ -82,6 +82,33 @@ Zegarra PR-114 · Guarino V3 PR-111 · Show PR-097 · Dugger PR-108 · Dolsen PR
 - Chrome extension drops periodically overnight (3×) — retry after ~30s works;
   renders in flight on a dropped tab survive IF the browser stays open.
 
+## Stretch 3 (8/19 morning, post-internet-drop) — COMPLETE
+- **Original vector plan sets staged for 10/11 jobs** (local-disk hunt + Buildern
+  Files for Zegarra "Peter Zegarra 4-24.pdf"; Mason=Reece scan + Dugger local are
+  RASTERS — check Buildern Files for Dugger vector next time).
+- **Readability census (readability_scorecard.json): 8/11 fully readable**
+  (davis 206 chains, show 168, guarino 146, pace 144, zegarra 122, roberts 88,
+  burns 64, holbrook 55). Watkins = cal #537's documented outlined-vector case,
+  independently reproduced. Census script: training/readability_scan.py.
+- **auto_areas harness v3** (training/auto_areas.py): cross-job zero-ink run —
+  **Roberts garage 1.61% + Davis garage 1.06% MATCHED, Davis envelope 7.0% NEAR,
+  0 wrong**. 38 loops dispositioned 14 diagonal / 9 too-complex / 7 no-solution /
+  4 ambiguous / 4 declared. ⛔ LESSON (v2 regression, reverted): single-page
+  chain pools can CLOSE ON A WRONG READING (Roberts garage p3→665 vs true 703
+  needing p4) — union pool stays primary; page-tier only rescues too-complex.
+  6-ft diagonal splitting did not convert refusals (real blockers = inside-face
+  + missing schedules). Interpretation: training/autonomy_report.py.
+- **Budgets w/ actuals staged ×9** + House Budgets rollup + Lyndall
+  reconciliation (fresh exports: roberts 539 rows, davis 708 rows per-line
+  Original+Actual; his historical exports: villanueva/miller/hernandez/waddell/
+  peterson/talbot cost-code level; burns fresh). Budget export recipe:
+  /projects/<id>/budget → download icon (1485,125) → "Download Excel" item
+  (position VARIES: sometimes ~(1477,147) below icon, sometimes floating
+  ~(1486,78-85)) — screenshot before the second click. MISSING budgets: pace,
+  watkins, holbrook, stiggers, show, zegarra, guarino, dugger, mason.
+- Rate learning + morning report as committed (1261f70). Estimate tail still
+  open: Bouchard, Hetherington, Bozeman, Dolsen, Wilson PR-044.
+
 ## Log
 - 8/18 eve: run initialized. cal #71 committed (9ddbb19). Autonomy lane v0 committed
   (a7f501b): garage zero-ink 0.22%; gaps = outer-face shape, floor-plan envelope,
