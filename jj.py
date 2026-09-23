@@ -4,7 +4,10 @@
     python jj.py verify     # prove the system is green (run before trusting anything)
     python jj.py backup     # mirror the un-synced ~/.claude assets into OneDrive
     python jj.py status     # what's where, what's stale, what's at risk
-    python jj.py estimate   # rebuild the active job's estimate from measured inputs
+    python jj.py estimate --help  # explicitly select a job and export its calculated draft
+    python jj.py owner-answers --help  # inspect or retain a returned confirmation workbook
+    python jj.py new-plan --help       # create intake, defaults and sheet inventory
+    python jj.py measure-plan --help   # prepare editable measurements after sheet review
     python jj.py save       # backup + commit in one step -- RUN BEFORE SHUTTING DOWN
 
 WHY BACKUP EXISTS
@@ -253,21 +256,8 @@ def cmd_status():
 
 
 def cmd_estimate():
-    """Rebuild the active job's estimate from its measured inputs."""
-    tk = os.path.join(JOB, 'Takeoff')
-    if not os.path.isdir(tk):
-        print('No Takeoff folder at', tk)
-        return 1
-    print('ESTIMATE - rebuilding from measured inputs in', tk, '\n')
-    for script in ['build_estimate.py', 'addendum.py', 'write_books.py']:
-        rc, out = run([sys.executable, os.path.join(tk, script)], cwd=tk)
-        tail = [l for l in out.strip().splitlines() if l.strip()][-4:]
-        print(f'  [{"OK " if rc == 0 else "FAIL"}] {script}')
-        for l in tail:
-            print('        ', l)
-        if rc != 0:
-            return 1
-    return 0
+    """Estimate only the explicitly selected job; never fall back to another house."""
+    return subprocess.call([sys.executable,os.path.join(ROOT,'tools','estimate_job.py'),*sys.argv[2:]])
 
 
 def _untracked_sources():
@@ -350,8 +340,71 @@ def cmd_save():
     return 1
 
 
+def cmd_init_job():
+    """Load remembered company practices before a new plan is estimated."""
+    from tools.company_profile import main
+    return main(sys.argv[2:])
+
+
+def cmd_framing_assemblies():
+    """Apply saved practices to source-classified wall assemblies."""
+    from tools.framing_assemblies import main
+    return main(sys.argv[2:])
+
+
+def cmd_owner_answers():
+    """Inspect or retain returned owner confirmations without applying unreviewed answers."""
+    from tools.owner_confirmations import main
+    return main(sys.argv[2:])
+
+
+def cmd_hardware_purchases():
+    """Generate live count mappings from a source-backed supplier-scope review."""
+    from tools.hardware_purchase_setup import main
+    return main(sys.argv[2:])
+
+
+def cmd_new_plan():
+    """Create a new intake without copying another house's quantities or prices."""
+    return subprocess.call([sys.executable,os.path.join(ROOT,'tools','new_plan_intake.py'),*sys.argv[2:]])
+
+
+def cmd_measure_plan():
+    """Prepare source-bound editable candidates after required sheet review."""
+    return subprocess.call([sys.executable,os.path.join(ROOT,'tools','new_plan_measure.py'),*sys.argv[2:]])
+
+
+def cmd_export_workbook():
+    return subprocess.call([sys.executable,os.path.join(ROOT,'tools','export_estimate.py'),*sys.argv[2:]])
+
+
+def cmd_opening_bid():
+    return subprocess.call([sys.executable,os.path.join(ROOT,'tools','export_opening_bid.py'),*sys.argv[2:]])
+
+
+def cmd_drywall_bid():
+    return subprocess.call([sys.executable,os.path.join(ROOT,'tools','export_opening_bid.py'),*sys.argv[2:],'--trade','drywall'])
+
+
+def cmd_trade_scopes():
+    return subprocess.call([sys.executable,os.path.join(ROOT,'tools','export_trade_scopes.py'),*sys.argv[2:]])
+
+
+def cmd_job_bids():
+    return subprocess.call([sys.executable,os.path.join(ROOT,'tools','export_job_bids.py'),*sys.argv[2:]])
+
+
+def cmd_trade_response():
+    return subprocess.call([sys.executable,os.path.join(ROOT,'tools','trade_response_review.py'),*sys.argv[2:]])
+
+
 COMMANDS = {'verify': cmd_verify, 'backup': cmd_backup, 'save': cmd_save,
-            'status': cmd_status, 'estimate': cmd_estimate}
+            'status': cmd_status, 'estimate': cmd_estimate, 'init-job': cmd_init_job,
+            'framing-assemblies': cmd_framing_assemblies,'owner-answers': cmd_owner_answers,
+            'hardware-purchases': cmd_hardware_purchases,
+            'new-plan':cmd_new_plan,'measure-plan':cmd_measure_plan,'export-workbook':cmd_export_workbook,
+            'opening-bid':cmd_opening_bid,'drywall-bid':cmd_drywall_bid,'trade-scopes':cmd_trade_scopes,
+            'job-bids':cmd_job_bids,'trade-response':cmd_trade_response}
 
 if __name__ == '__main__':
     arg = sys.argv[1] if len(sys.argv) > 1 else 'status'

@@ -1,0 +1,596 @@
+{
+  "schema_version": 1,
+  "profile_id": "jnj",
+  "version": 16,
+  "created_at": "2026-09-16T01:17:12.015850+00:00",
+  "purpose": "Reusable estimating practices for new J&J jobs, with explicit evidence and project overrides",
+  "precedence": [
+    "Applicable plan/supplier specifications and resolved project decisions",
+    "Explicit project overrides",
+    "Conditional owner practice defaults"
+  ],
+  "rules": [
+    {
+      "key": "purchasing.rounding",
+      "value": "ceil_to_actual_purchase_unit",
+      "source": "Jason: concrete whole yard, plastic box, mesh roll, rebar stick",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "concrete.waste_pct",
+      "value": 10,
+      "source": "Jason: 10% waste on all concrete",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "framing.prefer_precut_studs",
+      "value": true,
+      "source": "Jason: Pre-cut studs always where they can be used",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "framing.maximum_2x6_stock_ft",
+      "value": 26,
+      "source": "Jason: longest available 2x6 is 26 ft",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "framing.outside_corner_studs",
+      "value": 3,
+      "source": "Jason: Three-stud corners",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "framing.T_intersection_backing",
+      "value": "three_stud",
+      "source": "Jason: Three-stud backing",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "framing.top_plates",
+      "value": 2,
+      "source": "Jason: two top plates, one bottom plate",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "framing.bottom_plates",
+      "value": 1,
+      "source": "Jason: two top plates, one bottom plate",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "framing.stud_size",
+      "value": "2x4",
+      "source": "Jason: 2x4 16 oc",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "framing.stud_spacing_inches",
+      "value": 16,
+      "source": "Jason: 2x4 16 oc",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "roof.rafter_size",
+      "value": "2x6",
+      "source": "Jason: stick 2x6 16 oc",
+      "when": {
+        "roof_system": "stick_framed"
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "roof.rafter_spacing_inches",
+      "value": 16,
+      "source": "Jason: stick 2x6 16 oc",
+      "when": {
+        "roof_system": "stick_framed"
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "framing.attic_HVAC_walkway_and_platform",
+      "value": "include_in_framing_scope",
+      "source": "Jason: add attic walkway and equipment platform to framing for future jobs",
+      "when": {
+        "attic_HVAC": true
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "foundation.usual_wall_material",
+      "value": "8 inch CMU",
+      "source": "Jason: for most crawlspaces use 8 inch CMU",
+      "when": {
+        "foundation_type": "crawlspace"
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "foundation.usual_pier",
+      "value": {
+        "pier_width_inches": 16,
+        "pier_length_inches": 16,
+        "pad_width_inches": 24,
+        "pad_length_inches": 24,
+        "block_nominal_dimensions_inches": [
+          8,
+          8,
+          16
+        ],
+        "blocks_per_course": 2,
+        "course_bond": "alternate perpendicular courses",
+        "filled_solid": true
+      },
+      "source": "construction_defaults.json; Jason: usual piers/pads unless specified differently by plan",
+      "when": {
+        "foundation_type": "crawlspace"
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "slab.gravel_depth_inches",
+      "value": 4,
+      "source": "Jason: gravel 4 inches thick",
+      "when": {
+        "concrete_slab": true
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "slab.gravel_thickness_direction",
+      "value": "perpendicular_to_slope",
+      "source": "Jason: 4 inches perpendicular to slope",
+      "when": {
+        "thickened_slab_edge": true
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "slab.vapor_barrier_mil",
+      "value": 6,
+      "source": "Jason corrected millimeters to 6 mil",
+      "when": {
+        "concrete_slab": true
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "slab.plastic_package_sf",
+      "value": 2000,
+      "source": "Jason: 2000 sqft plastic boxes from Home Depot",
+      "when": {
+        "concrete_slab": true
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "slab.reinforcement_product_basis",
+      "value": "60 in x 150 ft concrete remesh roll; confirm product specifications",
+      "source": "Jason confirmed Home Depot remesh product 309385079",
+      "when": {
+        "concrete_slab": true
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "slab.extra_rebar_grid",
+      "value": {
+        "bar": "#4",
+        "spacing_each_direction_inches": 12
+      },
+      "source": "Jason: backfilled slab uses #4 grid 1ft x 1ft",
+      "when": {
+        "backfilled_slab": true
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "slab.rebar_chair_height_inches",
+      "value": 2,
+      "source": "Jason: 2 inch rebar chairs",
+      "when": {
+        "concrete_slab": true
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "slab.concrete_finish",
+      "value": {
+        "owner_mix_psi": 3000,
+        "slump_inches": 5,
+        "finish": "smooth trowel",
+        "preferred_joint_spacing_ft": [
+          12,
+          15
+        ],
+        "joint_layout": "symmetrical; verify slab-specific requirements"
+      },
+      "source": "Jason concrete mix/finish practice",
+      "when": {
+        "interior_slab": true
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "slab.gravel_purchase_load_tons",
+      "value": 16,
+      "source": "Jason: gravel bought in full 16-ton truckloads",
+      "when": {
+        "concrete_slab": true
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "pricing.preserve_template_line_markups",
+      "value": true,
+      "source": "Jason: use current template; preserve per-line markup",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "pricing.confirmed_slab_material_markup_pct",
+      "value": 15,
+      "source": "Jason selected current template: 15% materials, 7% labor",
+      "when": {
+        "concrete_slab": true
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "pricing.confirmed_slab_labor_markup_pct",
+      "value": 7,
+      "source": "Jason selected current template: 15% materials, 7% labor",
+      "when": {
+        "concrete_slab": true
+      },
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "pricing.delivery_method",
+      "value": "delivered",
+      "source": "Jason: Home Depot materials delivered",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "framing.ordinary_interior_door_studs_per_side",
+      "value": {
+        "king": 1,
+        "jack": 1
+      },
+      "when": {
+        "opening_class": "ordinary_interior_door"
+      },
+      "source": "Yes\u00e2\u20ac\u201done king and one jack per side",
+      "status": "Plan-required bearing/support details and special openings override this estimating practice"
+    },
+    {
+      "key": "framing.inside_corner_and_cross_backing",
+      "value": "solid_stud_backing",
+      "when": {},
+      "source": "Jason: Solid stud backing",
+      "status": "Method confirmed; piece count per assembly remains unresolved. Plan-specific details override."
+    },
+    {
+      "key": "framing.solid_backing_assembly_allowance",
+      "value": {
+        "L_corner": {
+          "whole_assembly_studs": 3,
+          "basis": "Conventional three-stud corner estimating detail; includes adjoining wall ends"
+        },
+        "T_intersection": {
+          "host_backing_studs": 3,
+          "branch_end_studs": 1,
+          "whole_assembly_studs": 4,
+          "basis": "Jason confirmed three-stud host backing plus one separately counted branch-end stud"
+        },
+        "cross_intersection": {
+          "host_backing_studs": 3,
+          "branch_end_studs": 2,
+          "whole_assembly_studs": 5,
+          "basis": "Derived estimating allowance: shared three-stud host backing plus two opposing branch ends. Not an explicit code-prescribed count"
+        }
+      },
+      "when": {},
+      "source": "backing_detail_research_v1/study.json; Jason requested reference-based selection",
+      "status": "Estimator-selected conventional assembly allowances, not owner-confirmed piece counts or code minima; apply only to solid-backed ordinary intersections"
+    },
+    {
+      "key": "exterior.porch_wrap_material",
+      "value": "cedar",
+      "source": "Jason confirmed cedar as future default, September 16, 2026",
+      "when": {},
+      "status": "Owner estimating default for selected scope; project specifications take precedence"
+    },
+    {
+      "key": "exterior.gable_bracket_material",
+      "value": "cedar",
+      "source": "Jason confirmed cedar as future default, September 16, 2026",
+      "when": {},
+      "status": "Owner estimating default for selected scope; project specifications take precedence"
+    },
+    {
+      "key": "drywall.deduct_window_door_openings",
+      "value": false,
+      "source": "Jason: no window/door deductions on siding or drywall; no 10% drywall billing waste; outputs/phase3/owner_finish_decisions_v1/decisions.json",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "siding.deduct_window_door_openings",
+      "value": false,
+      "source": "Jason: no window/door deductions on siding or drywall; no 10% drywall billing waste; outputs/phase3/owner_finish_decisions_v1/decisions.json",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "drywall.billing_waste_percent",
+      "value": 0,
+      "source": "Jason: no window/door deductions on siding or drywall; no 10% drywall billing waste; outputs/phase3/owner_finish_decisions_v1/decisions.json",
+      "when": {},
+      "status": "Owner estimating practice; plan-specific verification still applies"
+    },
+    {
+      "key": "windows.installation_quantity_basis",
+      "value": "individual_window_unit",
+      "source": "Jason, 2026-09-16: Per individual window unit",
+      "when": {},
+      "status": "Owner-confirmed estimating practice; count components in mulled assemblies separately"
+    },
+    {
+      "key": "doors.interior_core_by_room",
+      "value": {
+        "bedroom": "solid",
+        "bathroom": "solid",
+        "toilet_room": "solid",
+        "other_interior": "hollow"
+      },
+      "source": "Jason: Solid core on beds and bath hollow everywhere else. Exact answer in outputs/owner_scope_confirmation_v1/input_record.json; toilet-room interpretation matches reviewed Roberts O05.",
+      "when": {},
+      "status": "Apply only to identified ordinary interior doors and reviewed room associations. Unknown rooms, garage entries, exterior doors and special assemblies require separate specifications; explicit project selections take precedence."
+    },
+    {
+      "key": "pricing.supplier_quote_expiration",
+      "value": {
+        "treatment": "follow_up_not_automatic_rejection",
+        "supplier_scope": "Companies Jason uses; owner reports printed expiration is usually not enforced",
+        "guarantees_unchanged_price": false,
+        "price_changes": "Retain quoted amount and source date; track actual changes or uncertainty separately",
+        "exceptions": "Explicit supplier refusal, changed scope and confirmed price changes take precedence"
+      },
+      "when": {},
+      "source": "outputs/supplier_quote_validity_practice/owner_answer.json",
+      "status": "Owner-reported supplier practice; usually honored is not a guarantee for every quote or future price"
+    },
+    {
+      "key": "plumbing.exterior_hose_bibbs",
+      "value": 4,
+      "when": {},
+      "source": "outputs/hose_bibb_company_default/owner_answer.json",
+      "status": "Include even if unmarked on plans. Estimate scope allowance, not measured symbol count; confirm locations and use explicit project count when specified."
+    },
+    {
+      "key": "framing.tight_door_corner_quantity_basis",
+      "value": "documented_estimating_allowances",
+      "when": {},
+      "source": "outputs/framing_allowance_practice/owner_answer.json",
+      "status": "Use a documented quantity allowance for tight door/corner estimating rather than waiting for an exact combined layout. Show its basis; project-specific details override. No structural approval implied."
+    },
+    {
+      "key": "pricing.dated_allowance_fallback",
+      "value": {
+        "selection": "latest_saved_compatible_rate",
+        "current_rate_takes_precedence": true,
+        "display_source_date": true,
+        "display_as": "dated_estimating_allowance",
+        "scope_unit_and_cost_ownership_review_required": true,
+        "current_price_claim": false
+      },
+      "when": {},
+      "source": "outputs/dated_allowance_policy/owner_answer.json",
+      "status": "Owner-authorized fallback when current pricing is unavailable; keep project overrides and original supplier evidence. This does not transfer old job quantities or certify prices."
+    },
+    {
+      "key": "framing.ordinary_exterior_opening_studs_per_side",
+      "value": {
+        "king": 1,
+        "jack": 1
+      },
+      "source": "work/phase3/owner_finish_edit_trial/owner_answer_submissions/484854a4b3b196078dd2e57548e857befe3329bada2a9f7ea788649dc0dca43c.json R19",
+      "when": {},
+      "status": "Owner estimating practice; project specifications and verified assemblies take precedence"
+    },
+    {
+      "key": "framing.wide_garage_opening_studs_per_side",
+      "value": {
+        "king": 1,
+        "jack": 2
+      },
+      "source": "work/phase3/owner_finish_edit_trial/owner_answer_submissions/484854a4b3b196078dd2e57548e857befe3329bada2a9f7ea788649dc0dca43c.json R20",
+      "when": {},
+      "status": "Owner estimating practice; project specifications and verified assemblies take precedence"
+    },
+    {
+      "key": "flooring.floating_excludes_fixed_cabinets_and_island",
+      "value": true,
+      "source": "work/phase3/owner_finish_edit_trial/owner_answer_submissions/484854a4b3b196078dd2e57548e857befe3329bada2a9f7ea788649dc0dca43c.json R08",
+      "when": {},
+      "status": "Owner estimating practice; project specifications and verified assemblies take precedence"
+    },
+    {
+      "key": "cabinets.bathroom_billing_unit",
+      "value": "LF",
+      "source": "work/phase3/owner_finish_edit_trial/owner_answer_submissions/484854a4b3b196078dd2e57548e857befe3329bada2a9f7ea788649dc0dca43c.json R26",
+      "when": {},
+      "status": "Owner estimating practice; project specifications and verified assemblies take precedence"
+    },
+    {
+      "key": "doors.interior_hardware_by_room",
+      "value": {
+        "bedroom_bath_hardware": "privacy",
+        "other_interior_hardware": "passage",
+        "toilet_room_pocket_hardware": "privacy latch",
+        "closet_pocket_hardware": "passage pull"
+      },
+      "source": "work/phase3/owner_finish_edit_trial/owner_answer_submissions/484854a4b3b196078dd2e57548e857befe3329bada2a9f7ea788649dc0dca43c.json R23",
+      "when": {},
+      "status": "Owner estimating practice; project specifications and verified assemblies take precedence"
+    },
+    {
+      "key": "flooring.floating_material_waste_pct",
+      "value": 10,
+      "when": {
+        "flooring_installation": "straight_layout_floating"
+      },
+      "source": "Jason returned workbook 1f4f77d3567ad9de0510b21d5b3851f36e9891fa83237b3d6a7f58354e400bfe, F15; F21 wood-floor clarification in conversation.",
+      "status": "Owner estimating practice. Applicable product instructions and project specifications must still be verified."
+    },
+    {
+      "key": "flooring.floating_labor_quantity_basis",
+      "value": "measured_installed_floor_area",
+      "when": {
+        "flooring_installation": "straight_layout_floating"
+      },
+      "source": "Jason returned workbook 1f4f77d3567ad9de0510b21d5b3851f36e9891fa83237b3d6a7f58354e400bfe, F16; F21 wood-floor clarification in conversation.",
+      "status": "Owner estimating practice. Applicable product instructions and project specifications must still be verified."
+    },
+    {
+      "key": "tile.floor_underlayment_by_substrate",
+      "value": {
+        "concrete_slab": "none_direct_to_slab",
+        "wood_floor": "cement_board",
+        "wood_floor_board_thickness_inches": 0.25
+      },
+      "when": {},
+      "source": "Jason returned workbook 1f4f77d3567ad9de0510b21d5b3851f36e9891fa83237b3d6a7f58354e400bfe, F21; F21 wood-floor clarification in conversation. Jason returned workbook 5fd24b899fe9f67a316e06450d4161f45938c990e483716a4932739aaf2b31de, F27-F29, 2026-09-22.",
+      "status": "Owner estimating practice. Applicable product instructions and project specifications must still be verified."
+    },
+    {
+      "key": "tile.shower_wall_backer",
+      "value": {
+        "supplier": "Floor and Decor",
+        "type": "waterproof_composite_board",
+        "seal_joints_and_fasteners": true,
+        "exact_product": null,
+        "owner_product_name": "Sentinal fiber board"
+      },
+      "when": {},
+      "source": "Jason returned workbook 1f4f77d3567ad9de0510b21d5b3851f36e9891fa83237b3d6a7f58354e400bfe, F21; F21 wood-floor clarification in conversation. Jason returned workbook 5fd24b899fe9f67a316e06450d4161f45938c990e483716a4932739aaf2b31de, F27-F29, 2026-09-22.",
+      "status": "Owner estimating practice. Applicable product instructions and project specifications must still be verified."
+    },
+    {
+      "key": "tile.shower_floor",
+      "value": "mortar_bed",
+      "when": {},
+      "source": "Jason returned workbook 1f4f77d3567ad9de0510b21d5b3851f36e9891fa83237b3d6a7f58354e400bfe, F21; F21 wood-floor clarification in conversation.",
+      "status": "Owner estimating practice. Applicable product instructions and project specifications must still be verified."
+    },
+    {
+      "key": "tile.edge_finish",
+      "value": "Schluter_trim",
+      "when": {},
+      "source": "Jason returned workbook 1f4f77d3567ad9de0510b21d5b3851f36e9891fa83237b3d6a7f58354e400bfe, F21; F21 wood-floor clarification in conversation.",
+      "status": "Owner estimating practice. Applicable product instructions and project specifications must still be verified."
+    },
+    {
+      "key": "foundation.cmu_vertical_core_reinforcement",
+      "value": {
+        "filled_core_interval": 4,
+        "bars_per_filled_core": 2,
+        "bar_size": "#4",
+        "bar_length_basis": "top_of_footing_to_bottom_of_cap",
+        "include_core_fill": true
+      },
+      "when": {
+        "foundation_wall_material": "CMU"
+      },
+      "source": "Jason: Every 4th hole is filled with 2 vertical sticks; confirmed #4; bar length from top of footer to bottom of cap block; include the fill.",
+      "status": "Owner estimating default for confirmed CMU foundation walls. Project details override. Verify fill product, laps, anchorage and structural requirements separately; this is not code approval."
+    },
+    {
+      "key": "foundation.cmu_horizontal_reinforcement",
+      "value": {
+        "type": "ladder_mesh",
+        "course_interval": 3
+      },
+      "when": {
+        "foundation_wall_material": "CMU"
+      },
+      "source": "Jason: On the horizontal we install ladder mesh every 3rd course.",
+      "status": "Owner estimating default for confirmed CMU foundation walls. Project specifications override. Verify product, laps, corners, openings and actual courses before purchasing."
+    },
+    {
+      "key": "foundation.cmu_caps_within_overall_height",
+      "value": true,
+      "when": {
+        "foundation_wall_material": "CMU"
+      },
+      "source": "Jason, confirming cap block height: Those should be calculated in the overall height.",
+      "status": "Include cap height within measured overall masonry height; do not add caps above the specified height. Actual heights and cap thickness remain project-specific."
+    },
+    {
+      "key": "preconstruction.erosion_design_applicability",
+      "value": "verify_project_city_or_county_permit_requirements",
+      "when": {},
+      "source": "Jason returned workbook 1f4f77d3567ad9de0510b21d5b3851f36e9891fa83237b3d6a7f58354e400bfe, F26; F21 wood-floor clarification in conversation.",
+      "status": "Owner estimating practice. Applicable product instructions and project specifications must still be verified."
+    },
+    {
+      "key": "tile.material_waste_percent",
+      "value": 10,
+      "when": {},
+      "source": "Jason returned workbook 5fd24b899fe9f67a316e06450d4161f45938c990e483716a4932739aaf2b31de, F27-F29, 2026-09-22.",
+      "status": "Owner-confirmed estimating allowance for floor tile, wall tile and shower mosaic; apply before whole-box or whole-sheet rounding."
+    }
+  ],
+  "owner_price_benchmarks": {
+    "values": {
+      "concrete_per_cy": 190,
+      "gravel_per_16_ton_load": 950,
+      "slab_pump_each": 1500,
+      "separate_footing_pump_each": 1500,
+      "slab_labor_per_sf": 1.75,
+      "bobcat_touchup_allowance": 300,
+      "HD_delivery_per_order": 79,
+      "cap_block_each": 2.6,
+      "block_labor_each": 4,
+      "footing_labor_per_lf_including_pier_pads": 24,
+      "encapsulation_per_crawl_sf": 2.5,
+      "crawl_door_material": 300,
+      "crawl_door_install_labor": 150
+    },
+    "status": "Owner-provided benchmarks from Roberts setup; dated current price verification required before final quote",
+    "automatically_used_as_current_prices": false
+  },
+  "do_not_inherit_as_universal": [
+    "Roberts measurements and material counts",
+    "Roberts 4ft average wall/pier height",
+    "Roberts 16x18 footing and 18 inch pad depth",
+    "Roberts 14 inch I-joist layout at 19.2 inches OC",
+    "Roberts supplier species/grade mix and historical invoice prices",
+    "Roberts encapsulation choice, no-dehumidifier decision and absence of exterior waterproofing",
+    "Roberts roof field support layout",
+    "Earlier 6 inch rebar lap superseded by code review",
+    "Framing labor invoice rate and decorative beam charge",
+    "Roberts R13/R39 insulation, uninsulated garage and 3.5 inch porch deck drop"
+  ],
+  "reference_archives": {
+    "decisions": "outputs/company_profile_v1/decision_archive.json",
+    "slab": "outputs/phase2/material_inputs_2026-09-10_r16/measurement_v33.json",
+    "foundation": "outputs/phase3/cmu_foundation_v32/measurement_v32.json",
+    "framing": "outputs/phase3/framing_v15/measurement_v15.json"
+  },
+  "limits": "Company profile supplies defaults, not automatic plan measurements, structural approval, permit compliance or current prices. Upload UI integration and end-to-end new-job estimation remain unfinished.",
+  "updated_at": "2026-09-21"
+}

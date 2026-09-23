@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>J&J · Plan measurements</title><link rel="icon" href="data:,">
+<style>
+:root{--bg:#141a21;--panel:#1c242e;--edge:#354454;--ink:#e8eef4;--dim:#a8b7c6;--focus:#ffd54a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",sans-serif}
+header{padding:14px 20px;border-bottom:1px solid var(--edge)}h1{font-size:19px;margin:0}p{margin:6px 0}small{color:var(--dim)}
+main{display:grid;grid-template-columns:minmax(420px,1fr) 360px;height:calc(100vh - 83px)}
+#drawing{position:relative;min-height:450px;background:#0d1116}svg{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+aside{padding:16px;overflow:auto;background:var(--panel);border-left:1px solid var(--edge)}
+button,select,input{font:inherit;background:#101820;color:var(--ink);border:1px solid var(--edge);border-radius:5px;padding:7px 9px}
+button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--focus)}
+button[aria-pressed=true]{border-color:var(--focus)}select,input{width:100%}label{display:block;margin:10px 0 5px;color:var(--dim);font-size:12px}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.toolbar{position:absolute;left:12px;top:12px;display:flex;gap:6px}
+.legend{position:absolute;left:12px;bottom:12px;background:#141a21ee;padding:10px;border:1px solid var(--edge);border-radius:5px}
+.swatch{display:inline-block;width:14px;height:4px;vertical-align:middle;margin-right:6px}.legend span{margin-right:12px}
+#quantity{font-size:28px;font-weight:600}#message{color:#ffce6b;white-space:pre-wrap;min-height:40px}
+#list{display:grid;gap:5px;margin-top:14px}#list button{text-align:left}.point-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pending{border-top:1px solid var(--edge);padding-top:10px;margin-top:12px;font-size:12px;color:var(--dim)}
+#headerChecks summary,#paintChecks summary,#areaChecks summary{cursor:pointer;color:var(--ink);font-weight:600}#headerRows{display:grid;gap:10px}.header-check{border-bottom:1px solid var(--edge);padding-bottom:10px}.header-check strong{color:var(--ink)}.header-check button{margin-top:5px}.header-check[data-attention=true]{border-left:3px solid #ffce6b;padding-left:8px}
+@media(max-width:850px){main{display:flex;flex-direction:column;height:auto}#drawing{height:65vh}aside{overflow:visible}}
+</style></head><body>
+<header><h1>Plan measurements · draft editor</h1><small id="version">Loading saved geometry…</small></header>
+<main><div id="drawing"><svg id="canvas" aria-label="Plan measurements"></svg>
+<div class="toolbar"><button id="zoomIn" aria-label="Zoom in">+</button><button id="zoomOut" aria-label="Zoom out">−</button><button id="fit">Fit sheet</button><button id="focus">Show selected</button></div>
+<div class="legend"><span>Colors match the measurement list</span><p>Yellow = selected · drag a point to edit</p></div></div>
+<aside><label for="page">Drawing sheet</label><select id="page"></select>
+<details id="sundriesChecks" class="pending" hidden><summary>Bathroom floor sundries · partial allowance</summary><p id="sundriesStatus" role="status" aria-live="polite"></p><div id="sundriesRows"></div><p>Not included in the estimate total. Prices are dated retail allowances; tax, delivery and markup are excluded. Product and grout-color choices are estimating references.</p><button id="refreshSundries">Refresh sundries</button></details>
+<details id="headerChecks" class="pending" hidden><summary id="headerSummary">Opening/header checks</summary><p id="headerStatus" role="status" aria-live="polite"></p><div id="headerRows"></div><p>These checks compare widths. They do not approve header strength, bearing, or stud counts.</p></details>
+<details id="paintChecks" class="pending" hidden><summary>Paint surface references</summary><p id="paintStatus" role="status" aria-live="polite"></p><div id="paintRows"></div><p>Partial areas after known finish deductions. Other finishes remain to review; these are not paint-order quantities or prices.</p><button id="refreshPaint">Refresh references</button><p>Refresh to load changes made in another review.</p></details>
+<details id="areaChecks" class="pending" hidden><summary>Measured vs. printed areas</summary><p id="areaStatus" role="status" aria-live="polite"></p><div id="areaRows"></div><p>Differences over 5% need review. Agreement does not approve scope or pricing.</p></details>
+<h2 id="selected" style="font-size:16px">Choose a measurement</h2><div id="quantity">—</div>
+<small id="basis">Click a colored line or choose a measurement below.</small>
+<label for="vertex">Point</label><select id="vertex" disabled></select>
+<div class="actions"><button id="addPoint" disabled>Add point</button><button id="addStep" disabled>Add step</button><button id="removeItem" hidden disabled>Remove item</button></div>
+<small id="edgeHelp">Select a measurement, then add a point or step on an edge.</small>
+<div class="point-row"><div><label for="x">X · drawing points</label><input id="x" type="number" step="0.01" disabled></div><div><label for="y">Y · drawing points</label><input id="y" type="number" step="0.01" disabled></div></div>
+<label for="note">Change note</label><input id="note" placeholder="Describe what changed" disabled>
+<div class="actions"><button id="save" disabled>Save edit</button><button id="discard" disabled>Discard edit</button><button id="done" disabled>Done editing</button></div>
+<div id="message" role="status" aria-live="polite"></div>
+<div class="pending">Edits recalculate this measurement. Shared corners, adjoining shapes and material assemblies require review before pricing or ordering. <p id="pending" aria-live="polite"></p></div>
+<div id="list" aria-label="Measurement legend and selection"></div></aside></main>
+<script>
+const $=id=>document.getElementById(id),svg=$('canvas'),NS='http://www.w3.org/2000/svg';
+let state,selected=null,points=[],dirty=false,saving=false,page=5,box,drag=null,pointIndex=0,previewSequence=0;
+let edgeMode=null,quantityReview=null;
+let headerReview=null,headerReviewMessage='',headerReviewSequence=0;
+let paintReviewMessage='',paintReviewSequence=0,paintLoading=false;
+let areaReviewMessage='',areaReviewSequence=0;
+let sundriesMessage='',sundriesSequence=0,sundriesLoading=false;
+function showSundriesState(){
+  $('sundriesStatus').textContent=dirty?'Unsaved edit: save or discard to review quantities.':sundriesMessage;
+  $('sundriesRows').hidden=dirty||saving;
+  $('refreshSundries').disabled=dirty||saving||sundriesLoading;
+}
+async function refreshSundries(){
+  const version=state.version,sequence=++sundriesSequence;
+  sundriesLoading=true;sundriesMessage='Calculating saved floor…';$('sundriesRows').replaceChildren();showSundriesState();
+  try{
+    const response=await fetch('/api/floor-sundries');
+    if(response.status===404){$('sundriesChecks').hidden=true;return}
+    const value=await response.json();if(!response.ok)throw Error(value.error||'Sundries unavailable');
+    if(sequence!==sundriesSequence||state.version!==version)return;
+    if(value.measurement_version!==version||value.plan_sha256!==state.plan_sha256)throw Error('Measurements changed. Reload before reviewing.');
+    $('sundriesChecks').hidden=false;
+    const money=n=>n.toLocaleString(undefined,{style:'currency',currency:'USD'});
+    sundriesMessage=money(value.partial_pretax_cost)+' partial materials · '+value.installed_area_sf.toFixed(2)+' SF · saved version '+version;
+    const labels={board:'Cement-board sheets',screw_large:'Screws · 750-count packs',screw_small:'Screws · 185-count packs',bedding:'Board bedding mortar · bags',setting:'Tile-setting mortar · bags',grout:'Grout · boxes',tape:'Joint tape · rolls'};
+    for(const row of value.components){
+      const p=document.createElement('p');p.className='header-check';
+      p.textContent=labels[row.component]+': '+row.quantity+' × '+money(row.product.price)+' = '+money(row.extended_cost);$('sundriesRows').append(p);
+    }
+    const remaining=document.createElement('p');remaining.textContent='Still open: '+value.remaining.join('; ')+'.';$('sundriesRows').append(remaining);
+  }catch(error){if(sequence===sundriesSequence){$('sundriesChecks').hidden=false;sundriesMessage='Review unavailable: '+error.message;$('sundriesRows').replaceChildren()}}
+  finally{if(sequence===sundriesSequence){sundriesLoading=false;showSundriesState()}}
+}
+$('refreshSundries').onclick=refreshSundries;
+function showAreaReviewState(){
+  $('areaStatus').textContent=dirty?'Unsaved edit. Comparisons describe saved version '+state.version+'. Save to refresh.':saving?'Saving and comparing areas…':areaReviewMessage;
+  for(const button of $('areaRows').querySelectorAll('button'))button.disabled=dirty||saving;
+}
+async function refreshAreaReview(){
+  const version=state.version,sequence=++areaReviewSequence;
+  areaReviewMessage='Comparing saved areas…';$('areaRows').replaceChildren();showAreaReviewState();
+  try{
+    const response=await fetch('/api/area-schedule-check');
+    if(response.status===404){$('areaChecks').hidden=true;return}
+    const value=await response.json();if(!response.ok)throw Error(value.error||'Area comparison unavailable');
+    if(sequence!==areaReviewSequence||state.version!==version)return;
+    if(value.measurement_version!==version||value.plan_sha256!==state.plan_sha256)throw Error('Saved measurements changed. Reload before reviewing.');
+    $('areaChecks').hidden=!value.rows.length;
+    const sf=n=>n.toLocaleString(undefined,{maximumFractionDigits:2})+' SF';
+    const labels={ambiguous_scope:'Ambiguous scope',measurement_missing:'Measurement missing',printed_reference_missing:'Printed reference missing',invalid_printed_reference:'Printed area needs review'};
+    for(const row of value.rows){
+      const card=document.createElement('div');card.className='header-check';card.dataset.attention=String(row.status!=='within_tolerance');
+      const title=document.createElement('strong');title.textContent=row.label+' · Sheet '+row.page;card.append(title);
+      const detail=document.createElement('p');detail.textContent=row.difference_percent===null?(labels[row.status]||'Review needed'):
+        'Measured '+sf(row.measured_sf)+' · Printed '+sf(row.printed_sf)+' · '+row.difference_percent.toFixed(2)+'%'+(row.status==='discrepancy'?' — review needed':'');card.append(detail);
+      for(const id of row.measurement_ids){const button=document.createElement('button');button.textContent='Show boundary';button.onclick=()=>selectHeaderMeasurement(id);card.append(button)}
+      $('areaRows').append(card);
+    }
+    areaReviewMessage='Saved version '+version+' · '+value.rows.filter(r=>r.status!=='within_tolerance').length+' comparisons need review.';
+  }catch(error){$('areaChecks').hidden=false;areaReviewMessage=error.message}
+  finally{if(sequence===areaReviewSequence)showAreaReviewState()}
+}
+function message(text){$('message').textContent=text}
+function showHeaderReviewState(){
+  $('headerStatus').textContent=dirty?'Unsaved edit. Results below describe saved version '+state.version+'. Save to refresh the check.':saving?'Saving and checking opening widths…':headerReviewMessage;
+  for(const button of $('headerRows').querySelectorAll('button'))button.disabled=dirty||saving;
+}
+function showPaintReviewState(){
+  $('paintStatus').textContent=dirty?'Unsaved edit. References describe saved version '+state.version+'.':saving?'Saving and refreshing references…':paintReviewMessage;
+  for(const button of $('paintRows').querySelectorAll('button'))button.disabled=dirty||saving||paintLoading;
+  $('refreshPaint').disabled=dirty||saving||paintLoading;
+}
+async function refreshPaintReview(){
+  const version=state.version,sequence=++paintReviewSequence;
+  paintLoading=true;paintReviewMessage='Checking saved finish references…';$('paintRows').replaceChildren();showPaintReviewState();
+  try{const value=await api('/api/paint-surfaces');if(sequence!==paintReviewSequence||state.version!==version)return;
+    if(value.measurement_version!==version||value.plan_sha256!==state.plan_sha256)throw Error('Saved measurements changed. Reload before reviewing these results.');
+    const sf=n=>n.toLocaleString(undefined,{maximumFractionDigits:2})+' SF';
+    for(const zone of value.partial_zone_references){const line=document.createElement('p');line.textContent=(zone.zone==='garage'?'Garage':'House')+' walls and ceilings: '+sf(zone.remaining_surface_reference_sf)+' after known deductions.';$('paintRows').append(line)}
+    for(const room of value.combined_room_references){
+      const card=document.createElement('div');card.className='header-check';
+      const title=document.createElement('strong');title.textContent=state.measurements[room.room_id]?.label||room.room_id;card.append(title);
+      const areas=document.createElement('p');areas.textContent='Gross walls '+sf(room.gross_wall_sf)+' · Known finishes '+sf(room.known_finish_exclusion_sf)+' · Remaining '+sf(room.remaining_wall_reference_sf);card.append(areas);
+      if(room.overlap_between_allocations_sf>0.005){const overlap=document.createElement('p');overlap.textContent=sf(room.overlap_between_allocations_sf)+' of overlapping finishes counted only once.';card.append(overlap)}
+      if(state.measurements[room.room_id]){const button=document.createElement('button');button.textContent='Show '+room.room_id+' measurement';button.onclick=()=>selectHeaderMeasurement(room.room_id);card.append(button)}
+      $('paintRows').append(card);
+    }
+    $('paintChecks').hidden=false;paintReviewMessage='Saved version '+version+' · finish references refreshed.';
+  }catch(error){if(sequence!==paintReviewSequence||state.version!==version)return;
+    $('paintRows').replaceChildren();$('paintChecks').hidden=error.message==='No paint surface mapping configured';paintReviewMessage='Paint reference needs review: '+error.message;
+  }finally{if(sequence===paintReviewSequence){paintLoading=false;showPaintReviewState()}}
+}
+$('refreshPaint').onclick=refreshPaintReview;
+function selectHeaderMeasurement(id){
+  if(dirty||saving){message('Save or discard your edit first.');return}
+  const m=state.measurements[id];if(!m){message('No editable measurement is linked to this opening.');return}
+  if(page!==m.page){page=m.page;$('page').value=page;choose(null);list();fit()}
+  choose(id);focus();$('selected').scrollIntoView({block:'nearest'});
+}
+function renderHeaderReview(){
+  const labels={header_shorter_than_opening_reference:'Header is shorter than the opening',header_not_documented:'Header not documented',opening_width_unresolved:'Opening width not verified',no_length_left_for_end_support:'No length available for end support',end_support_length_unverified:'End supports need review'};
+  const special={O16:'Fireplace',EG01:'Front gable window'};
+  const inches=value=>value===null?'not verified':value.toLocaleString(undefined,{maximumFractionDigits:2})+' in';
+  const rows=headerReview.openings;
+  const supplierConflict=row=>Boolean(row.supplier_alternative?.flags.length);
+  const needsAttention=row=>row.status!=='end_support_length_unverified'||supplierConflict(row);
+  const conflicts=rows.filter(r=>['header_shorter_than_opening_reference','no_length_left_for_end_support'].includes(r.status)||supplierConflict(r)).length;
+  const missing=rows.filter(r=>['header_not_documented','opening_width_unresolved'].includes(r.status)).length;
+  $('headerSummary').textContent='Opening/header checks · '+rows.filter(needsAttention).length+' need attention';
+  headerReviewMessage='Saved version '+headerReview.measurement_version+' · '+conflicts+' size conflicts · '+missing+' missing details · '+rows.filter(r=>r.status==='end_support_length_unverified').length+' supports unverified.';
+  $('headerRows').replaceChildren();
+  for(const row of [...rows].sort((a,b)=>Number(needsAttention(b))-Number(needsAttention(a)))){
+    const card=document.createElement('div');card.className='header-check';card.dataset.openingId=row.opening_id;card.dataset.attention=String(needsAttention(row));
+    const title=document.createElement('strong');title.textContent=state.measurements[row.measurement_id]?.label||row.opening_id+' · '+(special[row.opening_id]||'Unlinked opening');card.append(title);
+    const status=document.createElement('p');status.textContent=supplierConflict(row)?'Supplier length conflict · '+(labels[row.status]||'Review needed'):(labels[row.status]||'Review needed');card.append(status);
+    const dimensions=document.createElement('p');dimensions.textContent='Drawing: '+inches(row.drawn_width_inches)+' · Product opening: '+inches(row.product_rough_opening_width_inches)+' · Header '+(row.header_id||'—')+': '+inches(row.header_cut_length_inches);card.append(dimensions);
+    if(row.span_measurement_ids?.length>1){const span=document.createElement('p');span.textContent='Drawing width includes the doorway and its pocket cavity.';card.append(span)}
+    if(row.length_remaining_for_both_supports_inches!==null){const support=document.createElement('p');support.textContent='Length remaining for both end supports: '+inches(row.length_remaining_for_both_supports_inches)+'.';card.append(support)}
+    if(row.flags.includes('drawn_width_differs_from_product_reference')){const difference=document.createElement('p');difference.textContent='Drawing width differs from the product reference. Reconcile before ordering.';card.append(difference)}
+    if(row.supplier_alternative){
+      const supplier=row.supplier_alternative;
+      const detail=document.createElement('p');detail.textContent='Supplier '+supplier.member_id+': '+inches(supplier.stock_length_inches)+' stock · '+supplier.product+'. Alternative source; layout revision is unverified.';card.append(detail);
+      if(supplier.flags.includes('supplier_stock_shorter_than_plan_cut')){const warning=document.createElement('p');warning.textContent='Supplier stock is '+inches(-supplier.stock_minus_plan_cut_inches)+' shorter than the plan cut.';card.append(warning)}
+      if(supplier.flags.includes('supplier_stock_has_no_end_support_length')){const warning=document.createElement('p');warning.textContent='Supplier stock leaves '+inches(supplier.length_remaining_for_both_supports_inches)+' for both end supports at the current opening width.';card.append(warning)}
+    }
+    if(row.measurement_id&&state.measurements[row.measurement_id]){const button=document.createElement('button');button.textContent='Show '+row.opening_id+' measurement';button.onclick=()=>selectHeaderMeasurement(row.measurement_id);card.append(button)}
+    else{const unlinked=document.createElement('p');unlinked.textContent=row.drawn_width_inches===null?'No editable opening width is linked yet.':'Measured in a linked drawing; no edit control in this view.';card.append(unlinked)}
+    $('headerRows').append(card);
+  }
+  showHeaderReviewState();
+}
+async function refreshHeaderReview(){
+  const version=state.version,sequence=++headerReviewSequence;
+  headerReview=null;headerReviewMessage='Checking saved opening widths…';$('headerRows').replaceChildren();showHeaderReviewState();
+  try{const value=await api('/api/opening-headers');if(sequence!==headerReviewSequence||state.version!==version)return;
+    if(value.measurement_version!==version)throw Error('Saved measurements changed. Reload before reviewing these results.');
+    headerReview=value;$('headerChecks').hidden=false;renderHeaderReview();
+  }catch(error){if(sequence!==headerReviewSequence||state.version!==version)return;
+    $('headerChecks').hidden=error.message==='No opening/header mapping configured';headerReviewMessage='Opening/header check unavailable: '+error.message;showHeaderReviewState();
+  }
+}
+function showPending(){
+  const base=state.invalidated_rows.length?'Rows affected by saved edits; review before pricing: '+state.invalidated_rows.join(', '):'Quantities remain drafts; no complete estimate is released.';
+  const warnings=quantityReview?.version===state.version?quantityReview.warnings:[];
+  $('pending').textContent=[base,...warnings].join(' ');
+}
+async function refreshQuantityReview(){
+  const version=state.version;
+  try{const value=await api('/api/quantities');if(state.version!==version||value.measurement_version!==version)return;
+    quantityReview={version,warnings:value.pending_quantities.map(p=>p.reason+': '+p.label+'.')};
+  }catch(error){if(state.version!==version)return;quantityReview={version,warnings:error.message==='No quantity mapping configured'?[]:['Quantity check unavailable: '+error.message]}}
+  showPending();
+}
+async function api(path,data){const response=await fetch(path,data?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}:{});const value=await response.json();if(!response.ok)throw Error(value.error||'Request failed');return value}
+function node(name,attrs){const el=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,v);return el}
+function pageMeasurements(){return Object.values(state.measurements).filter(m=>m.page===page)}
+function setBox(value){box=value;svg.setAttribute('viewBox',box.join(' '))}
+function fit(){const m=pageMeasurements()[0];setBox([0,0,m.width_pt,m.height_pt]);draw()}
+function focus(){if(!selected||!points.length)return;const xs=points.map(p=>p[0]),ys=points.map(p=>p[1]);let w=Math.max(80,Math.max(...xs)-Math.min(...xs)),h=Math.max(80,Math.max(...ys)-Math.min(...ys));setBox([Math.min(...xs)-w*.25,Math.min(...ys)-h*.25,w*1.5,h*1.5]);draw()}
+function screenPoint(event){return new DOMPoint(event.clientX,event.clientY).matrixTransform(svg.getScreenCTM().inverse())}
+function controls(){
+  const m=selected?state.measurements[selected]:null;
+  $('selected').textContent=m?m.label:'Choose a measurement';
+  for(const id of ['vertex','x','y','note','done'])$(id).disabled=!m||saving;
+  for(const id of ['vertex','x','y'])$(id).disabled=!m||saving||!points.length;
+  $('save').disabled=!dirty||saving;$('discard').disabled=!dirty||saving;$('focus').disabled=!m||!points.length;
+  const counting=m?.kind==='count';
+  for(const id of ['addPoint','addStep']){$(id).disabled=!m||saving||(counting&&id==='addStep');$(id).setAttribute('aria-pressed',String(edgeMode===id))}
+  $('addPoint').textContent=counting?'Add item':'Add point';$('addStep').hidden=counting;
+  $('removeItem').hidden=!counting;$('removeItem').disabled=!counting||saving||!points.length;
+  $('edgeHelp').textContent=counting?'Add item, then click its location. Select a marker to move or remove it.':'Select a measurement, then add a point or step on an edge.';
+  $('vertex').replaceChildren();
+  if(m){points.forEach((p,i)=>{const option=document.createElement('option');option.value=i;option.textContent='Point '+(i+1);$('vertex').append(option)});$('vertex').value=pointIndex;coordinates();}
+  else{$('quantity').textContent='—';$('x').value='';$('y').value='';$('basis').textContent='Click a colored line or choose a measurement below.'}
+  $('version').textContent='Saved version '+state.version+' · '+Object.keys(state.measurements).length+' measurements · not released for ordering';
+  showPending();
+  for(const button of $('list').children)button.setAttribute('aria-pressed',String(button.dataset.id===selected));
+  showHeaderReviewState();showPaintReviewState();showAreaReviewState();showSundriesState();
+}
+function coordinates(){if(!selected)return;if(!points.length){$('x').value='';$('y').value='';return}$('x').value=points[pointIndex][0].toFixed(2);$('y').value=points[pointIndex][1].toFixed(2)}
+function showResult(result){const perimeter=state.measurements[selected].display_quantity==='perimeter'&&result.perimeter_lf!==undefined;$('quantity').textContent=(perimeter?result.perimeter_lf:result.quantity).toLocaleString(undefined,{maximumFractionDigits:2})+' '+(perimeter?'LF':result.unit);$('basis').textContent=perimeter?'Wall centerline perimeter for plate lumber. Keep the reviewed corners aligned; added corners need a new cut mapping.':result.unit==='EA'?'One marker per counted item; locations identify scope, not installation dimensions.':result.projected_area_sf!==undefined?'Plan area '+result.projected_area_sf.toFixed(2)+' SF'+(state.measurements[selected].surface_factor?' · roof slope applied':''):'Gross measured run; openings and framing components are separate.'}
+async function preview(){showHeaderReviewState();showPaintReviewState();showAreaReviewState();showSundriesState();const sequence=++previewSequence,id=selected;try{const result=await api('/api/preview',{measurement_id:id,points});if(sequence===previewSequence&&selected===id){showResult(result);message('Unsaved edit. Save or discard before selecting another measurement.')}}catch(error){if(sequence===previewSequence){$('quantity').textContent='Invalid shape';message(error.message)}}}
+function choose(id){if(dirty||saving){message('Save or discard your edit first.');return}edgeMode=null;selected=id;previewSequence++;pointIndex=0;points=id?structuredClone(state.measurements[id].points):[];$('note').value='';controls();if(id)showResult(state.measurements[id].result);message('');draw()}
+function insertOnEdge(event){
+  if(!selected||saving||!edgeMode)return;
+  const p=screenPoint(event),m=state.measurements[selected];let best=null;
+  const count=m.kind==='area'?points.length:points.length-1;
+  for(let i=0;i<count;i++){
+    const a=points[i],b=points[(i+1)%points.length],dx=b[0]-a[0],dy=b[1]-a[1],length2=dx*dx+dy*dy;
+    if(!length2)continue;
+    const t=Math.max(0,Math.min(1,((p.x-a[0])*dx+(p.y-a[1])*dy)/length2)),x=a[0]+t*dx,y=a[1]+t*dy,distance=Math.hypot(p.x-x,p.y-y);
+    if(!best||distance<best.distance)best={i,a,b,dx,dy,t,x,y,distance};
+  }
+  if(!best)return;
+  if(edgeMode==='addPoint'){
+    if(best.t<.001||best.t>.999){message('Click between existing corners.');return}
+    points.splice(best.i+1,0,[best.x,best.y]);pointIndex=best.i+1;
+  }else{
+    if(Math.abs(best.dx)>.01&&Math.abs(best.dy)>.01){message('Choose a horizontal or vertical edge for a square step.');return}
+    const t=Math.max(.2,Math.min(.8,best.t)),half=Math.min(.15,t/2,(1-t)/2),a=[best.a[0]+(t-half)*best.dx,best.a[1]+(t-half)*best.dy],b=[best.a[0]+(t+half)*best.dx,best.a[1]+(t+half)*best.dy];
+    const offset=12/svg.getScreenCTM().a,axis=Math.abs(best.dx)>Math.abs(best.dy)?1:0,c=[...a],d=[...b];c[axis]+=offset;d[axis]+=offset;
+    if(c[0]>m.width_pt||d[0]>m.width_pt||c[1]>m.height_pt||d[1]>m.height_pt){message('Not enough drawing space for this step.');return}
+    points.splice(best.i+1,0,a,c,d,b);pointIndex=best.i+2;
+  }
+  edgeMode=null;dirty=true;controls();draw();preview();
+}
+for(const id of ['addPoint','addStep'])$(id).onclick=()=>{edgeMode=edgeMode===id?null:id;controls();message(edgeMode?(state.measurements[selected].kind==='count'?'Click the drawing to add one counted item.':id==='addStep'?'Click the edge where the porch needs a step. Then drag the new corners to the drawing.':'Click an edge to insert a point.'):'Insertion canceled.')};
+$('removeItem').onclick=()=>{if(!selected||saving||state.measurements[selected].kind!=='count'||!points.length)return;points.splice(pointIndex,1);pointIndex=Math.max(0,Math.min(pointIndex,points.length-1));edgeMode=null;dirty=true;controls();draw();preview()};
+function draw(){
+  svg.replaceChildren();const m=pageMeasurements()[0];svg.append(node('image',{href:'/sheet/'+page+'.png',x:0,y:0,width:m.width_pt,height:m.height_pt}));
+  for(const measurement of pageMeasurements()){
+    const active=measurement.id===selected,coords=active?points:measurement.points;
+    if(measurement.kind==='count'){
+      const scale=svg.getScreenCTM().a;
+      coords.forEach((p,i)=>{const marker=node('circle',{cx:p[0],cy:p[1],r:9/scale,fill:active?'#ffd54a30':measurement.color+'50',stroke:active?'#ffd54a':measurement.color,'stroke-width':2,'vector-effect':'non-scaling-stroke'});
+        marker.addEventListener('pointerdown',event=>{event.stopPropagation();if(dirty||saving){message('Save or discard your edit first.');return}choose(measurement.id);pointIndex=i;controls();draw()});svg.append(marker)});
+      continue;
+    }
+    const shape=node(measurement.kind==='area'?'polygon':'polyline',{points:coords.map(p=>p.join(',')).join(' '),fill:active&&measurement.kind==='area'?'#ffd54a20':'none',stroke:active?'#ffd54a':measurement.color,'stroke-width':active?3:2,'vector-effect':'non-scaling-stroke','pointer-events':'none'});
+    svg.append(shape);
+    const hit=node(measurement.kind==='area'?'polygon':'polyline',{points:coords.map(p=>p.join(',')).join(' '),fill:'none',stroke:'transparent','stroke-width':16,'vector-effect':'non-scaling-stroke','pointer-events':'stroke'});
+    hit.addEventListener('pointerdown',event=>{event.stopPropagation();if(edgeMode&&active)insertOnEdge(event);else choose(measurement.id)});svg.append(hit);
+  }
+  if(selected){const scale=svg.getScreenCTM().a;points.forEach((p,i)=>{const handle=node('circle',{cx:p[0],cy:p[1],r:6/scale,fill:i===pointIndex?'#ffd54a':'white',stroke:'#111','stroke-width':1.5,'vector-effect':'non-scaling-stroke'});handle.style.cursor='move';handle.addEventListener('pointerdown',event=>{event.stopPropagation();pointIndex=i;drag={kind:'point',id:event.pointerId};svg.setPointerCapture(event.pointerId);$('vertex').value=i;coordinates()});svg.append(handle)})}
+}
+function list(){ $('list').replaceChildren();for(const m of pageMeasurements()){const button=document.createElement('button');button.dataset.id=m.id;button.textContent=m.label;button.style.borderLeft='5px solid '+m.color;button.onclick=()=>{choose(m.id);if(selected===m.id&&!dirty)focus()};$('list').append(button)}controls()}
+svg.addEventListener('pointerdown',event=>{const p=screenPoint(event);if(selected&&!saving&&edgeMode==='addPoint'&&state.measurements[selected].kind==='count'){
+  const m=state.measurements[selected];if(p.x<0||p.y<0||p.x>m.width_pt||p.y>m.height_pt){message('Place the item inside the drawing.');return}
+  points.push([p.x,p.y]);pointIndex=points.length-1;edgeMode=null;dirty=true;controls();draw();preview();return;
+}drag={kind:'pan',id:event.pointerId,start:[p.x,p.y],box:[...box]};svg.setPointerCapture(event.pointerId)});
+svg.addEventListener('pointermove',event=>{if(!drag||saving)return;const p=screenPoint(event);if(drag.kind==='point'){points[pointIndex]=[p.x,p.y];dirty=true;coordinates();$('save').disabled=false;$('discard').disabled=false;draw()}else setBox([box[0]+drag.start[0]-p.x,box[1]+drag.start[1]-p.y,box[2],box[3]])});
+svg.addEventListener('pointerup',event=>{if(!drag)return;const changed=drag.kind==='point';drag=null;svg.releasePointerCapture(event.pointerId);if(changed)preview()});
+svg.addEventListener('pointercancel',()=>{drag=null;if(dirty)preview()});
+for(const id of ['x','y'])$(id).onchange=()=>{if(!selected||saving)return;if($(id).value===''){message('Enter a drawing coordinate.');coordinates();return}points[pointIndex][id==='x'?0:1]=Number($(id).value);dirty=true;controls();draw();preview()};
+$('vertex').onchange=()=>{pointIndex=Number($('vertex').value);coordinates();draw()};
+$('page').onchange=()=>{if(dirty){$('page').value=page;message('Save or discard your edit first.');return}page=Number($('page').value);choose(null);list();fit()};
+$('done').onclick=()=>choose(null);document.addEventListener('keydown',event=>{if(event.key==='Escape')choose(null)});
+$('discard').onclick=()=>{dirty=false;const id=selected;choose(id);message('Unsaved changes discarded.')};
+$('save').onclick=async()=>{if(!$('note').value.trim()){message('Add a short change note before saving.');return}try{saving=true;previewSequence++;controls();state=await api('/api/save',{measurement_id:selected,points,base_version:state.version,plan_sha256:state.plan_sha256,note:$('note').value});dirty=false;showResult(state.measurements[selected].result);message('Saved version '+state.version+'. Choose another line or click Done editing.');await Promise.all([refreshQuantityReview(),refreshHeaderReview(),refreshPaintReview(),refreshAreaReview(),refreshSundries()])}catch(error){message(error.message)}finally{saving=false;controls()}};
+$('fit').onclick=fit;$('focus').onclick=focus;
+function zoom(factor){setBox([box[0]+box[2]*(1-factor)/2,box[1]+box[3]*(1-factor)/2,box[2]*factor,box[3]*factor]);draw()}
+$('zoomIn').onclick=()=>zoom(.75);$('zoomOut').onclick=()=>zoom(1.333333);
+api('/api/state').then(value=>{state=value;const pages=[...new Set(Object.values(state.measurements).map(m=>m.page))].sort((a,b)=>a-b);page=pages[0];for(const p of pages){const option=document.createElement('option');option.value=p;option.textContent='Sheet '+p;$('page').append(option)}list();fit();refreshQuantityReview();refreshHeaderReview();refreshPaintReview();refreshAreaReview();refreshSundries()}).catch(error=>message(error.message));
+</script></body></html>

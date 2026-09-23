@@ -126,7 +126,7 @@
     <div class="brand"><span class="mark" aria-hidden="true"></span><b>Level Ground</b></div>
     <div class="lbl" id="rType">Bid Risk &amp; Gap Report</div>
     <h1 id="rTitle">Property name</h1>
-    <p class="sub">An independent review of your plans and your builder's estimate — what's solid, what's missing, and what to ask before you sign. Every line is labeled by how sure we are.</p>
+    <p class="sub" id="rSummary">An independent review of your plans and your builder's estimate — what's solid, what's missing, and what to ask before you sign. Every line is labeled by how sure we are.</p>
     <div class="meta" id="rMeta"></div>
   </div>
 
@@ -160,8 +160,8 @@
     </section>
 
     <section>
-      <h2>Your home, measured</h2>
-      <div class="rule"><span class="ln"></span><span class="lbl">straight off your drawings</span><span class="ln"></span></div>
+      <h2 id="quantityTitle">Your home, measured</h2>
+      <div class="rule"><span class="ln"></span><span class="lbl" id="quantityLabel">straight off your drawings</span><span class="ln"></span></div>
       <table>
         <thead><tr><th>Item</th><th>Quantity</th><th>Source</th><th>Confidence</th></tr></thead>
         <tbody id="qty"></tbody>
@@ -183,6 +183,12 @@
       </div>
     </section>
 
+    <section id="returnVisit" hidden>
+      <h2>Saved answers and review status</h2>
+      <p id="returnVisitMeta" class="basis"></p>
+      <div id="returnVisitAnswers"></div>
+      <p class="basis">This copy includes saved answers only. Reviewing an answer does not recalculate measurements or prices, verify permit compliance, or release an estimate. Original findings remain until separately revised.</p>
+    </section>
   </div>
 
   <div class="foot">
@@ -344,49 +350,40 @@
 <script>
   const R = JSON.parse(document.getElementById('report-data').textContent);
   const $ = id => document.getElementById(id);
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   const usd = n => n==null ? "—" : "$" + Math.round(n).toLocaleString();
   const usdK = n => n==null ? "—" : (n>=1000 ? "$" + Math.round(n/1000) + "k" : usd(n));
 
   if(!R.meta.is_sample) $('sampleFlag').style.display='none';
   $('rType').innerHTML = R.meta.report_type==='pre_bid' ? 'Pre-Bid Report' : 'Bid Risk &amp; Gap Report';
-  $('rTitle').textContent = R.meta.property_label;
-  $('rId').textContent = "Report " + R.meta.report_id + " · " + R.meta.date;
+  $('rTitle').textContent = R.meta.property_label || 'Your project review';
+  $('rId').textContent = "Report " + (R.meta.report_id || R.return_visit?.source_report_id || 'Not assigned') + " · " + (R.meta.date || 'Date not supplied');
+  if(R.report_status === 'reviewer_draft'){
+    $('rType').textContent = 'Reviewer draft · not approved for release';
+    $('rSummary').textContent = 'For review only. ' + (R.meta.verdict_note || 'Scope, quantities and costs remain unconfirmed.');
+    $('quantityTitle').textContent = 'Draft measurement references';
+    $('quantityLabel').textContent = 'partial quantities · confirmation required';
+  }
 
-  const h = R.meta.home;
+  const h = R.meta.home || {}, region = R.meta.region || {};
   $('rMeta').innerHTML = [
-    ["Prepared for", R.meta.prepared_for],
-    ["Home", h.heated_sf.toLocaleString()+" sf · "+h.stories+"-story · "+h.foundation],
-    ["Market", R.meta.region.market+", "+R.meta.region.state],
-    ["Date", R.meta.date]
-  ].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('');
+    ["Prepared for", R.meta.prepared_for || 'Not supplied'],
+    ["Home", (h.heated_sf == null ? 'Area not established' : h.heated_sf.toLocaleString()+" sf")+" · "+(h.stories == null ? 'Stories not established' : h.stories+"-story")+" · "+(h.foundation || 'Foundation not established')],
+    ["Market", [region.market, region.state].filter(Boolean).join(', ') || 'Not established'],
+    ["Date", R.meta.date || 'Not supplied']
+  ].map(([k,v])=>`<div><span>${esc(k)}</span><b>${esc(v)}</b></div>`).join('');
 
   // ── VERDICT STRIP — three modes ─────────────────────────────────────────────
   const M = R.meta;
-  const isBidGap = M.bid_total != null;
-  // exposure = per-finding corrections (dollars only exist on bid_gap findings)
-  let expLo=0, expHi=0;
-  R.findings.forEach(f=>{ if(f.realistic_low!=null){
-    expLo += Math.max(0, f.realistic_low-(f.bid_amount||0));
-    expHi += Math.max(0, f.realistic_high-(f.bid_amount||0)); } });
+  const isBidGap = M.report_type === 'bid_gap';
 
   if(isBidGap){
-    // BID GAP: Builder's bid | our range (= bid + documented gaps) | exposure. The range is
-    // DERIVED from the findings so the three numbers ALWAYS reconcile (range − bid === exposure).
-    const rangeLo = M.bid_total + expLo, rangeHi = M.bid_total + expHi;
     $('vBid').textContent = usd(M.bid_total);
-    $('vRange').textContent = usdK(rangeLo)+"–"+usdK(rangeHi);
-    $('vExp').textContent = usdK(expLo)+"–"+usdK(expHi);
-    let vnote = M.verdict_note || "";
-    if(M.our_range){   // cross-check: findings-derived range should OVERLAP the independent market range
-      const disjoint = Math.max(0, rangeLo - M.our_range.high, M.our_range.low - rangeHi);
-      if(disjoint > 0.12 * M.our_range.high){
-        console.warn(`Level Ground reconcile: findings-derived $${Math.round(rangeLo)}–$${Math.round(rangeHi)} `+
-          `and the independent market range $${M.our_range.low}–$${M.our_range.high} don't overlap `+
-          `(off $${Math.round(disjoint)}) — likely missed gaps or over-flagged; review before sending.`);
-        vnote += "  ⚠ Draft: the findings and the independent market range don't reconcile yet.";
-      }
-    }
-    $('vNote').textContent = vnote;
+    $('kRange').textContent = 'Cost of unresolved scope';
+    $('vRange').textContent = 'Not established';
+    $('kExp').textContent = 'Review items';
+    $('vExp').textContent = String((R.findings || []).length);
+    $('vNote').textContent = M.verdict_note || 'Written scope clarification is required before assigning any additional cost.';
   } else if(M.our_range){
     // PRE-BID + MARKET PRICING (Phase 2): expected-cost hero, no bid to compare against.
     $('kBid').textContent = "Your home";
@@ -408,19 +405,21 @@
     const fl = $('foundLbl'); if(fl) fl.textContent = 'before you sign anything';
   }
 
-  const catLabel = {missing_scope:"Missing scope", low_allowance:"Low allowance", vague_lump:"Vague lump sum", mispriced:"Mispriced scope"};
+  const catLabel = {scope_confirmation:"Confirm scope", excluded_scope:"Stated exclusion", specification_check:"Check specification", missing_scope:"Missing scope", low_allowance:"Low allowance", vague_lump:"Lump-sum clarification", mispriced:"Mispriced scope"};
   const confChip = c => c==="measured" ? '<span class="conf conf--m">Measured</span>'
+    : c==="needs_confirmation" ? '<span class="conf conf--e">Needs confirmation</span>'
     : c==="fact" ? '<span class="conf conf--f">Fact</span>'
     : c==="fact_plus_estimate" ? '<span class="conf conf--f">Fact</span> <span class="conf conf--e">Estimated · regional</span>'
-    : '<span class="conf conf--e">Estimated · regional</span>';
+    : c==="estimated" ? '<span class="conf conf--e">Estimated · regional</span>'
+    : '<span class="conf conf--e">Not verified</span>';
 
-  $('findings').innerHTML = R.findings.map(f=>{
+  $('findings').innerHTML = (R.findings || []).map(f=>{
     const gapLo = f.realistic_low!=null ? Math.max(0,f.realistic_low-(f.bid_amount||0)) : null;
     const gapHi = f.realistic_high!=null ? Math.max(0,f.realistic_high-(f.bid_amount||0)) : null;
     return `<div class="find">
-      <div class="find-head"><span class="t">${f.title}</span><span class="cat">${catLabel[f.category]||f.category}</span></div>
+      <div class="find-head"><span class="t">${esc(f.title)}</span><span class="cat">${esc(catLabel[f.category]||f.category)}</span></div>
       <div class="find-body">
-        <p>${f.detail}<br>${confChip(f.confidence)}${f.basis?`<span class="basis">Basis: ${f.basis}</span>`:""}</p>
+        <p>${esc(f.detail)}<br>${confChip(f.confidence)}${f.basis?`<span class="basis">Basis: ${esc(f.basis)}</span>`:""}</p>
         <div class="nums">
           ${f.bid_amount!=null ? `<span class="bid">in the bid: ${usd(f.bid_amount)}</span>`:""}
           ${f.realistic_low!=null ? `<span class="real">realistic: ${usdK(f.realistic_low)}–${usdK(f.realistic_high)}</span>`:""}
@@ -430,13 +429,24 @@
     </div>`;
   }).join('');
 
-  $('qty').innerHTML = R.quantities.map(q=>`<tr>
-    <td>${q.item}</td><td class="num">${q.qty} ${q.unit}</td><td class="src">${q.source}</td><td>${confChip(q.confidence)}</td>
+  $('qty').innerHTML = (R.quantities || []).map(q=>`<tr>
+    <td>${esc(q.item)}</td><td class="num">${esc(q.qty ?? 'Not measured')} ${esc(q.unit)}</td><td class="src">${esc(q.source)}</td><td>${confChip(q.confidence)}</td>
   </tr>`).join('');
 
-  $('questions').innerHTML = R.questions.map(q=>`<li><span class="chk" aria-hidden="true"></span>${q}</li>`).join('');
+  $('questions').innerHTML = (R.questions || []).map(q=>`<li><span class="chk" aria-hidden="true"></span>${esc(q)}</li>`).join('');
   document.querySelectorAll('#questions li').forEach(li=>li.addEventListener('click',()=>li.classList.toggle('done')));
-  $('unknowns').innerHTML = R.unknowns.map(u=>`<li>${u}</li>`).join('');
+  $('unknowns').innerHTML = (R.unknowns || []).map(u=>`<li>${esc(u)}</li>`).join('');
+  if (R.return_visit) {
+    const visit = R.return_visit;
+    $('returnVisit').hidden = false;
+    $('returnVisitMeta').textContent = `Saved-answer snapshot: ${visit.generated_at}. Source report: ${visit.source_report_id}. Source SHA-256: ${visit.source_report_sha256}.`;
+    const states = {awaiting_answer:'Awaiting your answer', answer_received_needs_review:'Saved · awaiting review', review_accepted:'Reviewed · resolved', review_needs_clarification:'More detail needed', review_rejected:'Answer needs correction'};
+    $('returnVisitAnswers').innerHTML = (visit.questions || []).map(q => {
+      const answer = q.answer, review = answer?.reviews?.at(-1);
+      const refs = [...new Set([...(answer?.evidence_refs || []), ...(review?.evidence_refs || [])])];
+      return `<div class="find"><div class="find-head"><span class="t">${esc(q.text)}</span><span class="cat">${esc(states[q.status] || 'Awaiting review')}</span></div><div class="find-body"><div><p>${esc(answer?.text || 'No saved answer')}</p>${answer ? `<p class="basis">Answer revision ${esc(answer.revision)} · ${esc(answer.created_at)}</p>` : ''}${review ? `<p class="basis">Reviewer: ${esc(review.rationale)}</p>` : ''}${refs.length ? `<p class="basis">Evidence references: ${refs.map(esc).join('; ')}</p>` : ''}</div></div></div>`;
+    }).join('');
+  }
 </script>
 </body>
 </html>

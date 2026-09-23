@@ -2458,8 +2458,8 @@ def measure_wall_lf(page, clip, zoom=4.0, ppf=None, band_ft=1.1, overlay_path=No
 # OTC33.. = 33" oven tall cabinet; W3624 = 36" upper). This is GIVEN DATA (Guardrail #1:
 # a printed number beats a pixel trace) — Jason's own takeoff method (calibration #34/#39).
 _CAB_UPPER = re.compile(r"^(?:DCW|WB|W)(\d{2})")           # wall/upper cabinet
-_CAB_TALL = re.compile(r"^(?:U\d|OTC(\d{2})|FHB?(\d{2})|T(\d{2})|PC(\d{2}))")  # full-height
-_CAB_LOWER = re.compile(r"^(?:DCB|SB|DB|VB|BC|BD|PB|B)(\d{2})")  # base / lower
+_CAB_TALL = re.compile(r"^(?:U|OTC|FHB?|T|PC)(\d{2})")  # full-height
+_CAB_LOWER = re.compile(r"^(?:DCB|SB|[23]DB|DB|OB|VB|BC|BD|PB|B)(\d{2})")  # base / lower
 
 
 def _classify_cab(tag):
@@ -2470,8 +2470,7 @@ def _classify_cab(tag):
         return ("upper", int(m.group(1)))
     m = _CAB_TALL.match(tag)
     if m:
-        w = next((int(g) for g in m.groups() if g), 24)  # U-towers default 24" wide
-        return ("tall", w)
+        return ("tall", int(m.group(1)))
     m = _CAB_LOWER.match(tag)
     if m:
         return ("lower", int(m.group(1)))
@@ -3051,34 +3050,108 @@ def _tag_words(page):
     return [(w[4], (w[0] + w[2]) / 2.0, (w[1] + w[3]) / 2.0) for w in page.get_text("words")]
 
 
+def _window_tag_groups(page):
+    """Group a mull tag and its nearby dimension-matching component tag row."""
+    tags=[];seen=set()
+    for word in page.get_text('words'):
+        match=WINDOW_TAG.match(word[4])
+        if not match:
+            continue
+        key=(word[4].upper(),tuple(word[:4]))
+        if key in seen:
+            continue
+        seen.add(key)
+        size=match.group(1)
+        tags.append({'tag':word[4],'type':match.group(2).upper(),
+            'width_inches':12*int(size[0])+int(size[1]),
+            'height_inches':12*int(size[2])+int(size[3]),
+            'x':(word[0]+word[2])/2,'y':(word[1]+word[3])/2,
+            'text_height':word[3]-word[1],'bbox':list(word[:4])})
+    groups={};claimed=set()
+    for index,parent in enumerate(tags):
+        if parent['type']!='MU' or parent['text_height']<=0:
+            continue
+        height=parent['text_height']
+        children=[(n,t) for n,t in enumerate(tags) if t['type']!='MU'
+            and t['height_inches']==parent['height_inches']
+            and 0.5*height<=t['y']-parent['y']<=2.5*height
+            and abs(t['x']-parent['x'])<=8*height]
+        children.sort(key=lambda item:item[1]['x'])
+        if not 2<=len(children)<=4:
+            continue
+        values=[t for _,t in children]
+        if (sum(t['width_inches'] for t in values)!=parent['width_inches']
+                or max(t['y'] for t in values)-min(t['y'] for t in values)>0.25*height
+                or abs((values[0]['x']+values[-1]['x'])/2-parent['x'])>height
+                or any(b['bbox'][0]-a['bbox'][2]>2*height for a,b in zip(values,values[1:]))):
+            continue
+        identities={n for n,_ in children}
+        if claimed & identities:
+            raise ValueError('Window component labels match multiple assemblies; review required')
+        claimed.update(identities);groups[index]=values
+    return [(tag,groups.get(n,[])) for n,tag in enumerate(tags) if n not in claimed]
+
+
+def window_cross_view_candidates(floor_pages, elevation_pages):
+    """Find unrepresented elevation tags without claiming physical identity by size."""
+    floor_tags=set()
+    for page in floor_pages:
+        for parent,components in _window_tag_groups(page):
+            floor_tags.add(parent['tag'].upper())
+            floor_tags.update(c['tag'].upper() for c in components)
+    candidates=[];represented=[]
+    for page in elevation_pages:
+        for parent,components in _window_tag_groups(page):
+            record={'page':page.number+1,'tag':parent['tag'],'bbox':parent['bbox'],
+                'nominal_width_inches':parent['width_inches'],
+                'nominal_height_inches':parent['height_inches'],
+                'component_tags':[c['tag'] for c in components]}
+            if parent['tag'].upper() in floor_tags:
+                represented.append(record)
+            else:
+                candidates.append(record)
+    return {'unrepresented_elevation_tags':candidates,'tags_also_on_floor_plans':represented,
+        'whole_building_count':None,'certified':False,
+        'remaining':['Match physical opening identities across views; equal tags do not prove the same opening.',
+                     'Confirm elevation-only tags represent installed openings, not alternatives or detail examples.',
+                     'Different locations and pages remain separate candidates until reconciled.']}
+
+
 def window_count(page, label_radius=200.0, default_mull=2):
     """COUNT windows off a FLOOR-PLAN page from manufacturer size tags.
 
     Jason's rule (2026-07-27): a mulled unit is separate windows -- a double mull is 2
     windows, a triple is 3. Multiplicity comes from a DOUBLE/TRIPLE/QUAD label near the
-    tag when the plan states one; an unlabelled *MU* tag falls back to `default_mull`
+    tag when the plan states one. Dimension-matching component tags immediately
+    below a mull tag count once under that assembly; otherwise an unlabelled *MU*
+    tag falls back to `default_mull`
     because a mull is at least two units by definition.
 
     NEVER run this on an elevation sheet. Elevations draw the same opening on more than
     one view and double-count -- measured 26 tags for 13 real windows on burns.
-    Returns (count, detail_rows).
+    Returns (page_count, detail_rows), not a whole-building count. Elevation-only
+    openings must be reconciled separately; an inferred mull remains an assumption.
     """
     words = _tag_words(page)
     labels = [(t.upper(), x, y) for t, x, y in words if t.upper() in MULL_LABELS]
     rows, total = [], 0
-    for text, x, y in words:
+    for tag,components in _window_tag_groups(page):
+        text,x,y=tag['tag'],tag['x'],tag['y']
         m = WINDOW_TAG.match(text)
         if not m:
             continue
         mult, basis = 1, "single"
         near = sorted(((lt, ((x - lx) ** 2 + (y - ly) ** 2) ** 0.5) for lt, lx, ly in labels),
                       key=lambda n: n[1])
-        if near and near[0][1] <= label_radius:
+        if components:
+            mult,basis=len(components),'dimension_matched_components'
+        elif m.group(2).upper() == 'MU' and near and near[0][1] <= label_radius:
             mult, basis = MULL_LABELS[near[0][0]], "labelled_" + near[0][0].lower()
         elif m.group(2).upper() == "MU":
             mult, basis = default_mull, "unlabelled_mull_default"
         total += mult
-        rows.append({"tag": text, "multiplier": mult, "basis": basis})
+        rows.append({"tag": text, "multiplier": mult, "basis": basis,
+                     'component_tags':[c['tag'] for c in components]})
     return total, rows
 
 
@@ -3093,12 +3166,13 @@ def window_trim_lf(page, label_radius=200.0):
     A tag is WWHH in feet-inches: 3050 is 3'-0" wide x 5'-0" high, so 16 LF of trim.
 
     ⚠ The manual takeoffs measure this PER SASH and therefore run over -- burns 214.79 vs 206.67
-    here, roberts 439.75 vs 283.33. Jason ruled the assembly method correct on both.
+    here. Parent and component tags must not both add perimeter to the same opening.
     ⚠ Waste is a separate column on the takeoff (10% on this line). This returns RAW LF.
     Returns (total_lf, detail_rows).
     """
     rows, total = [], 0.0
-    for text, _x, _y in _tag_words(page):
+    for tag, _components in _window_tag_groups(page):
+        text=tag['tag']
         m = WINDOW_TAG.match(text)
         if not m:
             continue
@@ -5199,72 +5273,7 @@ _REPORT_QTY_ORDER = ["heated_sf", "framing_sf", "roof_surface_sq",
 # final grade, gutters, low-voltage, landscaping, defined allowances, insulation grade, vague
 # lumps, change-order pricing). Pre-bid renders each as "confirm your bid covers this" + the
 # homeowner's meeting question. This is the advocacy IP -- what builders most often leave out.
-PRE_BID_SCOPE_CHECKLIST = [
-    # PHASE 3 fields (ignored by pre-bid; drive the bid comparison):
-    #   detect: 'dollar' = a $ finding if the bid line is ABSENT or under expected_low;
-    #           'grade'  = a mispriced finding if the plan wants an upgrade the bid under-carries;
-    #           'process'= a question only, never a $ finding.
-    #   scope_keys: substrings to match a bid line's description.  expected: (low, high) $ band
-    #   (PROVISIONAL, regional — same human-gated caveat as the $/SF bands).
-    {"category": "missing_scope", "title": "Site work, driveway & final grading",
-     "detail": "Grading, the driveway, and the final grade are the single most common thing a bid "
-               "under-carries or buries in a vague \"site allowance.\" It lands late, and it is "
-               "rarely small.", "confidence": "estimate_regional",
-     "question": "What exactly does the site/allowance line cover -- clearing, driveway, and final "
-                 "grade -- and what happens if it runs over?",
-     "detect": "dollar", "expected": (18000, 28000),
-     "scope_keys": ["site work", "sitework", "site allow", "driveway", "final grad", "grading",
-                    "excavat", "dirt work"]},
-    {"category": "missing_scope", "title": "Gutters & downspouts",
-     "detail": "A small line that goes missing from bids more than almost any other. It never gets "
-               "cheaper after the paint is on.", "confidence": "estimate_regional",
-     "question": "Are gutters and downspouts in the bid, and who is carrying them?",
-     "detect": "dollar", "expected": (3000, 5000), "scope_keys": ["gutter", "downspout"]},
-    {"category": "missing_scope", "title": "Home technology, security & low-voltage",
-     "detail": "Structured wiring, cameras, alarm, and automation are frequently left out and come "
-               "back as a five-figure change order mid-build, when your leverage is gone.",
-     "confidence": "estimate_regional",
-     "question": "Is low-voltage / structured wiring / security in the contract as a defined line, "
-                 "or is it excluded?",
-     "detect": "dollar", "expected": (40000, 60000),
-     "scope_keys": ["low volt", "low-volt", "structured wir", "automation", "smart home",
-                    "security", "camera", "alarm", "audio", "home tech"]},
-    {"category": "low_allowance", "title": "Every allowance defined in writing",
-     "detail": "Countertops, flooring, plumbing fixtures, lighting, and appliances usually ride as "
-               "allowances. A low or undefined allowance is a change order waiting to happen -- the "
-               "overage is on you.", "confidence": "fact",
-     "question": "Can you list every allowance, its dollar figure, and the exact material and "
-                 "square footage it buys -- in writing?",
-     "detect": "process", "expected": None, "scope_keys": []},
-    {"category": "missing_scope", "title": "Landscaping, sod & irrigation",
-     "detail": "Almost always excluded or zeroed. Fine if you know it going in -- a surprise if you "
-               "don't.", "confidence": "estimate_regional",
-     "question": "Is any landscaping, sod, or irrigation included, or is that on me?",
-     "detect": "dollar", "expected": (5000, 15000),
-     "scope_keys": ["landscap", "sod", "irrigation", "seeding"]},
-    {"category": "mispriced", "title": "Insulation matches the plan spec",
-     "detail": "If your plans call for spray foam and the bid is priced for a batt package, the real "
-               "number is different. Confirm the grade the bid actually carries.",
-     "confidence": "estimate_regional",
-     "question": "Does the insulation line match the spec on my plans (foam vs. batt), and can I see "
-                 "the quote behind it?",
-     "detect": "grade", "expected": (16000, 21000),
-     "scope_keys": ["insulat", "spray foam", "foam", "batt"], "upgrade_keys": ["foam"]},
-    {"category": "vague_lump", "title": "No vague lump sums",
-     "detail": "A one-line \"Electrical -- $35,000\" with no breakdown is where change orders breed. "
-               "It isn't wrong; it's unverifiable -- and unverifiable favors the builder.",
-     "confidence": "fact",
-     "question": "Can the big trade lines (electrical, plumbing, HVAC) be broken into scope and "
-                 "allowances so I can see what's actually included?",
-     "detect": "process", "expected": None, "scope_keys": []},
-    {"category": "missing_scope", "title": "Change-order pricing is in the contract",
-     "detail": "How overages are priced matters as much as the bid. Cost-plus-a-fixed-markup vs. "
-               "re-quoted-each-time is the difference between a fair overage and a painful one.",
-     "confidence": "fact",
-     "question": "How are change orders priced -- cost plus a fixed markup, or re-quoted each time "
-                 "-- and is that language in the contract?",
-     "detect": "process", "expected": None, "scope_keys": []},
-]
+from levelground_scope import CHECKLIST_VERSION, PRE_BID_SCOPE_CHECKLIST
 
 STANDARD_UNKNOWNS = [
     "What's under the dirt -- rock, unsuitable soil, or drainage surprises no plan can show.",
@@ -5468,9 +5477,23 @@ def ingest_bid(lines, total=None):
     """Normalize a builder's bid into the structured contract. `lines` = list of
     {desc, amount, is_lump?}. total defaults to the sum of line amounts. The fuzzy part
     (PDF/photo/xlsx -> this shape) is the replaceable front-end; the analysis runs on THIS."""
-    norm = [{"desc": str(ln.get("desc", "")), "amount": float(ln.get("amount") or 0),
-             "is_lump": bool(ln.get("is_lump"))} for ln in lines]
-    return {"total": float(total) if total is not None else round(sum(l["amount"] for l in norm), 2),
+    norm = []
+    for ln in lines:
+        amount = None if ln.get("amount") in (None, "") else float(ln["amount"])
+        if amount is not None and not math.isfinite(amount):
+            raise ValueError("Bid amounts must be finite or unknown")
+        status = ln.get("scope_status", "unclear")
+        if status not in ("included", "excluded", "unclear"):
+            raise ValueError("Unknown bid scope status")
+        norm.append({"desc": str(ln.get("desc", "")), "amount": amount,
+                     "is_lump": bool(ln.get("is_lump")), "scope_status": status,
+                     "source_ref": ln.get("source_ref"),
+                     "confirmed_scopes": list(ln.get("confirmed_scopes") or [])})
+    bid_total = (float(total) if total is not None else
+                 round(sum(l["amount"] for l in norm), 2) if norm and all(l["amount"] is not None for l in norm) else None)
+    if bid_total is not None and not math.isfinite(bid_total):
+        raise ValueError("Bid total must be finite or unknown")
+    return {"total": bid_total,
             "lines": norm}
 
 
@@ -5485,14 +5508,14 @@ def ingest_bid_xlsx(path, desc_col=0, amount_col=1, header_rows=1, lump_threshol
     for r in ws.iter_rows(min_row=header_rows + 1, values_only=True):
         desc = r[desc_col] if desc_col < len(r) else None
         amt = r[amount_col] if amount_col < len(r) else None
+        if not desc:
+            continue
         try:
-            amt = float(amt)
+            amt = float(amt) if amt not in (None, "") else None
         except (TypeError, ValueError):
-            continue
-        if not desc or amt <= 0:
-            continue
+            amt = None
         lines.append({"desc": str(desc), "amount": amt,
-                      "is_lump": amt >= lump_threshold and len(str(desc).split()) <= 2})
+                      "is_lump": amt is not None and amt >= lump_threshold and len(str(desc).split()) <= 2})
     return ingest_bid(lines)
 
 
@@ -5500,53 +5523,71 @@ def _bid_match(bid_lines, keys):
     return [ln for ln in bid_lines if any(k in ln["desc"].lower() for k in keys)]
 
 
-def _bid_finding(c, bid_amount, low, high):
-    absent = bid_amount <= 0
-    return {"category": c["category"], "title": c["title"],
-            "detail": c["detail"] + (" It isn't in the bid at all." if absent
-                                     else " The bid carries less than a realistic number for it."),
-            "bid_amount": bid_amount, "realistic_low": low, "realistic_high": high,
-            "confidence": c.get("confidence", "estimate_regional"),
-            "basis": (("Not found in the bid; " if absent else f"Bid carries ${bid_amount:,.0f}; ")
-                      + "regional range for a build like yours (provisional).")}
+def _bid_finding(c, matches, category="scope_confirmation"):
+    """Keyword matches identify review questions, never prove omissions or dollar gaps."""
+    return {"category": category, "title": c["title"], "detail": c["question"],
+            "bid_amount": None, "realistic_low": None, "realistic_high": None,
+            "confidence": "needs_confirmation", "evidence_lines": matches,
+            "basis": ("Explicit exclusion recorded; confirm who supplies this scope."
+                      if category == "excluded_scope" else
+                      "Related bid wording found; verify scope against plans and referenced attachments."
+                      if matches else
+                      "No keyword match in supplied lines. This does not prove the work is excluded; review attachments and obtain written clarification.")}
+
+
+def review_bid_scopes(bid, home, checklist=None):
+    """Keep every topic visible, separating reviewed wording from applicability."""
+    cl = PRE_BID_SCOPE_CHECKLIST if checklist is None else checklist
+    blines = (bid or {}).get("lines", [])
+    reviews = []
+    for c in cl:
+        keys = c.get("scope_keys") or []
+        m = [ln for ln in blines if c['title'] in ln.get('confirmed_scopes', []) or
+             any(k in ln['desc'].lower() for k in keys)]
+        sourced = [ln for ln in m if ln.get('source_ref') and c['title'] in ln.get('confirmed_scopes', [])]
+        excluded = any(ln.get("scope_status") == "excluded" for ln in sourced)
+        included = bool(m) and all(ln in sourced and ln.get("scope_status") == "included" for ln in m)
+        flag = c.get('optional_home_flag')
+        if flag and home.get(flag) is False:
+            status = 'intake_bid_conflict' if m else 'not_selected'
+        elif included:
+            status = 'included_per_source_review'
+        elif excluded:
+            status = ('conflicting_wording' if any(ln.get('scope_status') == 'included' for ln in m)
+                      else 'excluded_per_source_review')
+        elif flag and home.get(flag) is not True and not m:
+            status = 'selection_unconfirmed'
+        else:
+            status = 'unverified'
+        reviews.append({'id':c.get('id',c['title']), 'title':c['title'], 'status':status,
+                        'question':c['question'], 'evidence_lines':m})
+    return reviews
 
 
 def findings_from_bid(bid, home, checklist=None, quantities=None):
-    """PHASE 3 core: compare the plans' expected scope to the builder's bid -> report `findings[]`.
-      DOLLAR items -> a finding when the bid line is ABSENT or under expected_low (missing / low).
-      GRADE items  -> a mispriced finding when the plan wants an upgrade (home flag, e.g. 'foam')
-                      that the bid under-carries.
-      VAGUE LUMPS  -> any bid line flagged is_lump -> unverifiable, flagged (NEVER priced -> not
-                      added to the exposure total).
-    Bands are PROVISIONAL / regional (same human-gated caveat as the $/SF bands)."""
-    cl = checklist or PRE_BID_SCOPE_CHECKLIST
-    blines = bid.get("lines", [])
-    insul = (home.get("insulation") or "").lower()
+    """Source confirmations can close questions; keywords cannot prove omissions."""
+    cl = PRE_BID_SCOPE_CHECKLIST if checklist is None else checklist
     findings = []
-    for c in cl:
-        det, keys, band = c.get("detect", "process"), (c.get("scope_keys") or []), c.get("expected")
-        m = _bid_match(blines, keys) if keys else []
-        amt = round(sum(ln["amount"] for ln in m), 2)
-        if det == "dollar" and band:
-            lo, hi = band
-            if not m or amt < lo:                        # absent OR under the floor
-                findings.append(_bid_finding(c, amt, lo, hi))
-        elif det == "grade" and band:
-            lo, hi = band
-            if any(k in insul for k in c.get("upgrade_keys", [])) and m and amt < lo:
-                findings.append(_bid_finding(c, amt, lo, hi))    # plan wants foam; bid under-carries
-        # 'process' items never generate a $ finding -- they stay meeting questions
-    for ln in blines:                                    # vague lumps: unverifiable -> flag, no price
-        if ln["is_lump"]:
+    for c, review in zip(cl, review_bid_scopes(bid,home,cl)):
+        if review['status'] in ('included_per_source_review','not_selected'):
+            continue
+        category = 'excluded_scope' if review['status'] == 'excluded_per_source_review' else 'scope_confirmation'
+        finding = _bid_finding(c,review['evidence_lines'],category)
+        finding['scope_id'], finding['scope_status'] = review['id'], review['status']
+        if review['status'] == 'selection_unconfirmed':
+            finding['basis'] = 'Selection is unknown. Confirm whether this optional scope is wanted; no cost or requirement is assumed.'
+        elif review['status'] == 'intake_bid_conflict':
+            finding['basis'] = 'The intake says this scope is not selected, but related bid wording exists. Reconcile the difference.'
+        findings.append(finding)
+    for ln in bid.get('lines', []):                      # vague lumps: unverifiable -> flag, no price
+        if ln.get("is_lump"):
             findings.append({
                 "category": "vague_lump",
-                "title": f"\"{ln['desc']} -- ${ln['amount']:,.0f}\"",
-                "detail": "A big one-line number with no breakdown -- no scope split, no allowances. "
-                          "We can't call it wrong; we can tell you it's unverifiable as written, and "
-                          "unverifiable favors the builder.",
+                "title": ln['desc'],
+                "detail": "Request the referenced scope, specifications, allowances and exclusions supporting this lump sum. A lump sum alone does not establish that work is missing or overpriced.",
                 "bid_amount": ln["amount"], "realistic_low": None, "realistic_high": None,
-                "confidence": "fact",
-                "basis": "Flagged, not priced -- no quantities to check. Not added to the exposure total."})
+                "confidence": "needs_confirmation", "evidence_lines": [ln],
+                "basis": "Scope clarification only; no monetary exposure calculated."})
     return findings
 
 
@@ -5589,9 +5630,14 @@ def report_from_takeoff(takeoff, home, region, prepared_for="Homeowner",
         findings = [{"category": c["category"], "title": c["title"], "detail": c["detail"],
                      "bid_amount": None, "realistic_low": None, "realistic_high": None,
                      "confidence": c["confidence"],
-                     "basis": "Standard scope for a build like yours -- confirm your bid addresses it."}
+                     "basis": "Planning checklist; confirm applicability and the builder's scope for this project."}
                     for c in cl]
-    questions = [c["question"] for c in cl]            # the meeting script (both modes)
+    scope_checks = review_bid_scopes(bid,home,cl)
+    questions = [c['question'] for c in scope_checks
+                 if c['status'] not in ('included_per_source_review','not_selected')]
+    if bid is None:
+        visible = {c['title'] for c in scope_checks if c['status'] != 'not_selected'}
+        findings = [f for f in findings if f['title'] in visible]
 
     unknowns = list(STANDARD_UNKNOWNS)
     for nm in takeoff.get("not_measured", []):         # honest: what we could NOT measure
@@ -5614,9 +5660,8 @@ def report_from_takeoff(takeoff, home, region, prepared_for="Homeowner",
     else:
         mkt_caveat = ""
     if is_bid:
-        vnote = ("An independent review of your plans against your builder's bid -- what's solid, "
-                 "what's thin, and what to ask before you sign. The range below is your bid corrected "
-                 "for every gap we found; each dollar of it traces to a finding.")
+        vnote = ("Review questions based on the supplied bid lines. Missing keywords do not prove omitted work. "
+                 "No corrected contract price or financial exposure is established; review referenced attachments and written answers.")
     elif priced:
         vnote = ("This is a pre-bid review: your home measured off your drawings, an estimated "
                  "build-cost range for a build like this in your market, and the scope to make sure "
@@ -5652,7 +5697,10 @@ def report_from_takeoff(takeoff, home, region, prepared_for="Homeowner",
         "verdict_note": vnote,
     }
     return {"meta": meta, "findings": findings, "quantities": quantities,
-            "questions": questions, "unknowns": unknowns}
+            "questions": questions, "unknowns": unknowns,
+            "scope_checks": scope_checks,
+            "scope_checklist_version": CHECKLIST_VERSION if checklist is None else 'custom',
+            "complete_home_scope_review": False}
 
 
 # ---------------------------------------------------------------------------
@@ -6304,11 +6352,11 @@ if __name__ == "__main__":
     _lumps = [f for f in _bf if f["category"] == "vague_lump"]
     b3_ok = (_bid["total"] == 587400
              and any(f["title"].startswith("Gutters") for f in _bf)                 # absent -> missing
-             and any(f["title"].startswith("Home techn") for f in _bf)              # absent -> missing
-             and any(f["category"] == "mispriced" and "Insulation" in f["title"] for f in _bf)  # foam grade
+             and not any(f["title"].startswith("Home techn") for f in _bf)          # optional, not assumed
+             and any(f["category"] == "specification_check" and "Insulation" in f["title"] for f in _bf)
              and any("Site work" in f["title"] for f in _bf)                        # underpriced -> finding
              and len(_lumps) == 1 and _lumps[0]["realistic_low"] is None            # lump flagged, not priced
-             and all(f["realistic_low"] is not None for f in _bf if f["category"] != "vague_lump"))
+             and all(f["realistic_low"] is None and f['realistic_high'] is None for f in _bf))
     _repB = report_from_takeoff(_tk, {"finish_level": "custom", "insulation": "spray foam roofline"},
                                 {"market": "Middle Georgia"}, bid=_bid, market_book=MARKET_RATE_BOOK)
     b3_ok = b3_ok and (_repB["meta"]["report_type"] == "bid_gap"
@@ -6316,7 +6364,7 @@ if __name__ == "__main__":
                        and len(_repB["findings"]) == len(_bf))
     ok = ok and b3_ok
     print(f"  {'OK ' if b3_ok else 'FAIL'} findings_from_bid: {len(_bf)} findings "
-          f"({_cats.count('missing_scope')} missing, {_cats.count('mispriced')} mispriced, "
+          f"({_cats.count('scope_confirmation')} scope questions, {_cats.count('specification_check')} specification checks, "
           f"{len(_lumps)} vague-lump); report_from_takeoff(bid=) -> bid_gap $587,400")
     # ZEGARRA (7/8/26): the Buildern Import Description column is CLIENT-FACING.
     # lint_buildern_descriptions blocks the EXACT leaks that shipped -- takeoff

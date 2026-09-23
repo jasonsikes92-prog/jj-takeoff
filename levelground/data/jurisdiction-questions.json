@@ -6,7 +6,7 @@
     "report": "Print priority-1 questions in every report as the 'Permit & Jurisdictional Risk' section. Print priority-2 when the address signals apply (slope, flood zone, septic, HOA).",
     "call_sheet": "Priority-1 set only, in listed order, as the printable page the homeowner fills out while on the phone with the county.",
     "return_form": "Each question renders as one radio group from `answers[].label`. On submit, serve the matching `next_steps` block. Lookup only — nothing is generated per customer.",
-    "database": "A returned answer banks as an UNVERIFIED row for that jurisdiction. Never print an unverified row as a cited fact in another homeowner's report until two independent reports agree or it is confirmed against the source."
+    "database": "A returned answer remains UNVERIFIED reported evidence. Agreement between homeowners is a research signal, not verification of a local requirement. Before reusing a requirement, confirm it against an authoritative source and record the source, date, jurisdiction, effective dates and applicable site conditions. Never transfer private project answers or parcel-specific conditions into another homeowner's report as general rules."
   },
   "cost_signal_legend": {
     "low": "Usually a few hundred dollars or less, but gates other work.",

@@ -30,23 +30,30 @@ asserts:
   # 1x4 WINDOW TRIM — sum of window OPENING perimeters from the plan's own size tags.
   # Jason ruled 2026-07-27: trim runs around the whole ASSEMBLY (the mullion strip is built into
   # the window, so a double mull gets ONE perimeter) and DOORS GET NO TRIM.
-  # The manual takeoff measures per SASH and runs over: 439.75 vs 283.33 here.
+  # Corrected 2026-09-21: 283.33 double-counted the kitchen's three component
+  # perimeters (38 LF) beneath its parent tag. Eleven floor-plan assemblies total
+  # 245.33 nominal LF. This excludes the elevation-only gable window and waste.
   # ⚠ WHAT THIS PROVES: that the engine reads every window tag, parses the WWHH feet-inches
   # encoding, and applies Jason's assembly rule. It is METHOD-CONFORMANCE plus regression
   # protection — it is NOT independent accuracy evidence, because the expected value is derived
   # from the same tags the probe reads. Raw LF; the takeoff's 10% waste is a separate column.
-  - {trade: window_trim_lf, quantity: 283.33, unit: LF, tolerance_pct: 0.5, source: jason-ruling, page_ref: "floor plan window tags"}
+  - {trade: window_trim_lf, quantity: 245.33, unit: LF, tolerance_pct: 0.5, source: supplier-plan-reconciliation, page_ref: "p5 eleven floor-plan assemblies; gable opening excluded"}
   # Schedule-READ asserts grade against the PLAN'S OWN printed SQFT sheet (test = can the
   # engine read the schedule). RESOLVED by Jason 7/5/26: 2,161 is RIGHT — the plan was
   # revised after calibration #1 recorded 2,127. Plan-printed values are canonical here.
   - {trade: heated_sf, quantity: 2161, unit: SF, tolerance_pct: 1.5, source: schedule, assertion_type: comparison, page_ref: "p2 SQFT sheet"}
   - {trade: framing_sf, quantity: 3431, unit: SF, tolerance_pct: 1.5, source: schedule, assertion_type: comparison, page_ref: "p2 SQFT (heated+garage+cov porch+cov deck)"}
 
-  # WINDOW COUNT — measured off the FLOOR PLAN (p5), never the elevations. Ground truth is
-  # Skip's own Buildern takeoff for PR-051 (Measurements - Roberts Residence.xlsx: 23 each).
-  # Jason's rule 2026-07-27: a mulled unit is separate windows — 4x 6062MU labelled DOUBLE
-  # = 8, 2x 9062MU labelled TRIPLE = 6, 1x 6044MU unlabelled mull = 2, plus 7 singles = 23.
-  - {trade: window_count, quantity: 23, unit: EA, tolerance_pct: 0, source: skip-takeoff, page_ref: "p5 floor plan"}
+  # Supplier-backed review 2026-09-20 supersedes the legacy 23-count reference.
+  # Four doubles (8), two triples (6), kitchen three-part assembly (3), four floor-plan
+  # singles (4), and one distinct front-gable window (1) = 22 individual units.
+  # The legacy page-only probe returns 23: it counts the kitchen parent as two PLUS
+  # its three component tags, then misses the gable window. Do not accept that
+  # compensating count or force it to 22; assembly grouping and cross-sheet identity
+  # must both be resolved. The current reviewed estimate already uses 22.
+  # Evidence: work/phase3/owner_finish_edit_trial/price_evidence/window_assembly_scope.json
+  # SHA256 74980470e3a176ee948ccc6a5f27120a9ebe4ed6af0eb29642a90f72493bfdc2.
+  - {trade: window_count, quantity: 22, unit: EA, tolerance_pct: 0, source: supplier-plan-reconciliation, page_ref: "p5 floor plan and p9 front gable; supplier specification pages 1-6"}
 
   # FASCIA = reviewed eave + slope-corrected rake. Jason's 2026-07-29 markup is the geometry
   # authority. Southern's 336 LF quote remains a comparison only; forcing geometry to that
@@ -59,7 +66,7 @@ asserts:
   # Estimate-ASSEMBLY math reproduced in code (assemble_estimate, cal #49): the file's
   # 589 priced lines re-priced from qty/unit-cost/markup%% -> amount 516,589 (line math
   # verified in bulk; 1 rounding exception in the file itself).
-  - {trade: estimate_amount_usd, quantity: 516589, unit: USD, tolerance_pct: 0.5, source: reference-file, page_ref: "fixture reference-estimate.xlsx, Estimate sheet"}
+  - {trade: estimate_amount_usd, quantity: 516589, unit: USD, tolerance_pct: 0.5, source: reference-file, assertion_type: comparison, page_ref: "fixture reference-estimate.xlsx, Estimate sheet; arithmetic from supplied quantities and rates"}
   # DISCREPANCY (cal #49): 591,341 (cal #1 narrative) is NOT in the file; the file's own
   # Buildern footer Total = 649,312.39 and doesn't sum from its items. Jason to call it.
   # RESOLVED (Jason 7/6/26): sell truth = signed CONTRACT $591,341.33; the examples

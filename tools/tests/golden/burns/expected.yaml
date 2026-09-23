@@ -36,8 +36,8 @@ asserts:
   # blind trace_footprint gave a jumbled 1,915). Geometry regression.
   - {trade: roof_footprint_sf, quantity: 2678, unit: SF, tolerance_pct: 8, source: roof_footprint, page_ref: "p6 ROOF PLAN"}
 
-  # roofing_estimate reproduces Southern Expert Roofing's ACTUAL bill to the penny (#13).
-  - {trade: roofing_total_usd, quantity: 8052.92, unit: USD, tolerance_pct: 1, source: "Southern Expert Roofing PO", page_ref: "vendor estimate 294487"}
+  # Invoice-quantity arithmetic comparison; the probe does not measure these quantities from the PDF.
+  - {trade: roofing_total_usd, quantity: 8052.92, unit: USD, tolerance_pct: 1, source: "Southern Expert Roofing PO", assertion_type: comparison, page_ref: "vendor estimate 294487"}
 
-  # siding_estimate reproduces Southern Siding & Gutters' ACTUAL bill to the penny (#12c).
-  - {trade: siding_total_usd, quantity: 18962.50, unit: USD, tolerance_pct: 1, source: "Southern Siding & Gutters PO", page_ref: "vendor estimate 294490"}
+  # Invoice-quantity arithmetic comparison; rate-book changes can cause a visible difference.
+  - {trade: siding_total_usd, quantity: 18962.50, unit: USD, tolerance_pct: 1, source: "Southern Siding & Gutters PO", assertion_type: comparison, page_ref: "vendor estimate 294490"}

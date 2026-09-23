@@ -20,11 +20,13 @@ import jnj_takeoff as J
 
 
 def inject(html, report):
-    """Swap the <script id="report-data"> JSON block for `report` (pretty, em-dashed)."""
-    block = json.dumps(report, indent=2, ensure_ascii=False).replace("--", "—")
-    return re.sub(r'(<script id="report-data" type="application/json">)(.*?)(</script>)',
+    """Embed report data without changing its text or allowing a script terminator."""
+    block = json.dumps(report, indent=2, ensure_ascii=False, allow_nan=False).replace('<', r'\u003c')
+    result, count = re.subn(r'(<script id="report-data" type="application/json">)(.*?)(</script>)',
                   lambda m: m.group(1) + "\n" + block + "\n" + m.group(3),
-                  html, count=1, flags=re.S)
+                  html, flags=re.S)
+    if count != 1:raise ValueError('Report template must contain exactly one report-data block')
+    return result
 
 
 def main():

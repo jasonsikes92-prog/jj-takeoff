@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your project · LEVEL GROUND</title><link rel="stylesheet" href="/portal.css"><script src="/portal.js" defer></script>
+</head>
+<body>
+<header><div class="bar"><a class="brand" href="/">LEVEL GROUND</a><span class="preview">Local preview</span><button id="sign-out" class="secondary" hidden>Close project</button></div></header>
+<main>
+<section id="access" class="access"><p class="eyebrow">A second pair of eyes for your home</p><h1>Your build,<br>in one place.</h1><p>Review your plans, make sense of a builder’s bid and keep the answers together as your project moves forward.</p>
+<form id="access-form" class="panel"><label for="access-code">Project access code</label><input id="access-code" type="password" autocomplete="off" required spellcheck="false"><p class="hint">Use the private code provided for your project. If it has expired, request a new code from your reviewer.</p><button type="submit">Open project</button></form></section>
+<div id="message" role="status" aria-live="polite"></div>
+<section id="project" hidden>
+<div class="project-heading"><div><p class="eyebrow">Your project</p><h1 id="case-label"></h1></div><button id="refresh" class="secondary">Refresh project</button></div>
+<p class="intro">Start with your plans. Come back with a bid. Your documents and answers stay with the same project.</p>
+<section id="reviewer-tools" class="panel" aria-labelledby="reviewer-title" hidden><h2 id="reviewer-title">Trade bid drafts</h2><p class="hint">Reviewer access · Check current scope before sharing. These drafts have not been sent and do not approve an estimate or purchase.</p><div id="reviewer-bid-list"></div></section>
+<nav class="stages" aria-label="Review stages"><button type="button" data-stage="pre_bid" aria-pressed="true"><span>1 · Before choosing a builder</span>Plan &amp; budget review</button><button type="button" data-stage="bid_gap" aria-pressed="false"><span>2 · When your bid arrives</span>Builder bid review</button></nav>
+<div class="workspace"><div>
+<section class="panel" aria-labelledby="review-title"><h2 id="review-title">Your review</h2><label for="report-version">Report version</label><select id="report-version"></select><p class="hint"><button id="download-report" type="button" class="secondary" hidden>Download review</button></p><div id="report"></div></section>
+<section class="panel" aria-labelledby="questions-title"><h2 id="questions-title">Questions to work through</h2><p class="hint">Save what your builder tells you and attach the written evidence. Your reviewer checks each answer; saving it does not automatically resolve a question.</p><div id="questions"></div></section>
+</div><aside class="panel" aria-labelledby="documents-title"><h2 id="documents-title">Project documents</h2><p>Keep your plans, bids and written clarifications here for both stages.</p>
+<form id="upload-form"><label for="document-file">Choose a document</label><input id="document-file" type="file" required><p class="hint">Up to 25 MB per file. Uploads are saved for review; they do not produce an instant estimate.</p><button type="submit">Upload document</button></form><ul id="documents" class="documents"></ul></aside></div>
+</section></main><footer>LEVEL GROUND · Independent review for homeowners</footer>
+</body></html>
