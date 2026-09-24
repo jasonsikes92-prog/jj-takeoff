@@ -37,6 +37,7 @@ Every line gets three columns:
 Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASON (answered). Keep the open questions on a second tab.
 
 ## Measurement rules
+- **Siding method (Jason 9/24):** measure wall LF off the FLOOR PLAN (it catches the hidden recess walls) × the correct height for EACH wall. Read that height off the elevation dimension (bottom of siding to top plate); the garage may differ. Draw gables separately on the elevations, and always show the height used.
 - **Walls (siding, brick, stone): GROSS.** Never deduct window or door openings; Jason's siding sub doesn't either. Wall height = slab to top of plate. Gable triangles are added.
 - **Corner boards** = every inside and outside corner on siding walls × full wall height.
 - **Slab footers** = the whole slab perimeter PLUS added footers where each porch meets the house and where the garage wall meets the house.
