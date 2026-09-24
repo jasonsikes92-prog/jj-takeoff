@@ -75,8 +75,7 @@ The goal is plans in, accurate estimate out. ASTRA (a Codex agent) built the est
 - Commits end with the Claude co-author line. Jason pushes.
 
 ## 7. Open Questions
-- Is shingle waste 25% (template + Davis key) or 15% (`jnj-estimate-takeoff/SKILL.md`)?
-- Roberts windows: 22 (ASTRA, matches the Andersen quote) or 23 (Jason 7/27)?
+- ~~Shingle waste~~ **Ruled 25%** (Jason 9/23). ~~Roberts windows~~ **Ruled 22**, and the oversized tempered tub window gets its own line. The golden test still fails because ASTRA's engine reads 21; the engine is left untouched.
 - Anderson assumptions still open:
   - power run 230 ft
   - backsplash 20 SF

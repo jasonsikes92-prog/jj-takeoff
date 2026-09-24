@@ -46,6 +46,7 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
   - Low-slope porch roofs (3:12) are METAL.
 - **Roof insulation**: spray foam at the roof deck = roof area (Davis, Anderson). Walls are batts.
 - **Windows**: count on the elevations and reconcile against the plan tags. A mulled (2)3050 counts as 2. Decorative dormer windows count.
+  - **Oversized tempered window at a tub gets its OWN line**, separate from the standard window count, because it costs more (Jason, Roberts 9/23). Check every window at a tub or shower for a tempered/oversized note.
 - **Doors**: leaves by height (6'8 / 8'). Jason gives the solid/hollow split; on Anderson, bedrooms, office and man cave are solid.
   - A closet pair = 2 leaves.
   - Barn doors are easy to miss: look for panel lines drawn beside an opening.
@@ -73,5 +74,6 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
 - A key can carry the estimator's own shortcuts (Skip on Davis #2), so not every difference is a measuring error.
 - Once a key has been seen, any re-measure is NOT blind. Tag those changes RE-READ and score RULE changes separately.
 
-## Open conflict (ask Jason)
-- `jnj-estimate-takeoff/SKILL.md` says shingle waste is +15% and "do NOT use 25%". Jason's template and the Davis #2 key use 25%. Which one is right?
+## Rulings (Jason, 9/23/26)
+- **Shingle waste = 25%.** This settles the conflict with `jnj-estimate-takeoff/SKILL.md`, which said 15%; the skill now says 25%. The engine's `roofing_estimate()` still hard-codes 15%, so override it.
+- **Roberts windows = 22.**
