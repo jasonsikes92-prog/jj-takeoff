@@ -67,10 +67,13 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
   - bedroom/other closets: 1 shelf + rod, so × 1.
 - **Stone columns** = 4 sides.
 - **Plumbing**: full fixtures are anything with a drain (WC, lav, tub, shower, sinks, washer, dog wash, mop sink). Half fixtures are supply only (dishwasher, ice maker, each hose bib, extra shower valve).
+- **Downspouts**: one at each gutter-end roof corner, **13 ft each on a 1-story** (Jason 9/23).
+- **Corner boards**: count each face of an outside corner (Anderson markup).
 - **Driveway off a main highway**: carry a concrete apron at the road even if the drive is gravel (Jason 9/23).
 - **Add lines the template lacks** when the plan shows them: laundry cabinets and top, utility sink, closet shelving, stone veneer or columns, dog wash, pass-through doors.
 
 ## Scoring against a key
+- ⛔ Confirm the key was measured on the SAME plan revision (Anderson: it wasn't). Read the key's markup pages, not just its totals.
 - **The plans are the source of truth.** Work from them exclusively unless the owner directs otherwise. A key estimate (e.g. Skip's) may carry homeowner changes, but it can also carry mistakes, so VERIFY every scope conflict with Jason; never adopt one silently.
 - Keys mix raw and with-waste numbers, so compare against both. Shingle rows are confirmed with-waste (Davis: 7,105 = 5,684 × 1.25).
 - A key can carry the estimator's own shortcuts (Skip on Davis #2), so not every difference is a measuring error.
