@@ -66,7 +66,9 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
   - pantries and bath linen closets: × 3;
   - bedroom/other closets: 1 shelf + rod, so × 1.
 - **Stone columns** = 4 sides.
-- **Plumbing**: full fixtures are anything with a drain (WC, lav, tub, shower, sinks, washer, dog wash, mop sink). Half fixtures are supply only (dishwasher, ice maker, each hose bib, extra shower valve).
+- **Plumbing** (Jason 9/23):
+  - **Full fixtures**: anything with a drain (WC, lav, tub, shower, sinks, laundry washer box, dog wash, mop sink), PLUS **every water heater, whether or not it's drawn** (2 WH = 2 fixtures).
+  - **Half fixtures**: supply only (dishwasher, fridge/ice maker, each hose bib, extra shower valve).
 - **Downspouts**: one at each gutter-end roof corner, **13 ft each on a 1-story** (Jason 9/23).
 - **Corner boards**: count each face of an outside corner (Anderson markup).
 - **Driveway off a main highway**: carry a concrete apron at the road even if the drive is gravel (Jason 9/23).
