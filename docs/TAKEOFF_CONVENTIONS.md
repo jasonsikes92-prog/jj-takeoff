@@ -67,9 +67,11 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
   - bedroom/other closets: 1 shelf + rod, so × 1.
 - **Stone columns** = 4 sides.
 - **Plumbing**: full fixtures are anything with a drain (WC, lav, tub, shower, sinks, washer, dog wash, mop sink). Half fixtures are supply only (dishwasher, ice maker, each hose bib, extra shower valve).
+- **Driveway off a main highway**: carry a concrete apron at the road even if the drive is gravel (Jason 9/23).
 - **Add lines the template lacks** when the plan shows them: laundry cabinets and top, utility sink, closet shelving, stone veneer or columns, dog wash, pass-through doors.
 
 ## Scoring against a key
+- A Skip-written estimate reflects what the homeowner agreed to, so it overrides the plans and intake answers on SCOPE (Anderson: well, propane, gravel drive, stone removed).
 - Keys mix raw and with-waste numbers, so compare against both. Shingle rows are confirmed with-waste (Davis: 7,105 = 5,684 × 1.25).
 - A key can carry the estimator's own shortcuts (Skip on Davis #2), so not every difference is a measuring error.
 - Once a key has been seen, any re-measure is NOT blind. Tag those changes RE-READ and score RULE changes separately.
