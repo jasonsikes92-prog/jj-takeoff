@@ -71,7 +71,7 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
 - **Add lines the template lacks** when the plan shows them: laundry cabinets and top, utility sink, closet shelving, stone veneer or columns, dog wash, pass-through doors.
 
 ## Scoring against a key
-- A Skip-written estimate reflects what the homeowner agreed to, so it overrides the plans and intake answers on SCOPE (Anderson: well, propane, gravel drive, stone removed).
+- **The plans are the source of truth.** Work from them exclusively unless the owner directs otherwise. A key estimate (e.g. Skip's) may carry homeowner changes, but it can also carry mistakes, so VERIFY every scope conflict with Jason; never adopt one silently.
 - Keys mix raw and with-waste numbers, so compare against both. Shingle rows are confirmed with-waste (Davis: 7,105 = 5,684 × 1.25).
 - A key can carry the estimator's own shortcuts (Skip on Davis #2), so not every difference is a measuring error.
 - Once a key has been seen, any re-measure is NOT blind. Tag those changes RE-READ and score RULE changes separately.
