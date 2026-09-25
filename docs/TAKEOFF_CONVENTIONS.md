@@ -41,11 +41,13 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
 - **Dormers get siding:** the front face plus both side (cheek) walls. Only one side shows on an elevation, so multiply it (2 per dormer).
 - **Walls (siding, brick, stone): GROSS.** Never deduct window or door openings, and that includes the GARAGE DOOR (Jason 9/24); Jason's siding sub doesn't deduct them either. Wall height = slab to top of plate. Gable triangles are added.
 - **Corner boards** = every inside and outside corner on siding walls × full wall height.
-- **Slab footers** = the whole slab perimeter PLUS added footers where each porch meets the house and where the garage wall meets the house.
+- **Slab footers** = the whole slab perimeter PLUS added footers where each porch meets the house and where the garage wall meets the house. Where the garage meets a porch, that line gets a footer too (Villanueva garage/rear porch, Jason 9/25).
 - **Mono slab**: the "Concrete" line = the whole slab (house + garage + porch slabs).
 - **Roof**: plan face area × pitch factor, by pitch.
   - Decorative dormers take the main pitch; read it off the SIDE elevations.
-  - Low-slope porch roofs (3:12) are METAL.
+  - Low-slope porch roofs (3:12) are METAL by default, but CONFIRM per house - Villanueva's 3:12 front porch is SHINGLE (Jason 9/25).
+  - **A porch roof runs up to the wall it dies into** (Jason, Villanueva 9/25): between two front gables the porch roof continues up to the 2nd-floor wall. The roof plan's dashed outline stops short there, so draw the gap in.
+  - **Small gable returns (the kick at the base of a front gable) take the gable's MAIN pitch** and belong inside the gable face (Jason, Villanueva 9/25: folded the 8:12 returns into the 10:12 faces). Never a separate low-pitch line.
 - **Roof insulation**: spray foam at the roof deck = roof area (Davis, Anderson). Walls are batts.
 - **Windows**: count on the elevations and reconcile against the plan tags. A mulled (2)3050 counts as 2. Decorative dormer windows count.
   - **Oversized tempered window at a tub gets its OWN line**, separate from the standard window count, because it costs more (Jason, Roberts 9/23). Check every window at a tub or shower for a tempered/oversized note.
