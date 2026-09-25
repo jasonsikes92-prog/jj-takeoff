@@ -88,6 +88,7 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
 - **Drywall: measure EVERY wall in EVERY room** - both sides of every interior wall (Jason had to add the second side of walls I missed). **Never deduct doors or openings** - the drywaller buys the full sheet and cuts the opening out, so it counts (Jason 9/25).
 - **Window casing:** every window gets interior casing + jambs - including DORMER windows and GARAGE windows (Jason added the dormer casing on Anderson 9/25). Measure the rough-opening perimeter; a mulled pair is one opening.
 - **Door casing (interior):** every door gets casing - interior doors BOTH sides (2 legs x 6-8 + head, each side), closet pairs per opening, exterior doors (front/rear) on the inside only, garage entry both sides. Door and window casing go on the same casing-and-jambs line (Jason 9/25).
+- **Window perimeter LF (one measurement, three uses)** (Jason 9/25): measure each window opening perimeter once (mulled pair = one opening). Use it for (1) the estimate line **1x4 Hardie / exterior casing**, (2) interior wood window casing, and (3) **wood window jambs if the customer wants wood jambs**. Door casing is separate (interior, both sides).
 - **Corner boards**: count each face of an outside corner (Anderson markup).
 - **Driveway off a main highway**: carry a concrete apron at the road even if the drive is gravel (Jason 9/23).
 - **Add lines the template lacks** when the plan shows them: laundry cabinets and top, utility sink, closet shelving, stone veneer or columns, dog wash, pass-through doors.
