@@ -73,6 +73,8 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
   - **Half fixtures**: supply only (dishwasher, fridge/ice maker, each hose bib).
 - **Downspouts**: one at each gutter-end roof corner, **13 ft each on a 1-story** (Jason 9/23).
 - **Gutters** (Jason approved Anderson 9/24): eaves only; none on rakes/gable ends or dormers. **Downspouts go at BOTH ends of every gutter run** (a rear porch gutter between two wings gets 2), plus one where a long eave steps at a jog (Anderson front entry). Anderson = 8 downspouts, not 6.
+- **Doors** (Jason approved Anderson 9/24): count one per LEAF off the plan swings (closet pair = 2). Doors from a BEDROOM into a shared (jack-and-jill) bath are **SOLID**, not hollow. Bedrooms, master, office, man cave = solid. Anderson = 12 hollow + 7 solid.
+- **Shower heads:** count only heads actually shown - a second centerline mark in the shower is not automatically a 2nd head (Anderson master = 1 head, 17 full fixtures).
 - **Corner boards**: count each face of an outside corner (Anderson markup).
 - **Driveway off a main highway**: carry a concrete apron at the road even if the drive is gravel (Jason 9/23).
 - **Add lines the template lacks** when the plan shows them: laundry cabinets and top, utility sink, closet shelving, stone veneer or columns, dog wash, pass-through doors.
