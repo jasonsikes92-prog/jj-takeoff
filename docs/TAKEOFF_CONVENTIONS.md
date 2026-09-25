@@ -86,6 +86,7 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
 - **Everything above the ceiling joists gets foam** (Jason 9/25): roof deck over the heated house + every gable end over heated space + dormer walls + the housewrap-blocked wall at the garage. Garage gables/roof are not foamed.
 - **Framed SF counts a porch ONLY when it has a roof over it** (Jason 9/25). Covered porch = framed (its roof is framed); an uncovered porch/patio/slab gets no framing. Anderson: front porch (under the main roof) + rear patio (metal roof) both count.
 - **Drywall: measure EVERY wall in EVERY room** - both sides of every interior wall (Jason had to add the second side of walls I missed). **Never deduct doors or openings** - the drywaller buys the full sheet and cuts the opening out, so it counts (Jason 9/25).
+- **Window casing:** every window gets interior casing + jambs - including DORMER windows and GARAGE windows (Jason added the dormer casing on Anderson 9/25). Measure the rough-opening perimeter; a mulled pair is one opening.
 - **Corner boards**: count each face of an outside corner (Anderson markup).
 - **Driveway off a main highway**: carry a concrete apron at the road even if the drive is gravel (Jason 9/23).
 - **Add lines the template lacks** when the plan shows them: laundry cabinets and top, utility sink, closet shelving, stone veneer or columns, dog wash, pass-through doors.
