@@ -72,6 +72,7 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
   - **Full fixtures**: anything with a drain (WC, lav, tub, shower, sinks, laundry washer box, dog wash, mop sink), PLUS **every water heater, whether or not it's drawn** (2 WH = 2 fixtures), PLUS **each shower head** in a multi-head shower (Davis markup: master shower 2 heads = 2 fixtures).
   - **Half fixtures**: supply only (dishwasher, fridge/ice maker, each hose bib).
 - **Downspouts**: one at each gutter-end roof corner, **13 ft each on a 1-story** (Jason 9/23).
+- **Gutters** (Jason approved Anderson 9/24): eaves only; none on rakes/gable ends or dormers. **Downspouts go at BOTH ends of every gutter run** (a rear porch gutter between two wings gets 2), plus one where a long eave steps at a jog (Anderson front entry). Anderson = 8 downspouts, not 6.
 - **Corner boards**: count each face of an outside corner (Anderson markup).
 - **Driveway off a main highway**: carry a concrete apron at the road even if the drive is gravel (Jason 9/23).
 - **Add lines the template lacks** when the plan shows them: laundry cabinets and top, utility sink, closet shelving, stone veneer or columns, dog wash, pass-through doors.
