@@ -78,6 +78,7 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
 - **Countertops against a wall** (Jason 9/24): where a top meets a wall WITHOUT a tile backsplash, draw the top out INTO the wall to cover the back splash and side splash(es). Always.
 - **Two parallel cabinet lines on a wall = a row of LOWERS (line farther from the wall) + a row of UPPERS (line closer to the wall).** Kitchen uppers = the dashed line over the lowers, none over the hood or tall cabinets.
 - **Pantry shelving: x3 shelves** on every shelf run (Jason 9/24).
+- **Vent hood:** always count the kitchen vent hood cabinet (1 EA over the range) - it is its own line, not part of the uppers (Jason 9/24: I missed it in the viewer).
 - **Corner boards**: count each face of an outside corner (Anderson markup).
 - **Driveway off a main highway**: carry a concrete apron at the road even if the drive is gravel (Jason 9/23).
 - **Add lines the template lacks** when the plan shows them: laundry cabinets and top, utility sink, closet shelving, stone veneer or columns, dog wash, pass-through doors.
