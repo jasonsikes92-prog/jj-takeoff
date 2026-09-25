@@ -75,6 +75,9 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
 - **Gutters** (Jason approved Anderson 9/24): eaves only; none on rakes/gable ends or dormers. **Downspouts go at BOTH ends of every gutter run** (a rear porch gutter between two wings gets 2), plus one where a long eave steps at a jog (Anderson front entry). Anderson = 8 downspouts, not 6.
 - **Doors** (Jason approved Anderson 9/24): count one per LEAF off the plan swings (closet pair = 2). Doors from a BEDROOM into a shared (jack-and-jill) bath are **SOLID**, not hollow. Bedrooms, master, office, man cave = solid. Anderson = 12 hollow + 7 solid.
 - **Centerline marks are NOT fixtures:** the CL symbol (a C with an L through it) on a plumbing plan marks a centerline dimension, not a shower head or drain. Count fixtures only from the drawn fixture symbols (Anderson: my 2nd master shower head was a CL mark; Jason 9/24).
+- **Countertops against a wall** (Jason 9/24): where a top meets a wall WITHOUT a tile backsplash, draw the top out INTO the wall to cover the back splash and side splash(es). Always.
+- **Two parallel cabinet lines on a wall = a row of LOWERS (line farther from the wall) + a row of UPPERS (line closer to the wall).** Kitchen uppers = the dashed line over the lowers, none over the hood or tall cabinets.
+- **Pantry shelving: x3 shelves** on every shelf run (Jason 9/24).
 - **Corner boards**: count each face of an outside corner (Anderson markup).
 - **Driveway off a main highway**: carry a concrete apron at the road even if the drive is gravel (Jason 9/23).
 - **Add lines the template lacks** when the plan shows them: laundry cabinets and top, utility sink, closet shelving, stone veneer or columns, dog wash, pass-through doors.
