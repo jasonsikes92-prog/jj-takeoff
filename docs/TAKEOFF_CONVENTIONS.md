@@ -79,6 +79,9 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
 - **Two parallel cabinet lines on a wall = a row of LOWERS (line farther from the wall) + a row of UPPERS (line closer to the wall).** Kitchen uppers = the dashed line over the lowers, none over the hood or tall cabinets.
 - **Pantry shelving: x3 shelves** on every shelf run (Jason 9/24).
 - **Vent hood:** always count the kitchen vent hood cabinet (1 EA over the range) - it is its own line, not part of the uppers (Jason 9/24: I missed it in the viewer).
+- **LVP NEVER goes under any cabinetry** - kitchen runs, island, vanities, laundry/mud room lowers (Jason 9/24). Cut every cabinet footprint out of the floor.
+- **Niche in every tiled tub/shower:** any tub or shower with TILE walls gets a niche, **24x18 minimum, even if the plan does not show one** (Jason 9/24). Fiberglass/alcove surrounds do not.
+- **Master wet room** (Anderson, Jason edit): the shower floor (mud bed) covers the wet room; the bath floor tile is the vanity side + WC only.
 - **Corner boards**: count each face of an outside corner (Anderson markup).
 - **Driveway off a main highway**: carry a concrete apron at the road even if the drive is gravel (Jason 9/23).
 - **Add lines the template lacks** when the plan shows them: laundry cabinets and top, utility sink, closet shelving, stone veneer or columns, dog wash, pass-through doors.
