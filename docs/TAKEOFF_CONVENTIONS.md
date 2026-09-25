@@ -83,6 +83,7 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
 - **Niche in every tiled tub/shower:** any tub or shower with TILE walls gets a niche, **24x18 minimum, even if the plan does not show one** (Jason 9/24). Fiberglass/alcove surrounds do not.
 - **Master wet room** (Anderson, Jason edit): the shower floor (mud bed) covers the wet room; the bath floor tile is the vanity side + WC only.
 - **Spray foam (roof-deck foam jobs):** foam the roof deck over the HEATED house only - the **garage roof is NOT foamed**. The insulation company blocks off the garage with housewrap in the attic where it meets the house wall and foams that wall; count it (wall length x roof height above the plate). Overhangs and porches not foamed. The great-room SLOPED ceiling reads as 8:12 to a center ridge; openings are never deducted from drywall/insulation/base (Jason 9/25).
+- **Everything above the ceiling joists gets foam** (Jason 9/25): roof deck over the heated house + every gable end over heated space + dormer walls + the housewrap-blocked wall at the garage. Garage gables/roof are not foamed.
 - **Corner boards**: count each face of an outside corner (Anderson markup).
 - **Driveway off a main highway**: carry a concrete apron at the road even if the drive is gravel (Jason 9/23).
 - **Add lines the template lacks** when the plan shows them: laundry cabinets and top, utility sink, closet shelving, stone veneer or columns, dog wash, pass-through doors.
