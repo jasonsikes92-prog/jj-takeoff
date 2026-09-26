@@ -27,7 +27,7 @@ The item list is Jason's blank template, `Downloads\Measurements - Newest templa
    Standard details on most plans (deck ledger, "basement" details) are NOT scope; ask about them rather than include them.
 4. **Follow the job's own memory notes.** The Davis note said spray foam, and assuming attic insulation was a miss.
 5. **Freeze the takeoff (sha256 + timestamp) before looking at any answer key.**
-6. **⛔ Draw EVERY measurement on the plan** (Jason 9/26, Villanueva: "How can I verify your measurements?"). Every quantity is a line, box or dot in the viewer, drawn on the sheet it was read from. That means the enlarged kitchen/bath sheets at their own scale, and the elevations for windows, corners and bay walls. Never ship a typed-in number (from labels, room dims or math) as MEASURED. Before calling a takeoff ready, list the items with `add_qty` or no pieces; that list must be empty. Drawing the 26 typed-in Villanueva items caught:
+6. **⛔ Draw EVERY measurement on the plan** (Jason 9/26, Villanueva: "How can I verify your measurements?"). Every quantity is a line, box or dot in the viewer, drawn on the sheet it was read from: the floor plan for everything in plan (see step 7), and the elevations for windows, corners and bay walls. Never ship a typed-in number (from labels, room dims or math) as MEASURED. Before calling a takeoff ready, list the items with `add_qty` or no pieces; that list must be empty. Drawing the 26 typed-in Villanueva items caught:
    - **Labels undercount fillers.** The SB36 hall vanity is 3.31 LF wall to wall; the master labels summed to 6.0 but the run is 6.27.
    - **Math hides wrong guesses.** Linen shelves ran the wrong way without checking where the door was: 7.3 LF, really 9.3.
    - **Numbers that can't be drawn are made up.** The "2 side corners" couldn't be found on the elevations.
@@ -35,6 +35,9 @@ The item list is Jason's blank template, `Downloads\Measurements - Newest templa
    - **Drawing to the plan fill is not the whole rule.** I redrew the vanity tops to the cabinet fill only and dropped the splashes, breaking the countertop-against-a-wall rule below. Apply every convention to the drawn pieces too.
    - **Check the drawing, not your memory of it.** I "found" a missed upper cabinet that was already counted with the tall cabinets.
    - **Look at every auto-snap.** The window snap caught light fixtures and roof lines; render it and check.
+
+7. **Measure off the PLAN PAGE, not the details page** (Jason 9/26). Not every plan set has kitchen/bath enlargements, and they can be wrong. Take cabinets, tops, vanities, backsplash and closets off the floor plan's own lines and cabinet fills. Use a detail sheet only as a cross-check, and only for what the plan page doesn't show; tag that ASSUMED. Villanueva: the island top is 3.45 ft deep on the floor plan but 3.61 on the kitchen sheet. The master closet shelves appear only on the enlargement.
+   - **Kitchen tile backsplash** = the wall behind the whole counter run, INCLUDING behind the range, × 18" (counter to the bottom of the uppers) unless the plan shows otherwise. There's no side return where a run ends open to the room. An island gets none. A wall run WITH a tile backsplash is not drawn into the wall; that splash rule is only for tops without tile.
 
 ## Output
 Every line gets three columns:
