@@ -67,7 +67,7 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
   - Barn doors are easy to miss: look for panel lines drawn beside an opening.
   - Cased openings get their own list.
 - **Can lights**: count the plan symbols exactly (verify by symbol, not by the "R4" labels), then add Jason's standards on a separate line:
-  - cans in the garage (Anderson: 6);
+  - cans in the garage: ASK the count per house (Anderson 6; Villanueva 4 - the plan showed 2, Jason 9/26);
   - a can over every tub and every shower;
   - never a fan/light combo: the exhaust fan and the light are separate.
 - **Vanity bars** (3 circles) are not cans.
