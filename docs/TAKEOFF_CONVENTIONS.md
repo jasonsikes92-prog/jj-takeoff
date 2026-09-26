@@ -37,7 +37,7 @@ The item list is Jason's blank template, `Downloads\Measurements - Newest templa
    - **Look at every auto-snap.** The window snap caught light fixtures and roof lines; render it and check.
 
 7. **Measure off the PLAN PAGE, not the details page** (Jason 9/26). Not every plan set has kitchen/bath enlargements, and they can be wrong. Take cabinets, tops, vanities, backsplash and closets off the floor plan's own lines and cabinet fills. Use a detail sheet only as a cross-check, and only for what the plan page doesn't show; tag that ASSUMED. Villanueva: the island top is 3.45 ft deep on the floor plan but 3.61 on the kitchen sheet. The master closet shelves appear only on the enlargement.
-   - **Kitchen tile backsplash** = the wall behind the whole counter run, INCLUDING behind the range, × 18" (counter to the bottom of the uppers) unless the plan shows otherwise. There's no side return where a run ends open to the room. An island gets none. A wall run WITH a tile backsplash is not drawn into the wall; that splash rule is only for tops without tile.
+   - **Kitchen tile backsplash** = the wall behind the whole counter run × counter-to-bottom-of-uppers (18" standard). **At the range it runs UP TO THE BOTTOM OF THE HOOD, or the OTR microwave** (Jason 9/26); draw that piece separately with its own height. Villanueva: 18" on the run, 20.3" behind the range. Heights aren't on the floor plan, so read them off the wall elevation and say so. There's no side return where a run ends open to the room. An island gets none. A wall run WITH a tile backsplash is not drawn into the wall; that splash rule is only for tops without tile.
 
 ## Output
 Every line gets three columns:
