@@ -31,7 +31,8 @@ The item list is Jason's blank template, `Downloads\Measurements - Newest templa
    - **Labels undercount fillers.** The SB36 hall vanity is 3.31 LF wall to wall; the master labels summed to 6.0 but the run is 6.27.
    - **Math hides wrong guesses.** Linen shelves ran the wrong way without checking where the door was: 7.3 LF, really 9.3.
    - **Numbers that can't be drawn are made up.** The "2 side corners" couldn't be found on the elevations.
-   - **Misses go both ways.** Window casing 332 → 359 LF; living-room upper walls 367 → 405 SF; tops were high (splash added that isn't drawn).
+   - **Misses go both ways.** Window casing 332 → 359 LF; living-room upper walls 367 → 405 SF.
+   - **Drawing to the plan fill is not the whole rule.** I redrew the vanity tops to the cabinet fill only and dropped the splashes, breaking the countertop-against-a-wall rule below. Apply every convention to the drawn pieces too.
    - **Check the drawing, not your memory of it.** I "found" a missed upper cabinet that was already counted with the tall cabinets.
    - **Look at every auto-snap.** The window snap caught light fixtures and roof lines; render it and check.
 
