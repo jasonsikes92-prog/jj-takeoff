@@ -27,6 +27,13 @@ The item list is Jason's blank template, `Downloads\Measurements - Newest templa
    Standard details on most plans (deck ledger, "basement" details) are NOT scope; ask about them rather than include them.
 4. **Follow the job's own memory notes.** The Davis note said spray foam, and assuming attic insulation was a miss.
 5. **Freeze the takeoff (sha256 + timestamp) before looking at any answer key.**
+6. **⛔ Draw EVERY measurement on the plan** (Jason 9/26, Villanueva: "How can I verify your measurements?"). Every quantity is a line, box or dot in the viewer, drawn on the sheet it was read from. That means the enlarged kitchen/bath sheets at their own scale, and the elevations for windows, corners and bay walls. Never ship a typed-in number (from labels, room dims or math) as MEASURED. Before calling a takeoff ready, list the items with `add_qty` or no pieces; that list must be empty. Drawing the 26 typed-in Villanueva items caught:
+   - **Labels undercount fillers.** The SB36 hall vanity is 3.31 LF wall to wall; the master labels summed to 6.0 but the run is 6.27.
+   - **Math hides wrong guesses.** Linen shelves ran the wrong way without checking where the door was: 7.3 LF, really 9.3.
+   - **Numbers that can't be drawn are made up.** The "2 side corners" couldn't be found on the elevations.
+   - **Misses go both ways.** Window casing 332 → 359 LF; living-room upper walls 367 → 405 SF; tops were high (splash added that isn't drawn).
+   - **Check the drawing, not your memory of it.** I "found" a missed upper cabinet that was already counted with the tall cabinets.
+   - **Look at every auto-snap.** The window snap caught light fixtures and roof lines; render it and check.
 
 ## Output
 Every line gets three columns:
