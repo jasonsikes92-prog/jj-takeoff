@@ -75,6 +75,12 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
 - **Tall cabinets** include the fridge surround, oven tower and linen tower.
 - **Tile floor goes UNDER tubs and cabinets** (correct method; Skip's Davis key skipped under-cabinet). The **shower floor is its own line** (a different tile), never inside bath floor tile.
 - **LVP does NOT go under tubs or cabinets.** Deduct tub, vanity, base cabinet and island footprints.
+  - **LVP DOES go under appliances**: dishwasher, range, fridge, washer/dryer (Jason's Villanueva LVP ran under the island DW). Cut out only cabinets, vanities, tubs, the stair and the hearth/fireplace box.
+  - **Floors stop at the wall line across every door and window opening.** Never run into the wall thickness at an opening; I did and gained ~13 SF of slivers.
+  - **The stair landing at the foot of the stair is part of the stair** (wood, priced with the treads), not LVP (Villanueva 4'-10" x 3'-4" landing, Jason 9/26).
+  - **Secondary bath floors can be LVP. CONFIRM per house.** Villanueva: the hall bath is LVP (not under the vanity or tub); the master is tile.
+  - **Draw over, then cut** (viewer Cut box / Cut piece, Jason 9/26): draw the whole room as one piece and cut the island, cabinets and stair out as holes. Don't trace around them.
+  - Build floors from the plan's WALL FACES (vector walls), never a raster flood fill; door swings and stair lines leak into a flood fill.
 - **Bedroom flooring gets its own line**, separate from common-area flooring.
 - **Primary shower tile runs to the CEILING** (wall LF × ceiling height). Secondary tub/showers get fiberglass surrounds unless the plan shows tile.
 - **Shelving** = shelf LF × number of shelves:
