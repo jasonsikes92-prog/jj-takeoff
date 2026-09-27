@@ -115,7 +115,8 @@ Never bake waste into raw. Tag each line MEASURED, PLAN-STATED, ASSUMED, or JASO
   - **Dashed lines over a stair mean something is UNDER the stair**, usually a closet. They are not walls or treads to trace. That closet is a room with its own base: its sides, its back where the stair comes down, and straight across its door.
   - Build it off WALLS ONLY: thick neutral-gray wall pixels. Thin lines (door swings, stair dashes, fixture outlines) drop out, and warm-gray cabinet fill never counts. See `villanueva/base_plan.py`.
 - **Covered porches ALWAYS get a ceiling** (Jason 9/27): exterior T&G on the template **Porch Ceilings** line (the Wood Ceiling 1x6 T&G line is INTERIOR). Draw each covered porch outline (house wall to the post/beam line).
-- **Stain lines (Paint)** (Jason 9/27): T&G porch ceilings and porch posts get STAINED; so does every interior wood object - stair treads (template "Stain tread and paint risers", per tread) and handrails. Count treads off the plan (1 dot per tread).
+- **Stain lines (Paint)** (Jason 9/27): T&G porch ceilings, porch BEAMS and porch posts get STAINED (posts = $50 per post); so does every interior wood object - stair treads (template "Stain tread and paint risers", per tread) and handrails. Count treads off the plan (1 dot per tread).
+- **Porch beam + post WRAPS go with siding/exterior** (Jason 9/27): draw the beam line on the post centers (plan) = Wrap Porch Beams LF; draw every post slab-to-beam on the elevations = post wrap LF. Count stair treads as drawn: step(s) at the bottom + landing + the run; each riser ~7.5".
 - **Corner boards**: count each face of an outside corner (Anderson markup).
 - **Driveway off a main highway**: carry a concrete apron at the road even if the drive is gravel (Jason 9/23).
 - **Add lines the template lacks** when the plan shows them: laundry cabinets and top, utility sink, closet shelving, stone veneer or columns, dog wash, pass-through doors.
